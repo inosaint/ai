@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smithy</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Liter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/x-icon" href="../../public/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../../public/favicon-16x16.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../public/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="48x48" href="../../public/favicon-48x48.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="../../public/favicon-192x192.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../../public/favicon-180x180.png" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+  <!-- Sticky Breadcrumb -->
+  <nav class="breadcrumb-header">
+    <div class="breadcrumb">
+      <a href="../../index.html" class="breadcrumb-link">Projects</a>
+      <span class="breadcrumb-separator">/</span>
+      <span class="breadcrumb-current">Smithy</span>
+    </div>
+  </nav>
+
+  <article class="post">
+    <!-- Post Header -->
+    <header class="post-header">
+      <div class="post-header-image">
+        <img src="cover-smithy.png" alt="Smithy — a conversational site builder">
+      </div>
+      <div class="post-header-meta-container">
+        <span class="post-header-meta">Feb 2026</span>
+        <span class="post-header-meta">Claude Code</span>
+        <span class="post-header-meta">Claude API</span>
+        <span class="post-header-meta">React</span>
+        <span class="post-header-meta">Node.js</span>
+      </div>
+      <h1>Smithy</h1>
+      <p class="description">A proof of concept built using Claude Code with Claude API providing code generation and here.now hosting the resulting sites</p>
+    </header>
+
+    <!-- Demo Video -->
+    <h2>Demo</h2>
+    <div class="video-container">
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/ctzzhM_ZWfg?si=qJ26H7wqb1SjrWfO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>
+
+    <!-- What it does -->
+    <h2>Why I built this?</h2>
+    <p>I tried one of the popular well funded 'app builder' tools and I wondered how hard is it to actually make one. Here.now had just been released so I thought of building one with Claude API as the backend and Here.now as the hosting provider.</p>
+
+    <p>Honestly, I didnt expect this to work. The first version built on Claude chat (yep, not Claude code) looked ridiculously promising for me to pursue.</p> 
+
+    
+    <!-- Screenshots -->
+    <div class="image-grid-1">
+      <figure class="image-figure">
+        <img src="smithyonclaude.png" alt="Building Smithy with Claude">
+        <figcaption>Building Smithy with Claude</figcaption>
+      </figure>
+    </div>
+
+    <p>I didnt really give this project much thought in terms of design, but I attempted to mimic Plan mode by adding a short intro wizard which would help narrow down what you want to build. This approach would be useful for new folks who have no prior experience building on the internet.</p>
+
+    <!-- How deployment works -->
+    <h2>How it works</h2>
+    <p>Here's what actually happens when you click Deploy:</p>
+    <ol>
+      <li>Your browser sends the generated HTML to the Smithy server</li>
+      <li>The server makes a simple API call to <a href="https://here.now">here.now</a> (a free hosting service) to reserve a URL</li>
+      <li>The server uploads your HTML file to that URL</li>
+      <li>The server tells here.now "all done, make it live"</li>
+    </ol>
+    <p>That's it. Three HTTP requests.</p>
+
+
+    <!-- What I learned -->
+    <h2>What I learned</h2>
+    <ul>
+    <li>It's funny, but the very first version that Claude came up with was 'Dark IDE aesthetic with Neon colors', it shows the bias in the system of existing app builders. I don't think developers are their true target audiences but somehow they still seem to retain the aesthetic. So I asked it to make the style inviting for teenagers and it instantly over-indexed on making it pink and unicorny. I finally got it to reach a warm color scheme which you see in the video.</li>
+
+    <li>Each generation using Claude APi cost me about 20-30 cents. That made me realize that there's a fair amount of margin that these app builder tools are playing with, thus justifying their large funding valuations. But honestly nothing beats working with a base model like Claude or Codex. It's far superior and far cheaper.</li>
+  </ul>
+
+     <!-- The stack -->
+    <h2>The stack</h2>
+    <ul>
+      <li><strong>Frontend</strong>: React with Vite</li>
+      <li><strong>Backend</strong>: Express (Node.js)</li>
+      <li><strong>AI</strong>: Claude API via Anthropic's SDK — used only for generating the site code</li>
+      <li><strong>Hosting</strong>: <a href="https://here.now">here.now</a> — used for deploying the finished sites</li>
+      <li><strong>Storage</strong>: localStorage for now (project history, chat threads)</li>
+    </ul>
+    <p>The whole thing runs as two processes — a Vite dev server for the frontend and an Express server that handles the Claude API calls and deployment.</p>
+    
+  </article>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-line"></div>
+    <div class="footer-links-container">
+      <div class="footer-links footer-links-left">
+        <a href="/">Home</a>
+        <span>•</span>
+        <a href="/resume">Resume</a>
+      </div>
+      <div class="footer-links footer-links-right">
+        <a href="https://github.com/inosaint" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <span>•</span>
+        <a href="https://x.com/kenneth" target="_blank" rel="noopener noreferrer">X</a>
+        <span>•</span>
+        <a href="https://bsky.app/profile/ken.cv" target="_blank" rel="noopener noreferrer">Bluesky</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
