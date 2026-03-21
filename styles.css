@@ -721,8 +721,8 @@ body.home section > h2 {
 
 @media (max-width: 900px) {
   .screenshot-panel { display: none; }
-  .col-desc { display: none; }
   .col-tags { flex: 0 0 auto; }
+  .hero-display p { line-height: 1.05; }
 }
 
 @media (max-width: 640px) {
