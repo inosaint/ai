@@ -309,6 +309,11 @@
       </footer>
 
   <script>
+    document.querySelectorAll('a').forEach(a => {
+      a.setAttribute('target', '_blank');
+      if (!a.rel) a.setAttribute('rel', 'noopener noreferrer');
+    });
+
     const panel = document.getElementById('screenshotPanel');
     const img = document.getElementById('screenshotImg');
 
