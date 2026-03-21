@@ -603,7 +603,7 @@ body.home section > h2 {
 .month-label {
   font-family: var(--font-heading);
   font-size: 0.62rem;
-  font-weight: 100;
+  font-weight: 300;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: rgba(26, 16, 8, 0.45);
@@ -634,10 +634,10 @@ body.home section > h2 {
 .col-name a {
   font-family: var(--font-heading);
   font-size: 1.3rem;
-  font-weight: 300;
-  color: rgba(26, 16, 8, 0.68);
+  font-weight: 500;
+  color: #1a1008;
   text-decoration: none;
-  line-height: 1;
+  line-height: 1.15;
   display: inline-block;
   transition: color 0.2s;
 }
@@ -683,11 +683,11 @@ body.home section > h2 {
 .tech-tag {
   font-family: var(--font-heading);
   font-size: 0.6rem;
-  padding: 0.3rem 0.6rem;
+  padding: 0.38rem 0.6rem 0.22rem;
   background-color: #e8e3d9;
-  color: #1a1008;
+  color: rgba(26, 16, 8, 0.7);
   border-radius: 100px;
-  font-weight: 500;
+  font-weight: 100;
 }
 
 /* Floating screenshot preview */
