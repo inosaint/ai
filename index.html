@@ -29,7 +29,7 @@
   <header class="site-hero">
     <div class="hero-display">
       <p>Hey there,</p>
-      <p>I'm <a href="https://kenneth.dsouza.im/">Kenneth</a> and I'm currently on a Sabbatical making Apps with AI and exploring AI native design tooling.</p>
+      <p>I'm <a href="https://kenneth.dsouza.im/">Kenneth</a> & I'm currently on a Sabbatical making Apps with AI and exploring AI native design tooling.</p>
     </div>
     <p class="hero-sub">If you are interested in learning how to use AI to make something, have a look at my free AI course <a href="https://kenneth.dsouza.im/ai-workshop/">here</a>.</p>
   </header>
@@ -309,6 +309,11 @@
       </footer>
 
   <script>
+    document.querySelectorAll('a').forEach(a => {
+      a.setAttribute('target', '_blank');
+      if (!a.rel) a.setAttribute('rel', 'noopener noreferrer');
+    });
+
     const panel = document.getElementById('screenshotPanel');
     const img = document.getElementById('screenshotImg');
 
