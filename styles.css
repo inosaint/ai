@@ -603,7 +603,7 @@ body.home section > h2 {
 .month-label {
   font-family: var(--font-heading);
   font-size: 0.62rem;
-  font-weight: 300;
+  font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: rgba(26, 16, 8, 0.45);
@@ -683,11 +683,11 @@ body.home section > h2 {
 .tech-tag {
   font-family: var(--font-heading);
   font-size: 0.6rem;
-  padding: 0.38rem 0.6rem 0.22rem;
+  padding: 0.38rem 0.6rem 0.28rem;
   background-color: #e8e3d9;
   color: rgba(26, 16, 8, 0.7);
   border-radius: 100px;
-  font-weight: 100;
+  font-weight: 300;
 }
 
 /* Floating screenshot preview */
