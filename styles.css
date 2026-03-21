@@ -730,7 +730,7 @@ body.home section > h2 {
   .col-name { flex: 1 1 100%; }
   .col-desc { display: block; flex: 0 0 100%; }
   .col-tags { flex: 0 0 100%; }
-  .hero-display p { font-size: clamp(3.5rem, 12vw, 5.5rem); line-height: 1.05; }
+  .hero-display p { font-size: clamp(2.5rem, 12vw, 5.5rem); line-height: 1.05; }
 }
 
 /* Home page footer link override */
