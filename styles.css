@@ -616,10 +616,15 @@ body.home section > h2 {
   display: flex;
   gap: 2rem;
   align-items: flex-start;
-  padding: 1.4rem 0;
+  padding: 1.4rem 0.75rem;
   border-bottom: 1px solid rgba(26, 16, 8, 0.08);
   position: relative;
   transition: background-color 0.15s;
+  margin: 0 -0.75rem;
+}
+
+.project-row:hover {
+  background-color: rgba(26, 16, 8, 0.03);
 }
 
 .col-name {
@@ -643,12 +648,10 @@ body.home section > h2 {
 }
 
 .external-link-icon {
-  opacity: 0.4;
+  opacity: 0;
   margin-left: 0.3rem;
   vertical-align: middle;
   display: inline-block;
-  position: relative;
-  top: -1px;
   transition: opacity 0.2s;
 }
 
