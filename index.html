@@ -310,7 +310,8 @@
 
   <!-- Floating screenshot preview -->
   <div class="screenshot-panel" id="screenshotPanel">
-    <img id="screenshotImg" src="" alt="">
+    <img id="screenshotImg" src="" alt="" style="display: none;">
+    <video id="screenshotVideo" style="display: none;" autoplay muted loop></video>
   </div>
 
   <!-- Footer -->
@@ -340,12 +341,25 @@
 
     const panel = document.getElementById('screenshotPanel');
     const img = document.getElementById('screenshotImg');
+    const video = document.getElementById('screenshotVideo');
 
     document.querySelectorAll('.project-row').forEach(row => {
       row.addEventListener('mouseenter', (e) => {
         const src = row.dataset.screenshot;
         if (!src) return;
-        img.src = src;
+
+        const isVideo = src.toLowerCase().endsWith('.mov') || src.toLowerCase().endsWith('.mp4') || src.toLowerCase().endsWith('.webm');
+
+        if (isVideo) {
+          img.style.display = 'none';
+          video.style.display = 'block';
+          video.src = src;
+        } else {
+          video.style.display = 'none';
+          img.style.display = 'block';
+          img.src = src;
+        }
+
         panel.style.left = e.clientX + 'px';
         panel.style.top = e.clientY + 'px';
         panel.classList.add('visible');
