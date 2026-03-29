@@ -44,6 +44,34 @@
       <div class="month-section">
         <div class="month-label">March 2026</div>
         <div class="month-entries">
+
+
+          <div class="project-row" data-screenshot="projects/amoebas/amoebas.mov">
+            <div class="col-name"><a href="#">Amoebas</a></div>
+            <div class="col-desc">A self-hosted multiplayer game on local wifi that lets audiences scan a QR and join the 2D space. Compete with other amoebas to grow and top the leaderboard.</div>
+            <div class="col-tags">
+              <div class="tech-tags">
+                <span class="tech-tag">Game</span>
+                <span class="tech-tag">Event</span>
+                <span class="tech-tag">Multiplayer</span>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="project-row" data-screenshot="projects/design-demos-1/demos1.jpeg">
+            <div class="col-name"><a href="https://x.com/kenneth/status/2038159804922007935?s=12">Design Demo Nights #1</a></div>
+            <div class="col-desc">35 designers, 8 speakers came together to share the work they've been making using AI and Code.</div>
+            <div class="col-tags">
+              <div class="tech-tags">
+                <span class="tech-tag">Event</span>
+                <span class="tech-tag">Design</span>
+                <span class="tech-tag">AI</span>
+              </div>
+            </div>
+          </div>
+
+          
           <div class="project-row" data-screenshot="public/pinboarder.png">
             <div class="col-name"><a href="https://github.com/inosaint/pinboarder">Pinboarder <svg class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">A retro-modern macOS menubar app for managing Pinboard.in – right from your menu bar</div>
@@ -58,7 +86,7 @@
             </div>
           </div>
 
-          <div class="project-row" data-screenshot="">
+          <div class="project-row" data-screenshot="projects/infinite-dungeons/infinite-dungeons.mov">
             <div class="col-name"><a href="https://spielwerk.app/games/A424F663-879D-4DD9-BD4C-663C136A830F">Infinite Pixel Dungeons <svg class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">A procedurally generated pixel dungeon crawler</div>
             <div class="col-tags">
@@ -286,7 +314,8 @@
 
   <!-- Floating screenshot preview -->
   <div class="screenshot-panel" id="screenshotPanel">
-    <img id="screenshotImg" src="" alt="">
+    <img id="screenshotImg" src="" alt="" style="display: none;">
+    <video id="screenshotVideo" style="display: none;" autoplay muted loop></video>
   </div>
 
   <!-- Footer -->
@@ -316,12 +345,25 @@
 
     const panel = document.getElementById('screenshotPanel');
     const img = document.getElementById('screenshotImg');
+    const video = document.getElementById('screenshotVideo');
 
     document.querySelectorAll('.project-row').forEach(row => {
       row.addEventListener('mouseenter', (e) => {
         const src = row.dataset.screenshot;
         if (!src) return;
-        img.src = src;
+
+        const isVideo = src.toLowerCase().endsWith('.mov') || src.toLowerCase().endsWith('.mp4') || src.toLowerCase().endsWith('.webm');
+
+        if (isVideo) {
+          img.style.display = 'none';
+          video.style.display = 'block';
+          video.src = src;
+        } else {
+          video.style.display = 'none';
+          img.style.display = 'block';
+          img.src = src;
+        }
+
         panel.style.left = e.clientX + 'px';
         panel.style.top = e.clientY + 'px';
         panel.classList.add('visible');

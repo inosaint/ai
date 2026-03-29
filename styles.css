@@ -710,7 +710,8 @@ body.home section > h2 {
   opacity: 1;
 }
 
-.screenshot-panel img {
+.screenshot-panel img,
+.screenshot-panel video {
   width: 100%;
   aspect-ratio: 9 / 5;
   object-fit: cover;
