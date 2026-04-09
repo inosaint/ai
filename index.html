@@ -420,6 +420,7 @@
     document.querySelectorAll('.project-row').forEach(row => {
       row.addEventListener('click', (e) => {
         if (e.target.closest('a')) return;
+        if (e.target.closest('.tech-tag')) return;
         const link = row.querySelector('.col-name a');
         if (!link) return;
         const href = link.getAttribute('href');
