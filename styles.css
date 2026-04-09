@@ -756,7 +756,7 @@ body.home section > h2 {
 }
 
 @media (max-width: 768px) {
-  .project-row { flex-wrap: wrap; gap: 0.75rem; }
+  .project-row { flex-wrap: wrap; gap: 0.75rem; cursor: pointer; }
   .col-name { flex: 1 1 100%; }
   .col-desc { display: block; flex: 0 0 100%; }
   .col-tags { flex: 0 0 100%; }

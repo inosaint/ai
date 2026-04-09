@@ -55,6 +55,36 @@
         <div class="month-label">March 2026</div>
         <div class="month-entries">
 
+          <div class="project-row" data-screenshot="" data-category="exploration">
+            <div class="col-name"><a href="https://brisk-laurel-tj2e.here.now/">dezijnr — people you meet while interviewing <svg class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+            <div class="col-desc">An interactive piece about the archetypes of people you meet while interviewing at design studios</div>
+            <div class="col-tags">
+              <div class="tech-tags">
+                <span class="tech-tag">here.now</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-row" data-screenshot="" data-category="exploration">
+            <div class="col-name"><a href="https://woody-prism-2qw5.here.now">woody-prism <svg class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+            <div class="col-desc"></div>
+            <div class="col-tags">
+              <div class="tech-tags">
+                <span class="tech-tag">here.now</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-row" data-screenshot="projects/infinite-dungeons/infinite-dungeons.mov" data-category="game">
+            <div class="col-name"><a href="#">Infinite Pixel Dungeons — HTML</a></div>
+            <div class="col-desc">Standalone HTML version of Infinite Pixel Dungeons</div>
+            <div class="col-tags">
+              <div class="tech-tags">
+                <span class="tech-tag">Claude Code</span>
+              </div>
+            </div>
+          </div>
+
            <div class="project-row" data-screenshot="projects/amoebas/amoebas.mov" data-category="game">
             <div class="col-name"><a href="https://amoebas-production.up.railway.app/">Amoebas - Live <svg class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">First playground version of Amoebas, hosted live. Join from anywhere and compete in the 2D space.</div>
@@ -383,6 +413,18 @@
           const hasVisible = [...section.querySelectorAll('.project-row')].some(r => r.style.display !== 'none');
           section.style.display = hasVisible ? '' : 'none';
         });
+      });
+    });
+
+    // Mobile: tap anywhere on a row to open the project
+    document.querySelectorAll('.project-row').forEach(row => {
+      row.addEventListener('click', (e) => {
+        if (e.target.closest('a')) return;
+        const link = row.querySelector('.col-name a');
+        if (!link) return;
+        const href = link.getAttribute('href');
+        if (!href || href === '#') return;
+        window.open(link.href, '_blank');
       });
     });
 
