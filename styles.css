@@ -691,6 +691,36 @@ body.home section > h2 {
   font-weight: 300;
 }
 
+/* Filter panel */
+.filter-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 2rem;
+}
+
+.filter-chip {
+  font-family: var(--font-heading);
+  font-size: 0.6rem;
+  padding: 0.38rem 0.6rem 0.28rem;
+  background-color: #e8e3d9;
+  color: rgba(26, 16, 8, 0.7);
+  border-radius: 100px;
+  font-weight: 300;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.filter-chip:hover {
+  background-color: #d8d3c9;
+}
+
+.filter-chip.active {
+  background-color: #1a1008;
+  color: rgba(245, 240, 232, 0.9);
+}
+
 /* Floating screenshot preview */
 .screenshot-panel {
   position: fixed;
@@ -726,7 +756,7 @@ body.home section > h2 {
 }
 
 @media (max-width: 768px) {
-  .project-row { flex-wrap: wrap; gap: 0.75rem; }
+  .project-row { flex-wrap: wrap; gap: 0.75rem; cursor: pointer; }
   .col-name { flex: 1 1 100%; }
   .col-desc { display: block; flex: 0 0 100%; }
   .col-tags { flex: 0 0 100%; }
