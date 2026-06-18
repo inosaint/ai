@@ -22,13 +22,24 @@
 
 
   <!-- Styles -->
+  <script>
+    const previewParams = new URLSearchParams(window.location.search);
+    const typographyPreview = previewParams.get('typography');
+    if (['archive', 'editorial', 'minimal'].includes(typographyPreview)) {
+      document.documentElement.classList.add(`preview-type-${typographyPreview}`);
+    }
+    if (previewParams.get('viewport') === 'mobile') {
+      document.documentElement.classList.add('preview-mobile');
+    }
+  </script>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body class="home">
   <!-- Header / Bio -->
   <header class="site-hero">
+    <h1 class="sr-only">Kenneth's AI Projects</h1>
     <div class="hero-display">
-      <h3>Hey there,</h3>
+      <h1>Hey there,</h1>
       <p>I'm <a href="https://kenneth.dsouza.im/">Kenneth</a> & I'm currently on a sabbatical making apps with AI and exploring AI native design tooling.</p>
     </div>
     <div class="hero-links">
@@ -84,7 +95,7 @@
       </a>
 
       <a href="https://github.com/inosaint/pinboarder" class="featured-card" target="_blank" rel="noopener noreferrer">
-        <div class="featured-card-img"><img src="projects/app/pinboarder.png" alt="Pinboarder" width="932" height="932" loading="lazy"></div>
+        <div class="featured-card-img"><img class="featured-img-pinboarder" src="projects/app/pinboarder.png" alt="Pinboarder" width="932" height="932" loading="lazy"></div>
         <div class="featured-card-body">
           <span class="featured-card-name">Pinboarder</span>
           <span class="featured-card-desc">A retro-modern macOS menubar app for managing Pinboard.in – right from your menu bar</span>
@@ -108,7 +119,7 @@
       </a>
 
       <a href="https://designdemonights.com" class="featured-card" target="_blank" rel="noopener noreferrer">
-        <div class="featured-card-img"><img src="projects/ddn-site/ddn-site.png" alt="Design Demo Nights" width="800" height="614" loading="lazy"></div>
+        <div class="featured-card-img"><img class="featured-img-ddn" src="projects/ddn-site/ddn-site.png" alt="Design Demo Nights" width="800" height="614" loading="lazy"></div>
         <div class="featured-card-body">
           <span class="featured-card-name">Design Demo Nights</span>
           <span class="featured-card-desc">An archive of all Design Demo Nights editions — a community gathering where designers share work built with AI and code</span>
@@ -130,6 +141,7 @@
       <button class="filter-chip" data-filter="exploration" aria-pressed="false">Explorations</button>
       <button class="filter-chip" data-filter="visualization" aria-pressed="false">Visualizations</button>
     </div>
+    <p class="sr-only" id="filterStatus" aria-live="polite" aria-atomic="true">34 projects shown</p>
 
     <div class="projects-list">
 
@@ -138,7 +150,7 @@
         <h3 class="month-label">June 2026</h3>
         <div class="month-entries">
 
-          <div class="project-row" tabindex="0" data-screenshot="projects/design-demos/demos-4.JPG" data-category="event">
+          <div class="project-row" data-screenshot="projects/design-demos/demos-4.JPG" data-category="event">
             <div class="col-name"><a href="https://designdemonights.com/#4" target="_blank" rel="noopener noreferrer">Design Demo Nights #4 <svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">A community gathering where designers share work built with AI and code.</div>
             <div class="col-tags">
@@ -158,7 +170,7 @@
         <h3 class="month-label">May 2026</h3>
         <div class="month-entries">
 
-          <div class="project-row" tabindex="0" data-screenshot="projects/viz-demos/viz-demos-1.png" data-category="exploration">
+          <div class="project-row" data-screenshot="projects/viz-demos/viz-demos-1.png" data-category="exploration">
             <div class="col-name"><a href="https://eternal-nebula-33dy.here.now/" target="_blank" rel="noopener noreferrer">Solar System Narrative Viz <svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">A solar system narrative visualization told in Philomena Cunk's voice. An exploration in narrative viz and three.js. Planned and scripted with Gemini, built with Claude Code, debugged with Codex.</div>
             <div class="col-tags">
@@ -172,7 +184,7 @@
             </div>
           </div>
 
-          <div class="project-row" tabindex="0" data-screenshot="" data-category="exploration">
+          <div class="project-row" data-screenshot="" data-category="exploration">
             <div class="col-name"><a href="https://www.instagram.com/reel/DYhqoPSvP8o/" target="_blank" rel="noopener noreferrer">Grindsize Social Ad <svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">A video using remotion.dev to advertise grindsize.in on social media.</div>
             <div class="col-tags">
@@ -183,7 +195,7 @@
             </div>
           </div>
 
-          <div class="project-row" tabindex="0" data-screenshot="projects/design-demos/demos-3.jpg" data-category="event">
+          <div class="project-row" data-screenshot="projects/design-demos/demos-3.jpg" data-category="event">
             <div class="col-name"><a href="https://designdemonights.com/#3" target="_blank" rel="noopener noreferrer">Design Demo Nights #3 <svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">A community gathering where designers share work built with AI and code.</div>
             <div class="col-tags">
@@ -195,7 +207,7 @@
             </div>
           </div>
 
-          <div class="project-row" tabindex="0" data-screenshot="projects/ddn-site/ddn-site.png" data-category="event">
+          <div class="project-row" data-screenshot="projects/ddn-site/ddn-site.png" data-category="event">
             <div class="col-name"><a href="https://designdemonights.com/" target="_blank" rel="noopener noreferrer">Design Demo Nights Archive <svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">An archive of all Design Demo Nights editions — a community gathering where designers share work built with AI and code. Psst: there are easter eggs hidden around the site.</div>
             <div class="col-tags">
@@ -205,7 +217,7 @@
             </div>
           </div>
 
-          <div class="project-row" tabindex="0" data-screenshot="projects/grinder-calibrator/grinder-v1.jpg" data-category="app">
+          <div class="project-row" data-screenshot="projects/grinder-calibrator/grinder-v1.jpg" data-category="app">
             <div class="col-name"><a href="https://kenneth.dsouza.im/grinder-calibrator/">Grindsize.in <svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">A tool to help coffee enthusiasts calibrate their grind sizes when referring to bean recipes.</div>
             <div class="col-tags">
@@ -223,7 +235,7 @@
         <h3 class="month-label">April 2026</h3>
         <div class="month-entries">
 
-          <div class="project-row" tabindex="0" data-screenshot="projects/canara/canara.jpeg" data-category="event">
+          <div class="project-row" data-screenshot="projects/canara/canara.jpeg" data-category="event">
             <div class="col-name"><a href="https://x.com/kenneth/status/2049520004182515961">Agentic Coding Workshop at CEC, Mangalore <svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">Introduced Computer Science and Design students to Agentic Coding at Canara Engineering College. My second IRL workshop on the topic.</div>
             <div class="col-tags">
@@ -234,7 +246,7 @@
             </div>
           </div>
 
-          <div class="project-row" tabindex="0" data-screenshot="projects/design-demos/demos-2.jpg" data-category="event">
+          <div class="project-row" data-screenshot="projects/design-demos/demos-2.jpg" data-category="event">
             <div class="col-name"><a href="https://designdemonights.com/#2" target="_blank" rel="noopener noreferrer">Design Demo Nights #2 <svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">A community gathering where designers share work built with AI and code.</div>
             <div class="col-tags">
@@ -246,7 +258,7 @@
             </div>
           </div>
 
-          <div class="project-row" tabindex="0" data-screenshot="projects/rocky/rocky.png" data-category="exploration">
+          <div class="project-row" data-screenshot="projects/rocky/rocky.png" data-category="exploration">
             <div class="col-name"><a href="https://github.com/inosaint/rocky">ASCII Rocky</a></div>
             <div class="col-desc">An unsuccessful attempt to add ASCII art rendering to Vikalp's Rocky project. Rocky is a Plugin for your CLIs which enables your models to speak as the Eridian Rocky from Project Hail Mary. Current plugin infra doesnt let you render this reliably.</div>
             <div class="col-tags">
@@ -258,7 +270,7 @@
             </div>
           </div>
 
-          <div class="project-row" tabindex="0" data-screenshot="projects/tower-dungeon/tower.PNG" data-category="game">
+          <div class="project-row" data-screenshot="projects/tower-dungeon/tower.PNG" data-category="game">
             <div class="col-name"><a href="https://woody-prism-2qw5.here.now">Tower Dungeon <svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">A single page HTML based retro-styled dungeon crawler where you find your way out of mazes to the top of the tower dungeon. Designed to feel like a Gameboy. Aim to make 100 playable levels.</div>
             <div class="col-tags">
@@ -271,7 +283,7 @@
             </div>
           </div>
 
-          <div class="project-row" tabindex="0" data-screenshot="projects/designr/designr.png" data-category="exploration">
+          <div class="project-row" data-screenshot="projects/designr/designr.png" data-category="exploration">
             <div class="col-name"><a href="https://brisk-laurel-tj2e.here.now/">designr.<svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">A satirical take on design hiring by creating a tinder-like experience to match with your dream design manager
             </div>
@@ -291,7 +303,7 @@
         <h3 class="month-label">March 2026</h3>
         <div class="month-entries">
 
-           <div class="project-row" tabindex="0" data-screenshot="projects/amoebas/amoebas.mov" data-category="game">
+           <div class="project-row" data-screenshot="projects/amoebas/amoebas.mov" data-category="game">
             <div class="col-name"><a href="https://amoebas-production.up.railway.app/">Amoebas - Live <svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">All work and no play makes Claude dull, so I made a game site just for agents to join and play. Currently has 2 games, and I plan to add more.</div>
             <div class="col-tags">
@@ -303,7 +315,7 @@
           </div>
 
 
-          <div class="project-row" tabindex="0" data-screenshot="projects/amoebas/amoebas.mov" data-category="game">
+          <div class="project-row" data-screenshot="projects/amoebas/amoebas.mov" data-category="game">
             <div class="col-name"><a href="https://github.com/inosaint/amoebas">Amoebas</a></div>
             <div class="col-desc">A self-hosted multiplayer game on local wifi that lets audiences scan a QR and join the 2D space. Compete with other amoebas to grow and top the leaderboard.</div>
             <div class="col-tags">
@@ -316,7 +328,7 @@
 
       
 
-          <div class="project-row" tabindex="0" data-screenshot="projects/design-demos/demos-1.jpeg" data-category="event">
+          <div class="project-row" data-screenshot="projects/design-demos/demos-1.jpeg" data-category="event">
             <div class="col-name"><a href="https://designdemonights.com/#1" target="_blank" rel="noopener noreferrer">Design Demo Nights #1 <svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">A community gathering where designers share work built with AI and code.</div>
             <div class="col-tags">
@@ -329,7 +341,7 @@
           </div>
 
           
-          <div class="project-row" tabindex="0" data-screenshot="projects/app/pinboarder.png" data-category="app">
+          <div class="project-row" data-screenshot="projects/app/pinboarder.png" data-category="app">
             <div class="col-name"><a href="https://github.com/inosaint/pinboarder">Pinboarder <svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">A retro-modern macOS menubar app for managing Pinboard.in – right from your menu bar</div>
             <div class="col-tags">
@@ -343,7 +355,7 @@
             </div>
           </div>
 
-          <div class="project-row" tabindex="0" data-screenshot="projects/infinite-dungeons/infinite-dungeons.mov" data-category="game">
+          <div class="project-row" data-screenshot="projects/infinite-dungeons/infinite-dungeons.mov" data-category="game">
             <div class="col-name"><a href="https://spielwerk.app/games/A424F663-879D-4DD9-BD4C-663C136A830F">Infinite Pixel Dungeons <svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">A procedurally generated pixel dungeon crawler built on Spielwerk.de</div>
             <div class="col-tags">
@@ -353,7 +365,7 @@
             </div>
           </div>
 
-          <div class="project-row" tabindex="0" data-screenshot="" data-category="exploration">
+          <div class="project-row" data-screenshot="" data-category="exploration">
             <div class="col-name"><a href="https://x.com/kenneth/status/2032401402073686218">Design Tooling Releases — Exploration 2 <svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">Continued exploration of recent AI-native design tooling releases</div>
             <div class="col-tags">
@@ -364,7 +376,7 @@
             </div>
           </div>
 
-          <div class="project-row" tabindex="0" data-screenshot="" data-category="exploration">
+          <div class="project-row" data-screenshot="" data-category="exploration">
             <div class="col-name"><a href="https://x.com/kenneth/status/2032024715259523372">Design Tooling Releases — Exploration 1 <svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">Exploring recent design tooling releases and their AI-native capabilities</div>
             <div class="col-tags">
@@ -375,7 +387,7 @@
             </div>
           </div>
 
-          <div class="project-row" tabindex="0" data-screenshot="" data-category="exploration">
+          <div class="project-row" data-screenshot="" data-category="exploration">
             <div class="col-name"><a href="https://x.com/kenneth/status/2030282446743502850">Same Prompt, 3 Design Models, 1 Tool <svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">Running the same design prompt through 3 different AI models and 1 tool to compare outputs</div>
             <div class="col-tags">
@@ -386,7 +398,7 @@
             </div>
           </div>
 
-          <div class="project-row" tabindex="0" data-screenshot="projects/nid/nid.jpeg" data-category="event">
+          <div class="project-row" data-screenshot="projects/nid/nid.jpeg" data-category="event">
             <div class="col-name"><a href="https://x.com/nid_india/status/2029866422168428610">AI Workshop at NID <svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">AI workshop hosted at the National Institute of Design, India</div>
             <div class="col-tags">
@@ -403,8 +415,8 @@
       <div class="month-section">
         <h3 class="month-label">February 2026</h3>
         <div class="month-entries">
-          <div class="project-row" tabindex="0" data-screenshot="" data-category="app">
-            <div class="col-name"><a href="#">Sudhaarit</a></div>
+          <div class="project-row" data-screenshot="" data-category="app">
+            <div class="col-name"><span class="project-name">Sudhaarit</span></div>
             <div class="col-desc">A Konkani (Kannada script) to English translator. Lives as a Claude Artifact. Linguistics is not my speciality so lot of trial and error to make it work. Open to discuss.</div>
             <div class="col-tags">
               <div class="tech-tags">
@@ -414,7 +426,7 @@
             </div>
           </div>
 
-          <div class="project-row" tabindex="0" data-screenshot="projects/unamed/unamed.png" data-category="game">
+          <div class="project-row" data-screenshot="projects/unamed/unamed.png" data-category="game">
             <div class="col-name"><a href="https://github.com/inosaint/unamed">Unnamed <svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">A tower defense game where you play boggle to earn cash to upgrade your defenses. Stuck at asset generation.</div>
             <div class="col-tags">
@@ -426,7 +438,7 @@
             </div>
           </div>
 
-          <div class="project-row" tabindex="0" data-screenshot="projects/hermes/hermes-mac.png" data-category="app">
+          <div class="project-row" data-screenshot="projects/hermes/hermes-mac.png" data-category="app">
             <div class="col-name"><a href="https://github.com/inosaint/hermes">Hermes <svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">An open-source, local-first AI writing tool for Mac that structures your thinking without doing the writing for you</div>
             <div class="col-tags">
@@ -440,7 +452,7 @@
             </div>
           </div>
 
-          <div class="project-row" tabindex="0" data-screenshot="projects/smithy/cover-smithy.png" data-category="app">
+          <div class="project-row" data-screenshot="projects/smithy/cover-smithy.png" data-category="app">
             <div class="col-name"><a href="projects/smithy/index.html">Smithy</a></div>
             <div class="col-desc">A proof of concept site builder powered by Claude API and here.now</div>
             <div class="col-tags">
@@ -454,7 +466,7 @@
             </div>
           </div>
 
-          <div class="project-row" tabindex="0" data-screenshot="projects/event/vibeshift-blr.jpg" data-category="app">
+          <div class="project-row" data-screenshot="projects/event/vibeshift-blr.jpg" data-category="app">
             <div class="col-name"><a href="https://kenneth.dsouza.im/vibeshift-blr/">Vibeshift Projects <svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">A collection of 4 projects I worked on during Rhizome.org's Vibeshift event in Bangalore</div>
             <div class="col-tags">
@@ -467,7 +479,7 @@
             </div>
           </div>
 
-          <div class="project-row" tabindex="0" data-screenshot="projects/app/exhume.png" data-category="visualization">
+          <div class="project-row" data-screenshot="projects/app/exhume.png" data-category="visualization">
             <div class="col-name"><a href="https://exhume.link">exhume.link <svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">A visual analysis of your open browser tabs with a dash of necrotic humour</div>
             <div class="col-tags">
@@ -488,7 +500,7 @@
       <div class="month-section">
         <h3 class="month-label">January 2026</h3>
         <div class="month-entries">
-          <div class="project-row" tabindex="0" data-screenshot="projects/app/mapyourorg.JPG" data-category="app">
+          <div class="project-row" data-screenshot="projects/app/mapyourorg.JPG" data-category="app">
             <div class="col-name"><a href="https://mapyour.org">Mapyour.org <svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">An interactive web application for planning hiring and growth progression in design teams. Visualize your org structure, track promotions, and plan future hires.</div>
             <div class="col-tags">
@@ -500,7 +512,7 @@
             </div>
           </div>
 
-          <div class="project-row" tabindex="0" data-screenshot="projects/workshop/ai-workshop.png" data-category="app">
+          <div class="project-row" data-screenshot="projects/workshop/ai-workshop.png" data-category="app">
             <div class="col-name"><a href="https://kenneth.dsouza.im/ai-workshop">AI workshop <svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">A beginner-friendly workshop companion guide for learning Claude Code - from zero to deployed project.</div>
             <div class="col-tags">
@@ -511,7 +523,7 @@
             </div>
           </div>
 
-          <div class="project-row" tabindex="0" data-screenshot="projects/exploration/books-2025.png" data-category="visualization">
+          <div class="project-row" data-screenshot="projects/exploration/books-2025.png" data-category="visualization">
             <div class="col-name"><a href="https://kenneth.dsouza.im/books-2025/index.html">Books Viz' 2025 <svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">An artistic visualization of reading behavior throughout 2025, using p5.js to create textured pen strokes representing books read over time.</div>
             <div class="col-tags">
@@ -528,7 +540,7 @@
       <div class="month-section">
         <h3 class="month-label">November 2025</h3>
         <div class="month-entries">
-          <div class="project-row" tabindex="0" data-screenshot="projects/app/budgie.PNG" data-category="app">
+          <div class="project-row" data-screenshot="projects/app/budgie.PNG" data-category="app">
             <div class="col-name"><a href="https://budgie.travel">budgie.travel <svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">A retro themed skeuomorphic travel budget calculator with AI-powered itinerary generation</div>
             <div class="col-tags">
@@ -539,7 +551,7 @@
             </div>
           </div>
 
-          <div class="project-row" tabindex="0" data-screenshot="projects/app/traviti.png" data-category="app">
+          <div class="project-row" data-screenshot="projects/app/traviti.png" data-category="app">
             <div class="col-name"><a href="https://traviti.netlify.app">traviti <svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">An AI-powered itinerary generator that helps you plan your perfect trip</div>
             <div class="col-tags">
@@ -557,7 +569,7 @@
       <div class="month-section">
         <h3 class="month-label">August 2025</h3>
         <div class="month-entries">
-          <div class="project-row" tabindex="0" data-screenshot="projects/games/mouse.png" data-category="game">
+          <div class="project-row" data-screenshot="projects/games/mouse.png" data-category="game">
             <div class="col-name"><a href="https://spielwerk.app/games/82184EF9-7578-4701-BCB5-646682BD7C3F">Whack-a-rat <svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">A whack-a-mole style game featuring rats, built on Spielwerk.de</div>
             <div class="col-tags">
@@ -568,7 +580,7 @@
             </div>
           </div>
 
-          <div class="project-row" tabindex="0" data-screenshot="projects/games/down.png" data-category="game">
+          <div class="project-row" data-screenshot="projects/games/down.png" data-category="game">
             <div class="col-name"><a href="https://spielwerk.app/games/3F4D5B13-C17F-4000-80E7-A2473B1C1526">Freefallin' <svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">A free-fall physics game, inspired by downwell, built on Spielwerk.de </div>
             <div class="col-tags">
@@ -579,7 +591,7 @@
             </div>
           </div>
 
-          <div class="project-row" tabindex="0" data-screenshot="projects/games/taco.png" data-category="game">
+          <div class="project-row" data-screenshot="projects/games/taco.png" data-category="game">
             <div class="col-name"><a href="https://spielwerk.app/games/889C1041-DDDF-4295-A640-C41AA80358EA">Not a Hotdog <svg aria-hidden="true" class="external-link-icon" width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5V8.5M9.5 2.5H3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
             <div class="col-desc">A silly game where you try to find the taco amidst the Hotdogs, built on Spielwerk.de </div>
             <div class="col-tags">
@@ -624,6 +636,22 @@
     const panel = document.getElementById('screenshotPanel');
     const img = document.getElementById('screenshotImg');
     const video = document.getElementById('screenshotVideo');
+    const filterStatus = document.getElementById('filterStatus');
+
+    const getRealRowLink = (row) => {
+      const link = row.querySelector('.col-name a');
+      if (!link) return null;
+      const href = link.getAttribute('href');
+      if (!href || href === '#') return null;
+      return link;
+    };
+
+    const updateFilterStatus = (filter) => {
+      if (!filterStatus) return;
+      const visibleRows = [...document.querySelectorAll('.project-row')].filter(row => row.style.display !== 'none');
+      const label = filter === 'all' ? 'projects' : `${filter} projects`;
+      filterStatus.textContent = `${visibleRows.length} ${label} shown`;
+    };
 
     document.querySelectorAll('.filter-chip').forEach(chip => {
       chip.addEventListener('click', () => {
@@ -645,34 +673,22 @@
           const hasVisible = [...section.querySelectorAll('.project-row')].some(r => r.style.display !== 'none');
           section.style.display = hasVisible ? '' : 'none';
         });
+
+        updateFilterStatus(filter);
       });
     });
+    updateFilterStatus('all');
 
-    // Mobile: tap anywhere on a row to open the project
+    // Pointer convenience: tap/click anywhere on a linked row to open the project.
     document.querySelectorAll('.project-row').forEach(row => {
-      const link = row.querySelector('.col-name a');
-      if (link) {
-        row.setAttribute('aria-label', `Open ${link.textContent.trim()}`);
-      }
-
-      const openRowLink = () => {
-        if (!link) return;
-        const href = link.getAttribute('href');
-        if (!href || href === '#') return;
-        window.open(link.href, '_blank', 'noopener');
-      };
+      const link = getRealRowLink(row);
+      row.classList.toggle('has-link', Boolean(link));
 
       row.addEventListener('click', (e) => {
+        if (!link) return;
         if (e.target.closest('a')) return;
         if (e.target.closest('.tech-tag')) return;
-        openRowLink();
-      });
-
-      row.addEventListener('keydown', (e) => {
-        if (e.key !== 'Enter' && e.key !== ' ') return;
-        if (e.target.closest('a')) return;
-        e.preventDefault();
-        openRowLink();
+        window.open(link.href, '_blank', 'noopener');
       });
     });
 

@@ -115,7 +115,7 @@ a:hover {
 
 a:focus-visible,
 button:focus-visible,
-.project-row:focus-visible {
+.project-row.has-link:focus-within {
   outline: 3px solid #c45c2a;
   outline-offset: 3px;
 }
@@ -553,10 +553,11 @@ figcaption {
 }
 
 .hero-display h1,
+.hero-display h3,
 .hero-display p {
   font-family: var(--font-heading);
-  font-size: clamp(2.5rem, 7vw, 5.5rem);
-  line-height: 0.93;
+  font-size: clamp(2.45rem, 6vw, 4.7rem);
+  line-height: 1.02;
   letter-spacing: 0;
   color: #111111;
   margin-bottom: 0;
@@ -596,7 +597,7 @@ figcaption {
 .hero-links {
   display: flex;
   gap: 0.75rem;
-  margin-top: 3rem;
+  margin-top: 2.5rem;
 }
 
 .hero-link-box {
@@ -718,13 +719,13 @@ figcaption {
 
 /* Projects section (home page) */
 body.home section > h2 {
-  font-size: 1.6rem;
+  font-size: 1.35rem;
   font-weight: 400;
   text-transform: none;
   letter-spacing: 0;
   color: #111111;
   margin-top: 0;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.85rem;
 }
 
 /* Projects list */
@@ -753,17 +754,20 @@ body.home section > h2 {
   display: flex;
   gap: 2rem;
   align-items: flex-start;
-  padding: 1.4rem 0.75rem;
+  padding: 1.15rem 0.75rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   position: relative;
   transition: background-color 0.15s;
   margin: 0 -0.75rem;
+}
+
+.project-row.has-link {
   cursor: pointer;
 }
 
-.project-row:hover,
-.project-row:active,
-.project-row:focus-visible {
+.project-row.has-link:hover,
+.project-row.has-link:active,
+.project-row.has-link:focus-within {
   background-color: rgba(0, 0, 0, 0.04);
 }
 
@@ -771,14 +775,18 @@ body.home section > h2 {
   flex: 0 0 220px;
 }
 
-.col-name a {
+.col-name a,
+.project-name {
   font-family: var(--font-heading);
-  font-size: 1.3rem;
+  font-size: 1.18rem;
   font-weight: 500;
   color: #111111;
   text-decoration: none;
-  line-height: 1.15;
+  line-height: 1.16;
   display: inline-block;
+}
+
+.col-name a {
   transition: color 0.2s;
 }
 
@@ -801,7 +809,7 @@ body.home section > h2 {
 
 .col-desc {
   flex: 1;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: #555555;
   line-height: 1.55;
   font-weight: 300;
@@ -861,6 +869,211 @@ body.home section > h2 {
   color: rgba(255, 255, 255, 0.9);
 }
 
+/* Typography preview variants: active only via typography-preview.html. */
+html.preview-type-archive body {
+  max-width: 1040px;
+  padding-top: 3rem;
+}
+
+html.preview-type-archive .site-hero {
+  padding-bottom: 2rem;
+}
+
+html.preview-type-archive .hero-display h3,
+html.preview-type-archive .hero-display p {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4.5vw, 3.4rem);
+  line-height: 1.04;
+  letter-spacing: 0;
+  color: #111111;
+  font-weight: 400;
+  margin-bottom: 0;
+}
+
+html.preview-type-archive .hero-links {
+  margin-top: 2rem;
+}
+
+html.preview-type-archive body.home section > h2 {
+  font-size: 1.15rem;
+  margin-bottom: 0.65rem;
+}
+
+html.preview-type-archive .featured-card-name {
+  font-size: 0.82rem;
+}
+
+html.preview-type-archive .featured-card-desc,
+html.preview-type-archive .hero-link-desc,
+html.preview-type-archive .upcoming-event-desc {
+  font-size: 0.66rem;
+}
+
+html.preview-type-archive .project-row {
+  padding: 0.95rem 0.75rem;
+  gap: 1.5rem;
+}
+
+html.preview-type-archive .col-name {
+  flex-basis: 190px;
+}
+
+html.preview-type-archive .col-name a,
+html.preview-type-archive .project-name {
+  font-size: 1.02rem;
+  line-height: 1.18;
+}
+
+html.preview-type-archive .col-desc {
+  font-size: 0.72rem;
+  line-height: 1.48;
+}
+
+html.preview-type-archive .col-tags {
+  flex-basis: 190px;
+}
+
+html.preview-type-archive .tech-tag,
+html.preview-type-archive .filter-chip,
+html.preview-type-archive .month-label {
+  font-size: 0.56rem;
+}
+
+html.preview-type-editorial body {
+  max-width: 1180px;
+  padding-top: 4rem;
+}
+
+html.preview-type-editorial .site-hero {
+  padding-bottom: 2.75rem;
+}
+
+html.preview-type-editorial .hero-display h3,
+html.preview-type-editorial .hero-display p {
+  font-family: var(--font-heading);
+  font-size: clamp(3rem, 7vw, 5.4rem);
+  line-height: 0.98;
+  letter-spacing: 0;
+  color: #111111;
+  font-weight: 400;
+  margin-bottom: 0;
+}
+
+html.preview-type-editorial .hero-links {
+  margin-top: 2.6rem;
+}
+
+html.preview-type-editorial body.home section > h2 {
+  font-size: 1.35rem;
+  margin-bottom: 0.9rem;
+}
+
+html.preview-type-editorial .featured-card-name {
+  font-size: 0.94rem;
+}
+
+html.preview-type-editorial .featured-card-desc {
+  font-size: 0.72rem;
+}
+
+html.preview-type-editorial .project-row {
+  padding: 1.25rem 0.75rem;
+  gap: 1.8rem;
+}
+
+html.preview-type-editorial .col-name {
+  flex-basis: 220px;
+}
+
+html.preview-type-editorial .col-name a,
+html.preview-type-editorial .project-name {
+  font-size: 1.18rem;
+  line-height: 1.16;
+}
+
+html.preview-type-editorial .col-desc {
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+
+html.preview-type-editorial .tech-tag,
+html.preview-type-editorial .filter-chip {
+  font-size: 0.58rem;
+}
+
+html.preview-type-minimal .hero-display h3,
+html.preview-type-minimal .hero-display p {
+  font-family: var(--font-heading);
+  font-size: clamp(2.45rem, 6vw, 4.7rem);
+  line-height: 1.02;
+  letter-spacing: 0;
+  color: #111111;
+  font-weight: 400;
+  margin-bottom: 0;
+}
+
+html.preview-type-minimal .hero-links {
+  margin-top: 2.5rem;
+}
+
+html.preview-type-minimal body.home section > h2 {
+  font-size: 1.35rem;
+  margin-bottom: 0.85rem;
+}
+
+html.preview-type-minimal .project-row {
+  padding: 1.15rem 0.75rem;
+}
+
+html.preview-type-minimal .col-name a,
+html.preview-type-minimal .project-name {
+  font-size: 1.18rem;
+  line-height: 1.16;
+}
+
+html.preview-type-minimal .col-desc {
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+
+html.preview-type-minimal .featured-card-name {
+  font-size: 0.9rem;
+}
+
+html.preview-type-minimal .featured-card-desc {
+  font-size: 0.7rem;
+}
+
+html.preview-mobile {
+  font-size: 16px;
+}
+
+html.preview-mobile body {
+  max-width: 390px;
+  padding: 1.5rem 1.25rem;
+}
+
+html.preview-mobile .hero-links,
+html.preview-mobile .upcoming-event-row {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+html.preview-mobile .featured-grid {
+  grid-template-columns: 1fr;
+}
+
+html.preview-mobile .project-row {
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+html.preview-mobile .col-name,
+html.preview-mobile .col-desc,
+html.preview-mobile .col-tags {
+  flex: 0 0 100%;
+}
+
 /* Floating screenshot preview */
 .screenshot-panel {
   position: fixed;
@@ -893,15 +1106,18 @@ body.home section > h2 {
 @media (max-width: 900px) {
   .screenshot-panel { display: none; }
   .hero-display h1,
+  .hero-display h3,
   .hero-display p { line-height: 1.05; }
 }
 
 @media (max-width: 768px) {
-  .project-row { flex-wrap: wrap; gap: 0.75rem; cursor: pointer; }
+  .project-row { flex-wrap: wrap; gap: 0.75rem; }
+  .project-row.has-link { cursor: pointer; }
   .col-name { flex: 1 1 100%; }
   .col-desc { display: block; flex: 0 0 100%; }
   .col-tags { flex: 0 0 100%; }
   .hero-display h1,
+  .hero-display h3,
   .hero-display p { font-size: clamp(2.5rem, 12vw, 5.5rem); line-height: 1.05; }
 }
 
@@ -1253,6 +1469,11 @@ footer {
   display: block;
 }
 
+.featured-img-pinboarder,
+.featured-img-ddn {
+  object-position: top center;
+}
+
 .featured-card-body {
   padding: 0.85rem 1rem 1rem;
   display: flex;
@@ -1262,14 +1483,14 @@ footer {
 
 .featured-card-name {
   font-family: var(--font-heading);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 500;
   color: #111;
   line-height: 1.2;
 }
 
 .featured-card-desc {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   color: #555555;
   line-height: 1.5;
   font-weight: 300;
