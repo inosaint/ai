@@ -63,7 +63,7 @@
       </a>
     </div>
     <!-- Upcoming Event -->
-    <div class="upcoming-event-row">
+    <div class="upcoming-event-row" data-event-date="2026-07-24">
       <div class="upcoming-event-text">
         <span class="upcoming-event-label">Upcoming event</span>
         <span class="upcoming-event-title">Design Demo Nights #5</span>
@@ -72,6 +72,14 @@
       <a href="https://lu.ma/calendar/cal-Lz8YkYPCTUZPX9t" class="upcoming-event-btn" target="_blank" rel="noopener noreferrer">RSVP</a>
     </div>
   </header>
+  <script>
+    document.querySelectorAll('.upcoming-event-row[data-event-date]').forEach((row) => {
+      const eventDate = new Date(row.dataset.eventDate + 'T23:59:59');
+      if (eventDate < new Date()) {
+        row.remove();
+      }
+    });
+  </script>
 
   <!-- Highlights -->
   <section class="featured-section">
