@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Footer study — the park</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Martian+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="park.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);
+  font-family:'Archivo',system-ui,sans-serif;font-size:13.5px;
+  transition:background .6s ease,color .6s ease;min-height:100vh;display:flex;flex-direction:column}
+main{flex:1;padding:40px 30px;max-width:1100px}
+h1{font-weight:600;letter-spacing:-.025em;font-size:clamp(22px,3vw,38px);letter-spacing:-.01em;line-height:1.1;max-width:22ch}
+p.lede{margin-top:14px;max-width:60ch;opacity:.75;line-height:1.6}
+.ctl{margin-top:22px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+button{font-family:'Martian Mono',ui-monospace,monospace;font-size:9.5px;letter-spacing:.14em;background:none;color:inherit;
+  border:1px solid var(--rule);padding:8px 13px;cursor:pointer}
+button:hover{border-color:currentColor}
+button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+footer{margin-top:auto;position:relative}
+.foot-meta{font-family:'Martian Mono',ui-monospace,monospace;font-size:9px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  padding:14px 30px 24px;font-size:11px;letter-spacing:.1em;opacity:.65;border-top:1px solid var(--rule)}
+.foot-meta a{color:inherit;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px}
+.foot-meta a:hover{opacity:.6}
+a{color:inherit}
+</style></head>
+<body>
+<main>
+  <h1>Footer study — the park.</h1>
+  <p class="lede">Drawn in the browser: every line, colour block and figure is generated in JS, no image assets. The wheel turns, cars run the coaster, the carousel spins and its far side passes behind the drum. Switch to dark and the lights come on. Every visit redraws it in a slightly different hand.</p>
+  <div class="ctl">
+    <button id="theme">DARK MODE</button>
+    <button id="reroll">REDRAW</button>
+    <button id="motion" aria-pressed="true">MOTION ON</button>
+    <span id="seedout" style="opacity:.5"></span>
+  </div>
+</main>
+
+<footer>
+  <svg class="park" id="park" viewBox="0 0 2000 620" preserveAspectRatio="xMidYMax meet"
+       aria-label="An illustrated theme park: a turning ferris wheel, a carousel and a rollercoaster"></svg>
+  <div class="foot-meta">
+    <span><a href="https://kenneth.dsouza.im/">Kenneth Mark Dsouza</a> — Kenneth's AI playground</span>
+    <span>GITHUB · X · BLUESKY</span>
+  </div>
+</footer>
+
+<script src="park.js"></script>
+<script>
+const qs=new URLSearchParams(location.search);
+if(qs.get('theme')==='dark') document.documentElement.setAttribute('data-theme','dark');
+
+const seedOut=document.getElementById('seedout');
+function showSeed(s){
+  seedOut.innerHTML='';
+  const a=document.createElement('a');
+  a.href='?seed='+s+(document.documentElement.getAttribute('data-theme')==='dark'?'&theme=dark':'');
+  a.textContent='SEED '+s+' — PIN THIS ONE';
+  a.style.cssText='color:inherit;text-decoration:underline;text-underline-offset:3px';
+  seedOut.appendChild(a);
+}
+const park=initPark(document.getElementById('park'),{
+  seed: qs.has('seed') ? (parseInt(qs.get('seed'),10)||1) : undefined,
+  onSeed: showSeed
+});
+
+const tb=document.getElementById('theme');
+tb.textContent=document.documentElement.getAttribute('data-theme')==='dark'?'LIGHT MODE':'DARK MODE';
+tb.onclick=()=>{const d=document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme',d?'light':'dark');
+  tb.textContent=d?'DARK MODE':'LIGHT MODE'; showSeed(park.seed);};
+document.getElementById('reroll').onclick=()=>showSeed(park.redraw());
+const mb=document.getElementById('motion');
+mb.onclick=()=>{const on=mb.getAttribute('aria-pressed')!=='true';
+  mb.setAttribute('aria-pressed',String(on)); park.setMotion(on);
+  mb.textContent=on?'MOTION ON':'MOTION OFF';};
+</script>
+</body></html>

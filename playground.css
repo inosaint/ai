@@ -1,0 +1,206 @@
+/* Page styles — palette tokens come from park.css */
+:root{
+  --sans:'Archivo',system-ui,-apple-system,sans-serif;
+  --mono:'Martian Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --c-app:#C44928; --c-game:#4A7093; --c-event:#CA7549;
+  --c-exploration:#3F6B5C; --c-visualization:#AE8449;
+  --sky:#E8D7C8; --field:#FFFDFD;
+  --hair:#1414141f; --hair2:#14141440; --dim:#141414a6;
+}
+[data-theme="dark"]{
+  --c-app:#E4674A; --c-game:#79A3C9; --c-event:#E19464;
+  --c-exploration:#6FA48F; --c-visualization:#D2A567;
+  --sky:#141A22; --field:#111820;
+  --hair:#C9D2DA26; --hair2:#C9D2DA47; --dim:#C9D2DAa6;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+img,svg{max-width:100%}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);
+  font-family:var(--sans);
+  font-size:13.5px;line-height:1.55;-webkit-font-smoothing:antialiased;
+  transition:background .5s ease,color .5s ease}
+a{color:inherit}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+
+
+.frame{padding:24px}
+@media(max-width:720px){.frame{padding:16px}}
+
+.sheet{position:relative;padding:clamp(18px,3vw,44px)}
+/* the drafting underlay is drawn by JS with the same wobble as the park,
+   and deliberately stops before the index so it never sits under body text */
+.zone{position:relative}
+.zone > *{position:relative;z-index:1}
+.gridsvg{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:visible}
+.gridsvg path{stroke:var(--hair);fill:none;stroke-width:1;vector-effect:non-scaling-stroke}
+.reg{position:absolute;width:13px;height:13px;pointer-events:none}
+.reg::before,.reg::after{content:"";position:absolute;background:currentColor;opacity:.75}
+.reg::before{left:50%;top:0;bottom:0;width:1px}
+.reg::after{top:50%;left:0;right:0;height:1px}
+.reg.tl{left:-7px;top:-7px}.reg.tr{right:-7px;top:-7px}
+.reg.bl{left:-7px;bottom:-7px}.reg.br{right:-7px;bottom:-7px}
+
+/* hero */
+.hero{position:relative;padding-bottom:clamp(22px,3vw,40px);
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,auto);gap:clamp(20px,4vw,56px);align-items:end}
+@media(max-width:940px){.hero{grid-template-columns:1fr;align-items:start}}
+.viz{align-self:end;padding-bottom:4px;position:relative;padding-top:1.7em}
+.viz svg{display:block;width:100%;max-width:620px;height:auto;overflow:visible}
+.viz .dot{fill:var(--ink);transition:opacity .2s}
+.viz svg.filtered .dot{opacity:.16}
+.viz svg.filtered .dot.on{opacity:1}
+.viz .now{fill:none;stroke:var(--rust);stroke-width:1.4;stroke-dasharray:2.5 2.5}
+.viz .gap{fill:var(--dim);opacity:.35}
+.viz .base{stroke:var(--hair2);stroke-width:1}
+.viz .lab{fill:var(--dim);font-size:8.5px;letter-spacing:.06em;font-family:inherit}
+.viz .yr{fill:var(--ink);font-size:8.5px;letter-spacing:.1em;font-family:inherit}
+.viz .hit{fill:transparent;cursor:crosshair}
+.viz-read{position:absolute;top:0;left:0;right:0;height:1.3em;line-height:1.3em;font-size:10px;letter-spacing:.1em;color:var(--rust);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none}
+@media(max-width:940px){.viz-read{text-align:left}}
+.eyebrow{font-size:10px;letter-spacing:.22em;color:var(--dim)}
+.eyebrow::first-letter{color:var(--rust)}
+h1{font-size:clamp(30px,5.4vw,62px);font-weight:600;letter-spacing:-.035em;line-height:1;
+  margin-top:16px;text-wrap:balance}
+.lede{margin-top:16px;max-width:58ch;color:var(--dim);line-height:1.6}
+.lede a{text-decoration:underline;text-underline-offset:3px}
+.herolinks{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px 22px;font-size:12.5px}
+.herolinks a{text-decoration:none;border-bottom:1px solid var(--hair2);padding-bottom:2px;
+  color:var(--ink);transition:border-color .15s,color .15s}
+.herolinks a:hover{color:var(--rust);border-bottom-color:currentColor}
+.herolinks .ext{font-size:10px;margin-left:5px;opacity:.55;vertical-align:1px}
+
+h2.sec{font-size:10px;letter-spacing:.22em;font-weight:400;color:var(--dim);
+  margin:clamp(30px,4vw,54px) 0 12px;padding-top:14px}
+
+/* highlight grid */
+.hl{display:grid;grid-template-columns:repeat(3,1fr);background:var(--field);position:relative}
+@media(max-width:900px){.hl{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.hl{grid-template-columns:1fr}}
+.cell{position:relative;display:flex;flex-direction:column;padding:16px;text-decoration:none;color:inherit;min-width:0;overflow:hidden}
+.cell .no{font-size:19px;letter-spacing:.02em}
+.cell .art{display:block;margin:14px 0;aspect-ratio:16/10;overflow:hidden;position:relative;min-width:0;max-width:100%;
+  background:var(--sky);outline:1px solid var(--hair)}
+.cell .art img{width:100%;height:100%;max-width:none;object-fit:cover;object-position:top center;display:block;
+  /* stand-in for the illustration layer until the real ones exist */
+  filter:grayscale(1) contrast(1.35) sepia(.42) saturate(.7) brightness(1.04);
+  transition:filter .45s cubic-bezier(.2,.8,.2,1), transform .6s cubic-bezier(.2,.8,.2,1)}
+.cell:hover .art img,.cell:focus-visible .art img{filter:none;transform:scale(1.02)}
+.cell:focus-visible{outline:2px solid var(--rust);outline-offset:-2px}
+.cell .cn{font-size:14px;letter-spacing:.06em}
+.cell .ck{font-size:9.5px;letter-spacing:.16em;color:var(--dim);margin-top:4px}
+.cell .cd{font-size:12px;color:var(--dim);margin-top:9px;line-height:1.5}
+
+/* filters */
+.idxhead{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  margin:clamp(30px,4vw,54px) 0 16px;padding-top:14px}
+.idxhead .sec{margin:0;padding:0}
+.filters{display:flex;flex-wrap:wrap;gap:11px;margin:0;align-items:center}
+.filters button{font:inherit;padding:0;cursor:pointer;background:none;color:var(--dim);
+  border:0;line-height:0;transition:color .15s;display:block}
+.filters button svg{display:block;overflow:visible;pointer-events:none}
+.filters button{position:relative}
+.filters button::after{content:attr(aria-label);position:absolute;left:50%;top:calc(100% + 10px);
+  transform:translateX(-50%);white-space:nowrap;font-size:9px;letter-spacing:.14em;
+  color:var(--paper);background:var(--ink);padding:7px 11px;border-radius:2px;
+  opacity:0;pointer-events:none;transition:opacity .14s;z-index:9}
+.filters button:hover::after,.filters button:focus-visible::after{opacity:1}
+.filters button .dot{fill:currentColor}
+.filters button:hover{color:var(--ink)}
+.filters button[aria-checked="true"]{color:var(--rust)}
+.filters button:focus-visible{outline:2px solid var(--rust);outline-offset:1px}
+
+/* index rows */
+.mo{margin-bottom:26px}
+.mo h3{display:flex;align-items:baseline;gap:12px;font-size:11px;font-weight:400;
+  letter-spacing:.18em;color:var(--dim);padding-bottom:8px;
+  text-transform:uppercase}
+.mo h3 b{font-weight:400;font-size:10px;opacity:.7}
+.mo h3::after{content:"";flex:1;height:1px;background:var(--hair)}
+.rows{list-style:none;position:relative}
+.row{display:grid;grid-template-columns:12px 218px 1fr 200px;gap:0 14px;align-items:baseline;
+  padding:11px 8px;margin:0 -8px;transition:background .15s}
+.row:hover{background:var(--sky)}
+@media(max-width:860px){.row{grid-template-columns:12px 1fr;gap:2px 10px}
+  .rd,.rt{grid-column:2}}
+.rbullet{align-self:baseline;margin-bottom:-1.5px;overflow:visible}
+.rbullet .dot{fill:var(--dim)}
+.row:hover .rbullet .dot{fill:var(--rust)}
+.rn{font-size:13.5px}
+.rn a{text-decoration:none;border-bottom:1px solid transparent}
+.rn a:hover{border-bottom-color:currentColor;color:var(--rust)}
+.st{font-style:normal;font-size:8.5px;letter-spacing:.12em;border:1px solid currentColor;
+  padding:1px 4px;margin-left:7px;vertical-align:middle;white-space:nowrap}
+.st.wip{color:var(--rust)} .st.dead{color:var(--dim);text-decoration:line-through}
+.rd{font-size:12px;color:var(--dim);line-height:1.5;text-wrap:pretty}
+.rt{display:flex;flex-wrap:wrap;gap:4px}
+.rt i{font-style:normal;font-size:9px;letter-spacing:.1em;color:var(--dim);
+  border:1px solid var(--hair2);padding:2px 5px}
+
+/* footer */
+footer{margin-top:clamp(40px,6vw,90px);position:relative}
+.foot-meta{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  padding:14px 24px 26px;font-size:10.5px;letter-spacing:.12em;color:var(--dim);align-items:center;
+  border-top:1px solid var(--hair2)}
+.fm-left{display:flex;align-items:center;gap:11px}
+.themebtn{width:15px;height:15px;flex:none;border:1px solid currentColor;background:none;cursor:pointer;
+  border-radius:50%;padding:0;position:relative;overflow:hidden;color:inherit}
+.themebtn::after{content:"";position:absolute;inset:0 50% 0 0;background:currentColor}
+.themebtn:hover{color:var(--ink)}
+.themebtn:focus-visible{outline:2px solid var(--rust);outline-offset:2px}
+.foot-meta a{text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px}
+.foot-meta a:hover{color:var(--ink)}
+
+/* every rule on the page is drawn by hand, in one overlay */
+.rules{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:visible}
+.rules path{stroke:var(--hair2);fill:none;stroke-width:1;vector-effect:non-scaling-stroke}
+.rules path.faint{stroke:var(--hair)}
+.sheet > *{position:relative;z-index:1}
+.sheet > .rules,.hl > .rules{position:absolute;inset:0;z-index:0}
+.hl > .rules{z-index:2}
+.hl{isolation:isolate}
+.hl .cell{z-index:1}
+
+/* themed surfaces change in step with the body, not behind it */
+.hl,.cell .art,.sheet{transition:background .5s ease}
+
+/* Martian Mono is a wide face — small sizes and reduced tracking keep it in its lane */
+.sec,.filters button,.mo h3,.rt i,.st,.foot-meta,.viz-read,.herolinks .ext,
+.viz .lab,.viz .yr,.cell .ck{font-family:var(--mono)}
+.sec{font-size:9px;letter-spacing:.14em}
+.mo h3{font-size:9.5px;letter-spacing:.12em}
+.rt i{font-size:8px;letter-spacing:.02em;padding:2px 5px}
+.st{font-size:7.5px;letter-spacing:.04em}
+.cell .ck{font-size:8px;letter-spacing:.1em}
+.foot-meta{font-size:9px;letter-spacing:.08em}
+.viz-read{font-size:9px;letter-spacing:.04em}
+.cell .cn{font-family:var(--sans);font-weight:500;font-size:15px;letter-spacing:-.01em}
+.cell .cd{font-family:var(--sans);font-size:12.5px}
+.rn{font-family:var(--sans);font-weight:500;font-size:14px;letter-spacing:-.005em}
+.rd{font-family:var(--sans);font-size:12.5px}
+.lede{font-family:var(--sans)}
+.herolinks a{font-family:var(--sans);font-weight:500}
+
+/* ---- colour as encoding: each kind carries a park colour, in every place
+        the page already speaks in shapes (map, row bullets, filters) ---- */
+.viz .dot[data-cat="app"],.filters button[data-f="app"] .dot,.row[data-cat="app"] .rbullet .dot{fill:var(--c-app)}
+.viz .dot[data-cat="game"],.filters button[data-f="game"] .dot,.row[data-cat="game"] .rbullet .dot{fill:var(--c-game)}
+.viz .dot[data-cat="event"],.filters button[data-f="event"] .dot,.row[data-cat="event"] .rbullet .dot{fill:var(--c-event)}
+.viz .dot[data-cat="exploration"],.filters button[data-f="exploration"] .dot,.row[data-cat="exploration"] .rbullet .dot{fill:var(--c-exploration)}
+.viz .dot[data-cat="visualization"],.filters button[data-f="visualization"] .dot,.row[data-cat="visualization"] .rbullet .dot{fill:var(--c-visualization)}
+.row:hover .rbullet .dot{fill:inherit}
+.filters button{color:var(--dim)}
+.filters button[aria-checked="true"]{color:inherit}
+
+/* highlight cells take a whisper of their kind's colour behind the image */
+.cell[data-cat="app"] .art{background:color-mix(in srgb,var(--c-app) 12%,var(--sky))}
+.cell[data-cat="game"] .art{background:color-mix(in srgb,var(--c-game) 12%,var(--sky))}
+.cell[data-cat="event"] .art{background:color-mix(in srgb,var(--c-event) 12%,var(--sky))}
+.cell[data-cat="exploration"] .art{background:color-mix(in srgb,var(--c-exploration) 12%,var(--sky))}
+.cell[data-cat="visualization"] .art{background:color-mix(in srgb,var(--c-visualization) 12%,var(--sky))}
+.cell .ck{color:var(--dim)}
+.cell[data-cat="app"] .ck{color:var(--c-app)}
+.cell[data-cat="game"] .ck{color:var(--c-game)}
+.cell[data-cat="event"] .ck{color:var(--c-event)}
+.cell[data-cat="exploration"] .ck{color:var(--c-exploration)}
+.cell[data-cat="visualization"] .ck{color:var(--c-visualization)}

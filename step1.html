@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Step 1 — ground, ink, rules</title>
+<style>
+:root{
+  --sky:#E8D7C8;      /* warm cream ground */
+  --field:#EFEFEF;    /* near-white panel  */
+  --ink:#111211;      /* contour line / all type */
+  --terracotta:#EF8F68;
+  --terracotta-d:#E9835A;
+  --mustard:#DEC473;
+  --green:#286A50;
+  --rust:#A13C20;
+  --cobalt:#18589A;
+  --rule:#11121129;      /* hairline, ink at 16% */
+  --rule-hard:#1112114d;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--sky);color:var(--ink);
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.5;
+  -webkit-font-smoothing:antialiased}
+.frame{position:relative;min-height:100vh;padding:26px 26px 26px 62px}
+
+/* left rail, from ref 1 */
+.rail{position:fixed;left:0;top:0;bottom:0;width:44px;border-right:1px solid var(--rule);
+  display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:22px 0;z-index:2;
+  background:var(--sky)}
+.rail .vert{writing-mode:vertical-rl;transform:rotate(180deg);font-size:10px;letter-spacing:.28em;color:#11121199}
+.rail .mark{width:15px;height:15px;position:relative}
+.rail .mark::before,.rail .mark::after{content:"";position:absolute;background:var(--ink);opacity:.55}
+.rail .mark::before{left:50%;top:0;bottom:0;width:1px}
+.rail .mark::after{top:50%;left:0;right:0;height:1px}
+
+/* the ruled sheet */
+.sheet{position:relative;border:1px solid var(--rule-hard);padding:clamp(20px,3vw,40px)}
+.sheet::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:
+    repeating-linear-gradient(to right,  var(--rule) 0 1px, transparent 1px 84px),
+    repeating-linear-gradient(to bottom, var(--rule) 0 1px, transparent 1px 84px);
+  opacity:.5}
+/* registration marks at the corners */
+.reg{position:absolute;width:13px;height:13px;pointer-events:none}
+.reg::before,.reg::after{content:"";position:absolute;background:var(--ink);opacity:.75}
+.reg::before{left:50%;top:0;bottom:0;width:1px}
+.reg::after{top:50%;left:0;right:0;height:1px}
+.reg.tl{left:-7px;top:-7px}.reg.tr{right:-7px;top:-7px}
+.reg.bl{left:-7px;bottom:-7px}.reg.br{right:-7px;bottom:-7px}
+
+.eyebrow{font-size:10px;letter-spacing:.24em;color:#112121aa;margin-bottom:14px}
+.eyebrow b{font-weight:400;color:var(--rust)}
+h1{font-size:clamp(26px,4.2vw,50px);font-weight:400;letter-spacing:-.01em;line-height:1.06;
+  max-width:20ch;position:relative;text-wrap:balance}
+.lede{margin-top:16px;max-width:56ch;color:#111211cc;font-size:13px}
+
+/* --- highlight grid: the thing to judge --- */
+.hl{margin-top:clamp(26px,3.4vw,44px);border:1px solid var(--rule-hard);
+  display:grid;grid-template-columns:repeat(3,1fr);position:relative;background:var(--field)}
+@media(max-width:900px){.hl{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.hl{grid-template-columns:1fr}}
+.cell{border-right:1px solid var(--rule-hard);border-bottom:1px solid var(--rule-hard);
+  padding:18px;min-height:220px;display:flex;flex-direction:column;position:relative}
+.cell:nth-child(3n){border-right:0}
+@media(max-width:900px){.cell{border-right:1px solid var(--rule-hard)}.cell:nth-child(2n){border-right:0}}
+.cell .no{font-size:22px;font-weight:400;letter-spacing:.02em}
+.cell .plus{position:absolute;right:14px;top:16px;width:11px;height:11px;opacity:.6}
+.cell .plus::before,.cell .plus::after{content:"";position:absolute;background:var(--ink)}
+.cell .plus::before{left:5px;top:0;bottom:0;width:1px}
+.cell .plus::after{top:5px;left:0;right:0;height:1px}
+.cell h2{font-size:14px;font-weight:400;letter-spacing:.1em;margin-top:12px}
+.cell .kind{font-size:10px;letter-spacing:.16em;color:#11121199;margin-top:5px}
+.cell .art{flex:1;margin-top:16px;border-top:1px solid var(--rule);padding-top:12px;
+  display:flex;flex-direction:column;gap:6px;align-items:center;justify-content:center;font-size:10px;letter-spacing:.14em;
+  color:#11121166;text-align:center}
+.cell .art i{display:block;font-style:normal;color:var(--terracotta-d);letter-spacing:.1em}
+
+/* --- palette proof --- */
+.pal{margin-top:34px;border-top:1px solid var(--rule-hard);padding-top:16px}
+.pal h3{font-size:10px;letter-spacing:.24em;font-weight:400;color:#112121aa;margin-bottom:12px}
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:1px;background:transparent}
+.sw{background:var(--sky);padding:11px;outline:1px solid var(--rule-hard)}
+.sw .chip{height:44px;border:1px solid #11121122}
+.sw .hex{font-size:11px;margin-top:8px;letter-spacing:.04em}
+.sw .role{font-size:9.5px;letter-spacing:.1em;margin-top:3px;color:#11121199}
+.sw .role.paint{color:var(--rust)}
+.sw .ratio{font-size:9.5px;color:#11121199;margin-top:2px}
+.demo{margin-top:18px;display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start}
+.demo p{font-size:13px;max-width:34ch}
+.demo .ok{color:var(--green)} .demo .ok2{color:var(--cobalt)} .demo .ok3{color:var(--rust)}
+.demo .bad{color:var(--terracotta-d)}
+.tag{font-size:9px;letter-spacing:.12em;border:1px solid currentColor;padding:2px 5px;vertical-align:middle}
+</style></head>
+<body>
+<div class="rail">
+  <span class="mark"></span>
+  <span class="vert">STEP 01 — GROUND · INK · RULES</span>
+  <span class="mark"></span>
+</div>
+
+<div class="frame">
+  <div class="sheet">
+    <span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span>
+
+    <p class="eyebrow">// GROUND + RULE SYSTEM &nbsp;·&nbsp; <b>TYPE IS PLACEHOLDER, NOT THIS DECISION</b></p>
+    <h1>Everything I made this year.</h1>
+    <p class="lede">Warm ground and ink taken from your footer painting; the hairline rules, cell grid, corner registration marks and the left rail taken from the black reference. Nothing else yet — no illustration, no typeface, no motion.</p>
+
+    <div class="hl">
+      <div class="cell"><span class="plus"></span><span class="no">/01</span>
+        <h2>EXHUME.LINK</h2><span class="kind">VISUALIZATION</span>
+        <span class="art">ILLUSTRATION<i>hover reveals screenshot</i></span></div>
+      <div class="cell"><span class="plus"></span><span class="no">/02</span>
+        <h2>DATA-VIZARD</h2><span class="kind">APP</span>
+        <span class="art">ILLUSTRATION<i>hover reveals screenshot</i></span></div>
+      <div class="cell"><span class="plus"></span><span class="no">/03</span>
+        <h2>BUDGIE.TRAVEL</h2><span class="kind">APP</span>
+        <span class="art">ILLUSTRATION<i>hover reveals screenshot</i></span></div>
+      <div class="cell"><span class="plus"></span><span class="no">/04</span>
+        <h2>MAPYOUR.ORG</h2><span class="kind">APP</span>
+        <span class="art">ILLUSTRATION<i>hover reveals screenshot</i></span></div>
+      <div class="cell"><span class="plus"></span><span class="no">/05</span>
+        <h2>GRINDSIZE.IN</h2><span class="kind">APP</span>
+        <span class="art">ILLUSTRATION<i>hover reveals screenshot</i></span></div>
+      <div class="cell"><span class="plus"></span><span class="no">/06</span>
+        <h2>DESIGN DEMO NIGHTS</h2><span class="kind">EVENT</span>
+        <span class="art">ILLUSTRATION<i>hover reveals screenshot</i></span></div>
+    </div>
+
+    <div class="pal">
+      <h3>PALETTE — SAMPLED FROM YOUR FOOTER PAINTING</h3>
+      <div class="swatches">
+        <div class="sw"><div class="chip" style="background:#E8D7C8"></div><div class="hex">#E8D7C8</div><div class="role">GROUND — SKY</div></div>
+        <div class="sw"><div class="chip" style="background:#EFEFEF"></div><div class="hex">#EFEFEF</div><div class="role">GROUND — FIELD</div></div>
+        <div class="sw"><div class="chip" style="background:#111211"></div><div class="hex">#111211</div><div class="role">INK — ALL TYPE</div><div class="ratio">13.4:1 · 16.3:1</div></div>
+        <div class="sw"><div class="chip" style="background:#EF8F68"></div><div class="hex">#EF8F68</div><div class="role paint">PAINT ONLY</div><div class="ratio">1.70:1 — never type</div></div>
+        <div class="sw"><div class="chip" style="background:#DEC473"></div><div class="hex">#DEC473</div><div class="role paint">PAINT ONLY</div><div class="ratio">1.22:1 — never type</div></div>
+        <div class="sw"><div class="chip" style="background:#286A50"></div><div class="hex">#286A50</div><div class="role">TYPE OK</div><div class="ratio">4.59:1</div></div>
+        <div class="sw"><div class="chip" style="background:#A13C20"></div><div class="hex">#A13C20</div><div class="role">TYPE OK</div><div class="ratio">4.69:1</div></div>
+        <div class="sw"><div class="chip" style="background:#18589A"></div><div class="hex">#18589A</div><div class="role">TYPE OK</div><div class="ratio">5.19:1</div></div>
+      </div>
+      <div class="demo">
+        <p class="ok">Deep green sets legibly at body size. <span class="tag">4.59:1</span></p>
+        <p class="ok2">So does the cobalt. <span class="tag">5.19:1</span></p>
+        <p class="ok3">And the rust. <span class="tag">4.69:1</span></p>
+        <p class="bad">Terracotta does not — this line fails. <span class="tag">1.70:1</span></p>
+      </div>
+    </div>
+  </div>
+</div>
+</body></html>

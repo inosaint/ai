@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@100;300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Liter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 
   <!-- Favicons -->
@@ -35,12 +36,29 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body class="home">
+  <!-- Topbar -->
+  <div class="site-topbar">
+    <span class="terminal-dots"><span></span><span></span><span></span></span>
+    <span class="site-topbar-path">~/kenneth/ai-sabbatical</span>
+    <span class="site-topbar-spacer"></span>
+    <a href="https://kenneth.dsouza.im/" class="site-topbar-link">main site →</a>
+  </div>
+
   <!-- Header / Bio -->
   <header class="site-hero">
     <h1 class="sr-only">Kenneth's AI Projects</h1>
-    <div class="hero-display">
-      <h1>Hey there,</h1>
-      <p>I'm <a href="https://kenneth.dsouza.im/">Kenneth</a> & I'm currently on a sabbatical making apps with AI and exploring AI native design tooling.</p>
+    <div class="hero-display terminal-window">
+      <div class="terminal-titlebar">
+        <span class="terminal-dots"><span></span><span></span><span></span></span>
+        <span class="terminal-path">bio.sh</span>
+        <a href="https://kenneth.dsouza.im/" class="terminal-titlebar-link">main site →</a>
+      </div>
+      <div class="terminal-body">
+        <p class="terminal-line"><span class="prompt">$</span> whoami</p>
+        <h1 class="terminal-output">Kenneth<span class="cursor-blink" aria-hidden="true">▌</span></h1>
+        <p class="terminal-output-sub">Currently on a sabbatical, making apps with AI and exploring AI-native design tooling.</p>
+        <p class="terminal-meta"><span id="localTime"></span> local &nbsp;·&nbsp; also at <a href="https://kenneth.dsouza.im/" class="terminal-meta-link">kenneth.dsouza.im ↗</a></p>
+      </div>
     </div>
     <div class="hero-links">
       <a href="https://howtoaicode.com" class="hero-link-box" target="_blank" rel="noopener noreferrer">
@@ -72,6 +90,16 @@
       <a href="https://luma.com/i24sf8vx" class="upcoming-event-btn" target="_blank" rel="noopener noreferrer">RSVP</a>
     </div>
   </header>
+  <script>
+    const localTimeEl = document.getElementById('localTime');
+    if (localTimeEl) {
+      const updateLocalTime = () => {
+        localTimeEl.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      };
+      updateLocalTime();
+      setInterval(updateLocalTime, 1000 * 30);
+    }
+  </script>
   <script>
     document.querySelectorAll('.upcoming-event-row[data-event-date]').forEach((row) => {
       const eventDate = new Date(row.dataset.eventDate + 'T23:59:59');

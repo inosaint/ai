@@ -1,0 +1,26 @@
+[
+  {
+    "text": "can we try and make these lines wobbly and see how it looks?",
+    "x": 278,
+    "y": 1398,
+    "target": "div.frame > div.sheet > section.mo > h3",
+    "page": "index-new.html",
+    "viewport": "1446x703",
+    "theme": "light",
+    "id": "amsyvcaio2ij",
+    "created": "2026-08-18T16:20:07.104Z",
+    "status": "open"
+  },
+  {
+    "text": "can we move the symbols to the left and the AlL projects title to the right?",
+    "x": 85,
+    "y": 1367,
+    "target": "div.frame > div.sheet > div.idxhead > h2.sec",
+    "page": "index-new.html",
+    "viewport": "1446x703",
+    "theme": "light",
+    "id": "amsyvcx7bi7f",
+    "created": "2026-08-18T16:20:36.503Z",
+    "status": "open"
+  }
+]
