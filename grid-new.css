@@ -2,14 +2,16 @@
    Sizes come from a manual weight (data-w 1..4); the palette is the park palette
    pushed brighter, since these are meant to read as painted blocks, not washes. */
 :root{
-  --g-coral:#EE9179; --g-ochre:#E3A32E; --g-vermillion:#CE4527;
+  --g-coral:#EE9179; --g-ochre:#E3A32E; --g-vermillion:#C24125;
   --g-teal:#47738F;  --g-navy:#26445C;  --g-moss:#3E6E5D;
   --g-terra:#DE7F4E; --g-blush:#F2B9A4;
 }
 [data-theme="dark"]{
-  --g-coral:#A55C48; --g-ochre:#A2762A; --g-vermillion:#8F3220;
+  /* deepened until the light label clears 4.5:1 — see the WCAG pass.
+     ochre 2.66, coral 3.25, terra 3.49 and blush 2.42 all failed before. */
+  --g-coral:#844A3A; --g-ochre:#73541E; --g-vermillion:#8F3220;
   --g-teal:#365A72;  --g-navy:#1A2F40;  --g-moss:#2C5145;
-  --g-terra:#9C5A38; --g-blush:#A87A6B;
+  --g-terra:#814B2E; --g-blush:#715248;
 }
 
 .idxhead{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
@@ -57,8 +59,11 @@
   font-size:13px;text-wrap:balance}
 .tile[data-w="3"] .tn,.tile[data-w="4"] .tn{font-size:16px}
 .tile[data-w="1"] .tn{font-size:11.5px}
-.tile .tk{display:block;font-family:var(--mono,ui-monospace,monospace);font-size:8px;
-  letter-spacing:.18em;opacity:.62;margin-top:4px}
+/* The symbol in the corner already says which category this is, so the word is
+   redundant on screen — but it stays in the DOM for anything reading the page,
+   since the symbol itself is aria-hidden. */
+.tile .tk{position:absolute;width:1px;height:1px;overflow:hidden;
+  clip:rect(0,0,0,0);white-space:nowrap}
 .tile .tico{position:absolute;top:10px;left:11px;z-index:3;opacity:.55}
 .tile .tico .dot{fill:currentColor}
 .tile:hover,.tile:focus-visible{color:var(--t-ink,#15150F)}
@@ -185,7 +190,12 @@
    subtitle while the links themselves stay where they were — aligning the whole
    block to the top would have moved them too. */
 @media(min-width:940px){
-  .herolinks{margin-top:42px}
+  /* a healthy gap under the title, and a bigger one above the links so the
+     title/subtitle pair sits well clear of them.
+     Written as p.lede because park.css sets p.lede{margin-top:14px} — a bare
+     .lede loses on specificity however late it is declared. */
+  p.lede{margin-top:24px;font-size:15px}
+  .herolinks{margin-top:64px;margin-bottom:12px;font-size:15px}
 }
 
 /* ---- dark mode: the category symbols come on like lamps ----
@@ -209,8 +219,8 @@
    The per-tile --t-ink is inline for the light palette and cannot be reassigned
    from a stylesheet, so the resolved colour is overridden instead. */
 [data-theme="dark"] .tile{color:var(--ink)}
-[data-theme="dark"] .tile .tn{opacity:.96}
-[data-theme="dark"] .tile .tk{opacity:.62}
+/* full strength: .96 was enough to pull terra from 4.60 to 4.38:1 */
+[data-theme="dark"] .tile .tn{opacity:1}
 @keyframes tileglow{
   0%,100%{opacity:.82}
   50%    {opacity:1}
@@ -220,3 +230,32 @@
 @media (prefers-reduced-motion: reduce){
   [data-theme="dark"] .tile .tico{animation:none}
 }
+
+/* ---- subtitle contrast ----
+   park.css sets p.lede{opacity:.75} and playground.css colours it with --dim,
+   which is already 65% alpha. The two compound to 0.4875, giving 3.26:1 in light
+   and 3.73:1 in dark — both under the 4.5:1 WCAG AA needs for 13.5px/400 text.
+   The element opacity goes, so --dim alone governs, and --dim is raised to meet
+   AA in both themes with a little headroom. */
+p.lede{opacity:1}
+.lede{color:var(--lede-fg)}
+:root{--lede-fg:#141414c9}
+[data-theme="dark"]{--lede-fg:#C9D2DAd6}
+
+/* ---- the project map reads, it does not navigate ----
+   Nothing in the map is clickable — hovering a cell only writes to the readout —
+   so a pointer/hand would promise a click that never comes. Crosshair is the
+   convention for precise inspection on a chart, and it is what grid-viz.html
+   used before that file was folded away. Set on the svg rather than the hit
+   rects so the cursor does not flicker in the gaps between cells. */
+.viz svg{cursor:crosshair}
+.viz .hit{cursor:crosshair}
+/* the readout is the feedback the cursor is promising, so give it presence */
+.viz-read{opacity:0;transition:opacity .15s}
+.viz:hover .viz-read{opacity:1}
+
+/* ---- small type that fell under 4.5:1 in the WCAG pass ---- */
+/* the external-link arrow: 10px/500 at .55 alpha read 3.94:1 */
+.herolinks .ext{opacity:.85}
+/* the year beside each month: 8.5px/400 at .38 alpha read 2.40:1 */
+.mlabel b{opacity:.72}

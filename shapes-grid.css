@@ -1,0 +1,30 @@
+/* Grid study — tiles cut to their category mark.
+
+   Only the label handling differs from the main grid: a triangle or a cross has
+   far less usable area than a square, so the name is centred in the mark's body
+   rather than sitting in the bottom-left corner where it would fall outside. */
+.pgrid[data-shapes] .tile{
+  justify-content:center;align-items:center;text-align:center;padding:8px}
+.pgrid[data-shapes] .tile .tmeta{
+  max-width:82%;pointer-events:none}
+.pgrid[data-shapes] .tile .tn{font-size:11px;line-height:1.2;text-wrap:balance}
+.pgrid[data-shapes] .tile[data-w="3"] .tn,
+.pgrid[data-shapes] .tile[data-w="4"] .tn{font-size:14px}
+.pgrid[data-shapes] .tile[data-w="1"] .tn{font-size:9.5px;letter-spacing:-.005em}
+
+/* A triangle only has width near its base, so the label drops and narrows or it
+   spills past the sloping sides. A diamond narrows toward every corner; a cross
+   is only full width across its waist. */
+.pgrid[data-shapes] .tile[data-cat="event"] .tmeta{transform:translateY(34%);max-width:56%}
+.pgrid[data-shapes] .tile[data-cat="exploration"] .tmeta{max-width:52%}
+.pgrid[data-shapes] .tile[data-cat="visualization"] .tmeta{max-width:56%}
+.pgrid[data-shapes] .tile[data-cat="game"] .tmeta{max-width:66%}
+/* the smallest marks cannot hold a name at all — the tooltip carries it */
+.pgrid[data-shapes] .tile[data-w="1"][data-cat="event"] .tn,
+.pgrid[data-shapes] .tile[data-w="1"][data-cat="visualization"] .tn{font-size:8px}
+
+/* the corner symbol is redundant when the whole tile is that symbol */
+.pgrid[data-shapes] .tile .tico{display:none}
+
+/* shapes do not tile, so the lattice behind them does more of the work */
+.pgrid[data-shapes] ~ .prules{opacity:1}

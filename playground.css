@@ -1,6 +1,6 @@
 /* Page styles — palette tokens come from park.css */
 :root{
-  --sans:'Archivo',system-ui,-apple-system,sans-serif;
+  --sans:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
   --mono:'Martian Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
   --c-app:#C44928; --c-game:#4A7093; --c-event:#CA7549;
   --c-exploration:#3F6B5C; --c-visualization:#AE8449;

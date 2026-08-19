@@ -1,0 +1,31 @@
+/* Park illustration — built from the five category marks.
+   Shared by footer-marks.html (the study) and index-new.html (the live footer),
+   so the two cannot drift apart. Expects park.css to have already defined
+   --paper, --ink, --lamp, --lampglow and --star. */
+:root{
+  --m-teal:#47738F; --m-navy:#26445C; --m-rust:#CE4527; --m-ochre:#E3A32E;
+  --m-moss:#3E6E5D; --m-coral:#EE9179; --m-figure:#26445C;
+  --m-plane-op:.94; --m-ink-op:.8;
+}
+[data-theme="dark"]{
+  --m-teal:#365A72; --m-navy:#1A2F40; --m-rust:#8F3220; --m-ochre:#A2762A;
+  --m-moss:#2C5145; --m-coral:#A55C48; --m-figure:#5C6B7A;
+  --m-plane-op:.72; --m-ink-op:.42;
+}
+
+/* the balloons climb out of the footer and over the page, so nothing may clip them */
+.park{display:block;width:100%;height:auto;overflow:visible}
+.park .plane{opacity:var(--m-plane-op)}
+.park .ln{stroke:var(--ink);fill:none;opacity:var(--m-ink-op);stroke-linecap:round;
+  vector-effect:non-scaling-stroke}
+.park .rim{fill:none;stroke:var(--ink);stroke-width:1.3;opacity:var(--m-ink-op);
+  vector-effect:non-scaling-stroke}
+.park .track{fill:none;stroke:var(--m-rust);stroke-width:2.4;opacity:.9;
+  vector-effect:non-scaling-stroke}
+.park .base{stroke:var(--ink);opacity:1;stroke-linecap:square}
+/* The park's own baseline is the rule above the footer text — the viewBox is
+   trimmed to it, so a second border here would just double the line. */
+.park + .foot-meta{border-top:0;margin-top:0}
+.park .star{fill:var(--ink);opacity:calc(var(--star)*.45)}
+.park .lamp{fill:var(--lamp);opacity:var(--lampglow);transition:opacity .6s ease}
+@media (prefers-reduced-motion: reduce){ .park *{animation:none!important} }

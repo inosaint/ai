@@ -15,8 +15,11 @@
   if(typeof GRID_CONFIG==='object' && GRID_CONFIG){
     const DARK={'--g-navy':1,'--g-teal':1,'--g-moss':1,'--g-vermillion':1};
     tiles.forEach(t=>{
+      // keyed by "Name @ Month" so two projects sharing a name stay distinct;
+      // a bare name still works for hand-added entries
       const nameEl=t.querySelector('.tn');
-      const cfg=nameEl && GRID_CONFIG[nameEl.textContent.trim()];
+      const nm=nameEl?nameEl.textContent.trim():'';
+      const cfg=GRID_CONFIG[t.dataset.key] || GRID_CONFIG[nm];
       if(!cfg) return;
       if(cfg.size)   t.dataset.w=String(Math.min(4,Math.max(1,cfg.size|0)));
       if(cfg.colour){
@@ -30,6 +33,8 @@
     });
   }
   const labels=[...grid.querySelectorAll('.mlabel')];
+  // set data-shapes on the grid to cut every tile to its category mark
+  const SHAPE_TILES = grid.dataset.shapes!==undefined && typeof SHAPES==='object';
   // one seed per tile, shared by the SVG outline and the shader's edge
   tiles.forEach((t,i)=>{ t.dataset.seed=((i*137)%40).toFixed(2); });
 
@@ -49,20 +54,43 @@
 
   /* ---------- the park in the footer ---------- */
   const parkSvg=document.getElementById('park');
-  if(parkSvg && typeof initPark==='function')
-    initPark(parkSvg,{seed: qsp.has('seed')?(parseInt(qsp.get('seed'),10)||1):undefined});
+  const parkSeed={seed: qsp.has('seed')?(parseInt(qsp.get('seed'),10)||1):undefined};
+  // the marks park is the one the footer uses now; initPark stays as a fallback
+  if(parkSvg && typeof initParkMarks==='function') initParkMarks(parkSvg,parkSeed);
+  else if(parkSvg && typeof initPark==='function') initPark(parkSvg,parkSeed);
 
   /* ---------- seeded wobble, so the hand is stable between loads ---------- */
   function rnd(seed){ return ()=>{ seed|=0; seed=seed+0x6D2B79F5|0;
     let t=Math.imul(seed^seed>>>15,1|seed);
     t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
 
-  function wobblyRect(w,h,r,amt){
-    // walk the perimeter, nudging each step, and overshoot the corners a little
-    const pts=[], per=[[0,0],[w,0],[w,h],[0,h]];
-    for(let e=0;e<4;e++){
-      const [x0,y0]=per[e], [x1,y1]=per[(e+1)%4];
-      const len=Math.hypot(x1-x0,y1-y0), n=Math.max(2,Math.round(len/26));
+  /* The outline a tile is cut to. Normally the cell itself; in shape mode it is
+     the project's category mark, inscribed in the cell at the same proportions
+     grid-viz.js draws. crumble clips its canvas to these points, so the hover
+     crumble follows whichever outline is in use without knowing about either. */
+  function shapeVerts(kind,w,h){
+    const cx=w/2, cy=h/2, s=Math.min(w,h)/2;
+    if(kind==='square')   return [[0,0],[w,0],[w,h],[0,h]];
+    if(kind==='circle'){
+      const v=[], n=44;
+      for(let i=0;i<n;i++){ const a=i/n*Math.PI*2;
+        v.push([cx+Math.cos(a)*s*0.99, cy+Math.sin(a)*s*0.99]); }
+      return v;
+    }
+    if(kind==='triangle'){ const hh=s*1.02;
+      return [[cx,cy-hh],[cx+s,cy+hh*0.72],[cx-s,cy+hh*0.72]]; }
+    if(kind==='diamond')  return [[cx,cy-s],[cx+s,cy],[cx,cy+s],[cx-s,cy]];
+    const a=s*0.35, b=s;                       // cross
+    return [[cx-a,cy-b],[cx+a,cy-b],[cx+a,cy-a],[cx+b,cy-a],[cx+b,cy+a],[cx+a,cy+a],
+            [cx+a,cy+b],[cx-a,cy+b],[cx-a,cy+a],[cx-b,cy+a],[cx-b,cy-a],[cx-a,cy-a]];
+  }
+
+  function wobblyPoly(verts,r,amt){
+    // walk the perimeter, nudging each step, and overshoot the start a little
+    const pts=[], N=verts.length;
+    for(let e=0;e<N;e++){
+      const [x0,y0]=verts[e], [x1,y1]=verts[(e+1)%N];
+      const len=Math.hypot(x1-x0,y1-y0), n=Math.max(1,Math.round(len/26));
       for(let i=0;i<=n;i++){
         const t=i/n;
         pts.push([x0+(x1-x0)*t+(r()-0.5)*amt, y0+(y1-y0)*t+(r()-0.5)*amt]);
@@ -86,7 +114,8 @@
       svg.setAttribute('viewBox','0 0 '+b.width.toFixed(0)+' '+b.height.toFixed(0));
       svg.innerHTML='';
       const r=rnd(9001+i*137);
-      const d=wobblyRect(b.width,b.height,r,2.0);
+      const kind=SHAPE_TILES ? (SHAPES[el.dataset.cat]||'square') : 'square';
+      const d=wobblyPoly(shapeVerts(kind,b.width,b.height), r, 2.0);
       el._clip=d.pts;                       // used to clip the shader to this outline
       const fill=document.createElementNS(NS,'path');
       fill.setAttribute('class','fill'); fill.setAttribute('d',d.fill);
@@ -362,7 +391,13 @@
   function relayout(){ sizeRows(); buildViz(); requestAnimationFrame(()=>{
     drawFrames(); drawRules(); drawGrid(); if(crumble) crumble.measure(); }); }
   let rt; addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(relayout,160);});
-  addEventListener('scroll',()=>{ if(crumble) crumble.measure(); },{passive:true});
+  // scroll fired measure() — rects plus clip-path strings — on every single event
+  let sTick=false;
+  addEventListener('scroll',()=>{
+    if(sTick||!crumble) return;
+    sTick=true;
+    requestAnimationFrame(()=>{ sTick=false; crumble.measure(); });
+  },{passive:true});
   if(document.fonts&&document.fonts.ready) document.fonts.ready.then(relayout);
   buildViz();
   relayout();

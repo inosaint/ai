@@ -321,9 +321,20 @@ function build(){
 }
 
 /* ---- animation ---------------------------------------------- */
+  /* The footer is usually far below the fold. Animating it while it is off
+     screen, or while the tab is in the background, is pure cost. */
+  let onScreen=true, raf=0;
+  const idle=()=>document.hidden||!onScreen;
+  function kick(){ if(!raf && !idle()) raf=requestAnimationFrame(frame); }
+  if(typeof IntersectionObserver==='function'){
+    new IntersectionObserver(function(es){ onScreen=es[0].isIntersecting; kick(); },
+      {rootMargin:'150px'}).observe(svg);
+  }
+  document.addEventListener('visibilitychange',kick);
+
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 function frame(t){
-  if(motion && !reduce){
+  if(motion && !reduce && !idle()){
     tick=t/1000;
     // wheel turns; cabins counter-rotate so they hang level
     const ang=tick*7;
@@ -361,11 +372,12 @@ function frame(t){
       });
     }
   }
-  requestAnimationFrame(frame);
+  if(idle()){ raf=0; return; }          // stop; kick() restarts it
+  raf=requestAnimationFrame(frame);
 }
 
   build();
-  requestAnimationFrame(frame);
+  kick();
   return {
     get seed(){ return SEED; },
     redraw(s){ SEED = (s!==undefined) ? s : (SEED*31+17)%9973; build(); return SEED; },

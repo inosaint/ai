@@ -169,8 +169,29 @@ function initCrumble(canvas, host){
     return [.5,.5,.5];
   };
 
-  const cache=new Map();
+  const cache=new Map();                         // LRU, capped: decoded bitmaps are
+  const CACHE_MAX=8;                             // far heavier than the files on disk
   const media=[null,null];                       // what each slot is sampling
+  function remember(src, obj){
+    cache.delete(src); cache.set(src,obj);
+    while(cache.size>CACHE_MAX){
+      const oldest=cache.keys().next().value;
+      if(slotEl.some(e=>e&&e.dataset.img===oldest)) break;   // never evict a live slot
+      const gone=cache.get(oldest);
+      if(gone&&gone.tagName==='VIDEO'){ gone.pause(); gone.removeAttribute('src'); gone.load(); }
+      cache.delete(oldest);
+    }
+  }
+  const MAXTEX=1024;
+  function fit(src){
+    const w=src.naturalWidth||src.videoWidth||0, h=src.naturalHeight||src.videoHeight||0;
+    if(!w||!h||Math.max(w,h)<=MAXTEX) return src;
+    const k=MAXTEX/Math.max(w,h);
+    const c=document.createElement('canvas');
+    c.width=Math.round(w*k); c.height=Math.round(h*k);
+    c.getContext('2d').drawImage(src,0,0,c.width,c.height);
+    return c;
+  }
   const isVideo=src=>/\.(mp4|mov|webm|m4v|ogv)$/i.test(src||'');
 
   function upload(slot, src){
@@ -180,7 +201,8 @@ function initCrumble(canvas, host){
     try{
       gl.bindTexture(gl.TEXTURE_2D,texs[slot]);
       gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);
-      gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,src);
+      gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,
+        src.tagName==='VIDEO'?src:fit(src));
       hasImg[slot]=1;
       return true;
     }catch(e){
@@ -205,7 +227,7 @@ function initCrumble(canvas, host){
         v.crossOrigin='anonymous';
         v.addEventListener('error',()=>console.warn('[crumble] video failed:',src));
         v.src=src;
-        cache.set(src,v);
+        remember(src,v);
       }
       media[slot]={kind:'video', el:v, src};
       // a muted, inline video is allowed to play without a gesture
@@ -215,12 +237,13 @@ function initCrumble(canvas, host){
 
     let im=cache.get(src);
     if(im && im.complete && im.naturalWidth){
+      remember(src,im);
       media[slot]={kind:'image', el:im, src}; upload(slot,im); return;
     }
     if(!im){
       im=new Image(); im.crossOrigin='anonymous';
       im.onerror=()=>console.warn('[crumble] image failed:',src);
-      cache.set(src,im); im.src=src;
+      remember(src,im); im.src=src;
     }
     media[slot]={kind:'image', el:im, src};
     im.addEventListener('load',()=>{
@@ -283,7 +306,6 @@ function initCrumble(canvas, host){
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const t0=performance.now();
   function frame(now){
-    raf=requestAnimationFrame(frame);
     let live=false;
     for(let i=0;i<2;i++){
       const k=want[i]>hover[i]?0.15:0.20;      // let go faster than it takes hold
@@ -322,13 +344,18 @@ function initCrumble(canvas, host){
     gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D,texs[1]); gl.uniform1i(u.tex1,1);
     gl.clearColor(0,0,0,0); gl.clear(gl.COLOR_BUFFER_BIT);
     if(live) gl.drawArrays(gl.TRIANGLES,0,3);
+    // idle out completely once nothing is hovered or fading; enter() wakes it
+    if(!live && !want[0] && !want[1]){ raf=0; return; }
+    raf=requestAnimationFrame(frame);
   }
+  function kick(){ if(!raf) raf=requestAnimationFrame(frame); }
 
-  measure(); raf=requestAnimationFrame(frame);
+  measure(); kick();
 
   return {
     state, measure,
     enter(el, centre){
+      kick();
       if(slotEl[0]===el){ want[0]=1; return; }
       // push the current tile into the second slot so it can fade out behind
       slotEl[1]=slotEl[0]; hover[1]=hover[0]; want[1]=0; mouse[1]=mouse[0].slice();
@@ -345,7 +372,7 @@ function initCrumble(canvas, host){
                   (hostRect.bottom-(r.top+r.height/2))*dpr];
       }
     },
-    leave(el){ if(slotEl[0]===el) want[0]=0; if(slotEl[1]===el) want[1]=0; },
+    leave(el){ if(slotEl[0]===el) want[0]=0; if(slotEl[1]===el) want[1]=0; kick(); },
     destroy(){ cancelAnimationFrame(raf); }
   };
 }

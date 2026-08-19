@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Footer study — built from the marks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Martian+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="park-marks.css">
+<style>
+:root{
+  --paper:#F4F1EC; --ink:#15150F; --rule:#15150F22;
+  --m-teal:#47738F; --m-navy:#26445C; --m-rust:#CE4527; --m-ochre:#E3A32E;
+  --m-moss:#3E6E5D; --m-coral:#EE9179; --m-figure:#26445C;
+  --lamp:#FFB33C; --lampglow:0; --star:0; --plane-op:.94; --ink-op:.8;
+}
+[data-theme="dark"]{
+  --paper:#0E1218; --ink:#C9D2DA; --rule:#C9D2DA22;
+  --m-teal:#365A72; --m-navy:#1A2F40; --m-rust:#8F3220; --m-ochre:#A2762A;
+  --m-moss:#2C5145; --m-coral:#A55C48; --m-figure:#5C6B7A;
+  --lampglow:1; --star:1; --plane-op:.72; --ink-op:.42;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:'Plus Jakarta Sans',system-ui,sans-serif;
+  font-size:13.5px;min-height:100vh;display:flex;flex-direction:column;
+  transition:background .6s ease,color .6s ease}
+main{flex:1;padding:clamp(28px,5vw,56px) clamp(20px,4vw,40px);max-width:1100px}
+.kicker{font-family:'Martian Mono',ui-monospace,monospace;font-size:9.5px;letter-spacing:.22em;
+  opacity:.55;margin-bottom:14px}
+h1{font-weight:600;font-size:clamp(24px,3.4vw,38px);letter-spacing:-.015em;line-height:1.08;max-width:22ch}
+p.lede{margin-top:14px;max-width:64ch;opacity:.72;line-height:1.65}
+.ctl{margin-top:24px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+button{font-family:'Martian Mono',ui-monospace,monospace;font-size:9.5px;letter-spacing:.14em;
+  background:none;color:inherit;border:1px solid var(--rule);padding:8px 13px;cursor:pointer}
+button:hover{border-color:currentColor}
+button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.seed{font-family:'Martian Mono',ui-monospace,monospace;font-size:9.5px;letter-spacing:.1em;opacity:.5}
+.seed a{color:inherit}
+a{color:inherit}
+
+footer{margin-top:auto;position:relative}
+footer{overflow:visible}
+body{overflow-x:hidden}
+.foot-meta{font-family:'Martian Mono',ui-monospace,monospace;display:flex;
+  justify-content:space-between;gap:16px;flex-wrap:wrap;padding:14px 30px 24px;
+  font-size:10px;letter-spacing:.14em;opacity:.7;border-top:1px solid var(--rule)}
+.foot-meta a{text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px}
+@media (prefers-reduced-motion: reduce){ .park *{animation:none!important} }
+</style></head>
+<body>
+<main>
+  <p class="kicker">FOOTER STUDY · BUILT FROM THE MARKS</p>
+  <h1>The same five shapes, made into a park.</h1>
+  <p class="lede">Every form here is one of the five category marks — square, circle, triangle,
+  diamond, cross — at the proportions the project map draws them. Towers are squares, the wheel
+  carries one of each mark around its rim, the canopy is a fan of triangles, the mounts and the
+  coaster cars are marks too, and the crowd is a scatter of all five. Only the structure is
+  drawn as line. Switch to dark and the lamps come on.</p>
+  <div class="ctl">
+    <button id="theme">DARK MODE</button>
+    <button id="reroll">REDRAW</button>
+    <button id="motion" aria-pressed="true">MOTION ON</button>
+    <span class="seed" id="seedout"></span>
+  </div>
+</main>
+
+<footer>
+  <svg class="park" id="park" viewBox="0 0 2000 498" preserveAspectRatio="xMidYMax meet"
+       aria-label="A theme park drawn entirely from the five project category marks"></svg>
+  <div class="foot-meta">
+    <span><a href="index-new.html">← the playground</a></span>
+    <span>SQUARE · CIRCLE · TRIANGLE · DIAMOND · CROSS</span>
+  </div>
+</footer>
+
+<script src="park-marks.js"></script>
+<script>
+const qs=new URLSearchParams(location.search);
+if(qs.get('theme')==='dark') document.documentElement.setAttribute('data-theme','dark');
+const seedOut=document.getElementById('seedout');
+function showSeed(s){
+  seedOut.innerHTML='';
+  const a=document.createElement('a');
+  a.href='?seed='+s+(document.documentElement.getAttribute('data-theme')==='dark'?'&theme=dark':'');
+  a.textContent='SEED '+s+' — PIN THIS ONE';
+  a.style.cssText='text-decoration:underline;text-underline-offset:3px';
+  seedOut.appendChild(a);
+}
+const park=initParkMarks(document.getElementById('park'),{
+  seed: qs.has('seed')?(parseInt(qs.get('seed'),10)||1):undefined,
+  onSeed: showSeed
+});
+const tb=document.getElementById('theme');
+tb.textContent=document.documentElement.getAttribute('data-theme')==='dark'?'LIGHT MODE':'DARK MODE';
+tb.onclick=()=>{const d=document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme',d?'light':'dark');
+  tb.textContent=d?'DARK MODE':'LIGHT MODE'; showSeed(park.seed);};
+document.getElementById('reroll').onclick=()=>showSeed(park.redraw());
+const mb=document.getElementById('motion');
+mb.onclick=()=>{const on=mb.getAttribute('aria-pressed')!=='true';
+  mb.setAttribute('aria-pressed',String(on)); park.setMotion(on);
+  mb.textContent=on?'MOTION ON':'MOTION OFF';};
+</script>
+</body></html>

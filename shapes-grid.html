@@ -2,14 +2,15 @@
 <html lang="en"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Kenneth's AI playground</title>
+<title>Grid study — every project as its mark</title>
 <link rel="icon" type="image/x-icon" href="public/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Martian+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Martian+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="park.css">
 <link rel="stylesheet" href="playground.css">
 <link rel="stylesheet" href="grid-new.css">
+<link rel="stylesheet" href="shapes-grid.css">
 </head>
 <body>
 <div class="frame">
@@ -19,8 +20,11 @@
     <div class="zone" id="zone">
     <header class="hero">
       <div class="hero-t">
-      <h1>Kenneth's AI playground</h1>
-      <p class="lede">Everything* <a href="https://kenneth.dsouza.im/" class="me">I've</a> built on sabbatical with AI — apps, games, visualizations, events and the odd failure.</p>
+      <h1>Every project as its mark.</h1>
+      <p class="lede">A study: every project is cut to its own category mark rather than a
+      square — circles for games, triangles for events, diamonds for explorations, crosses for
+      visualizations, squares for apps. Size still comes from the weight in grid-config.js, and
+      hovering still crumbles the mark into smaller copies of itself.</p>
       <p class="herolinks">
         <a href="https://howtoaicode.com" target="_blank" rel="noopener noreferrer"
            data-tip="Learn how to use AI to make your first project. Free, and no experience needed."
@@ -47,186 +51,186 @@
 
     <div class="pwrap">
       <canvas class="pcanvas" id="pcanvas" aria-hidden="true"></canvas>
-      <div class="pgrid" id="pgrid">
+      <div class="pgrid" id="pgrid" data-shapes>
       <p class="mlabel" role="presentation"><span>JULY</span><b>2026</b></p>
       <a class="tile" href="https://designdemonights.com/#5" target="_blank" rel="noopener noreferrer" data-cat="event" data-w="3"
-         data-mo="July 2026" data-tint="--g-vermillion" data-img="projects/design-demos/demos-5.png" style="--t-bg:var(--g-vermillion);--t-ink:var(--paper)">
+         data-mo="July 2026" data-key="Design Demo Nights #5 @ July 2026" data-tint="--g-vermillion" data-img="projects/design-demos/demos-5.png" style="--t-bg:var(--g-vermillion);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">Design Demo Nights #5</span><span class="tk">EVENT</span></span>
       </a>
       <a class="tile" href="https://sudhaarit.com/" target="_blank" rel="noopener noreferrer" data-cat="app" data-w="2"
-         data-mo="July 2026" data-tint="--g-teal" data-img="projects/app/sudhaarit-site.png" style="--t-bg:var(--g-teal);--t-ink:var(--paper)">
+         data-mo="July 2026" data-key="Sudhaarit @ July 2026" data-tint="--g-teal" data-img="projects/app/sudhaarit-site.png" style="--t-bg:var(--g-teal);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">Sudhaarit</span><span class="tk">APP</span></span>
       </a>
       <a class="tile" href="https://mapyour.org/#growth-plan" target="_blank" rel="noopener noreferrer" data-cat="app" data-w="1"
-         data-mo="July 2026" data-tint="--g-navy" data-img="projects/app/mapyourgrowth.png" style="--t-bg:var(--g-navy);--t-ink:var(--paper)">
+         data-mo="July 2026" data-key="Mapyour.org growth plan feature @ July 2026" data-tint="--g-navy" data-img="projects/app/mapyourgrowth.png" style="--t-bg:var(--g-navy);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">Mapyour.org growth plan feature</span><span class="tk">APP</span></span>
       </a>
       <a class="tile" href="https://data-vizard.com" target="_blank" rel="noopener noreferrer" data-cat="app" data-w="2"
-         data-mo="July 2026" data-tint="--g-teal" data-img="projects/data-vizard/data-vizard-site.png" style="--t-bg:var(--g-teal);--t-ink:var(--paper)">
+         data-mo="July 2026" data-key="data-vizard.com @ July 2026" data-tint="--g-teal" data-img="projects/data-vizard/data-vizard-site.png" style="--t-bg:var(--g-teal);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">data-vizard.com</span><span class="tk">APP</span></span>
       </a>
       <a class="tile" href="https://devoted-huckle-mtxv.here.now" target="_blank" rel="noopener noreferrer" data-cat="visualization" data-w="3"
-         data-mo="July 2026" data-tint="--g-terra" data-img="projects/data-vizard/salary-data.png" style="--t-bg:var(--g-terra);--t-ink:var(--ink)">
+         data-mo="July 2026" data-key="Salary data viz @ July 2026" data-tint="--g-terra" data-img="projects/data-vizard/salary-data.png" style="--t-bg:var(--g-terra);--t-ink:var(--ink)">
         <span class="tmeta"><span class="tn">Salary data viz</span><span class="tk">VISUALIZATION</span></span>
       </a>
       <a class="tile" href="https://vizchitra.com/2026/sessions/interactive-dataviz-using-ai-coding-19?from=kenneth.dsouza.im" target="_blank" rel="noopener noreferrer" data-cat="event" data-w="1"
-         data-mo="July 2026" data-tint="--g-coral" data-img="projects/workshop/vizchitra.jpeg" style="--t-bg:var(--g-coral);--t-ink:var(--ink)">
+         data-mo="July 2026" data-key="Interactive DataViz Using AI Coding at VizChitra 2026 @ July 2026" data-tint="--g-coral" data-img="projects/workshop/vizchitra.jpeg" style="--t-bg:var(--g-coral);--t-ink:var(--ink)">
         <span class="tmeta"><span class="tn">Interactive DataViz Using AI Coding at VizChitra 2026</span><span class="tk">EVENT</span></span>
       </a>
       <a class="tile" href="https://astral-willow-xyk8.here.now" target="_blank" rel="noopener noreferrer" data-cat="visualization" data-w="2"
-         data-mo="July 2026" data-tint="--g-terra" style="--t-bg:var(--g-terra);--t-ink:var(--ink)">
+         data-mo="July 2026" data-key="FIFA 2026 football world cup visualized @ July 2026" data-tint="--g-terra" style="--t-bg:var(--g-terra);--t-ink:var(--ink)">
         <span class="tmeta"><span class="tn">FIFA 2026 football world cup visualized</span><span class="tk">VISUALIZATION</span></span>
       </a>
       <p class="mlabel" role="presentation"><span>JUNE</span><b>2026</b></p>
       <a class="tile" href="https://www.npmjs.com/package/data-vizard" target="_blank" rel="noopener noreferrer" data-cat="app" data-w="2"
-         data-mo="June 2026" data-tint="--g-teal" data-img="projects/data-vizard/data-vizard.png" style="--t-bg:var(--g-teal);--t-ink:var(--paper)">
+         data-mo="June 2026" data-key="Data Vizard @ June 2026" data-tint="--g-teal" data-img="projects/data-vizard/data-vizard.png" style="--t-bg:var(--g-teal);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">Data Vizard</span><span class="tk">APP</span></span>
       </a>
       <a class="tile" href="https://feels.fyi" target="_blank" rel="noopener noreferrer" data-cat="app" data-w="1"
-         data-mo="June 2026" data-tint="--g-navy" style="--t-bg:var(--g-navy);--t-ink:var(--paper)">
+         data-mo="June 2026" data-key="feels @ June 2026" data-tint="--g-navy" style="--t-bg:var(--g-navy);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">feels</span><span class="tk">APP</span></span>
       </a>
       <a class="tile" href="https://designdemonights.com/#4" target="_blank" rel="noopener noreferrer" data-cat="event" data-w="3"
-         data-mo="June 2026" data-tint="--g-vermillion" data-img="projects/design-demos/demos-4.JPG" style="--t-bg:var(--g-vermillion);--t-ink:var(--paper)">
+         data-mo="June 2026" data-key="Design Demo Nights #4 @ June 2026" data-tint="--g-vermillion" data-img="projects/design-demos/demos-4.JPG" style="--t-bg:var(--g-vermillion);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">Design Demo Nights #4</span><span class="tk">EVENT</span></span>
       </a>
       <p class="mlabel" role="presentation"><span>MAY</span><b>2026</b></p>
       <a class="tile" href="https://eternal-nebula-33dy.here.now/" target="_blank" rel="noopener noreferrer" data-cat="visualization" data-w="2"
-         data-mo="May 2026" data-tint="--g-terra" data-img="projects/viz-demos/viz-demos-1.png" style="--t-bg:var(--g-terra);--t-ink:var(--ink)">
+         data-mo="May 2026" data-key="Solar System Narrative Viz @ May 2026" data-tint="--g-terra" data-img="projects/viz-demos/viz-demos-1.png" style="--t-bg:var(--g-terra);--t-ink:var(--ink)">
         <span class="tmeta"><span class="tn">Solar System Narrative Viz</span><span class="tk">VISUALIZATION</span></span>
       </a>
       <a class="tile" href="https://www.instagram.com/reel/DYhqoPSvP8o/" target="_blank" rel="noopener noreferrer" data-cat="exploration" data-w="1"
-         data-mo="May 2026" data-tint="--g-terra" style="--t-bg:var(--g-terra);--t-ink:var(--ink)">
+         data-mo="May 2026" data-key="Grindsize Social Ad @ May 2026" data-tint="--g-terra" style="--t-bg:var(--g-terra);--t-ink:var(--ink)">
         <span class="tmeta"><span class="tn">Grindsize Social Ad</span><span class="tk">EXPLORATION</span></span>
       </a>
       <a class="tile" href="https://designdemonights.com/#3" target="_blank" rel="noopener noreferrer" data-cat="event" data-w="3"
-         data-mo="May 2026" data-tint="--g-vermillion" data-img="projects/design-demos/demos-3.jpg" style="--t-bg:var(--g-vermillion);--t-ink:var(--paper)">
+         data-mo="May 2026" data-key="Design Demo Nights #3 @ May 2026" data-tint="--g-vermillion" data-img="projects/design-demos/demos-3.jpg" style="--t-bg:var(--g-vermillion);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">Design Demo Nights #3</span><span class="tk">EVENT</span></span>
       </a>
       <a class="tile" href="https://designdemonights.com/" target="_blank" rel="noopener noreferrer" data-cat="event" data-w="2"
-         data-mo="May 2026" data-tint="--g-vermillion" style="--t-bg:var(--g-vermillion);--t-ink:var(--paper)">
+         data-mo="May 2026" data-key="Design Demo Nights Archive @ May 2026" data-tint="--g-vermillion" style="--t-bg:var(--g-vermillion);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">Design Demo Nights Archive</span><span class="tk">EVENT</span></span>
       </a>
       <a class="tile" href="https://kenneth.dsouza.im/grinder-calibrator/" target="_blank" rel="noopener noreferrer" data-cat="app" data-w="4"
-         data-mo="May 2026" data-tint="--g-navy" data-img="projects/grinder-calibrator/grinder-v1.jpg" style="--t-bg:var(--g-navy);--t-ink:var(--paper)">
+         data-mo="May 2026" data-key="Grindsize.in @ May 2026" data-tint="--g-navy" data-img="projects/grinder-calibrator/grinder-v1.jpg" style="--t-bg:var(--g-navy);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">Grindsize.in</span><span class="tk">APP</span></span>
       </a>
       <p class="mlabel" role="presentation"><span>APRIL</span><b>2026</b></p>
       <a class="tile" href="https://x.com/kenneth/status/2049520004182515961" target="_blank" rel="noopener noreferrer" data-cat="event" data-w="1"
-         data-mo="April 2026" data-tint="--g-vermillion" data-img="projects/workshop/canara.jpeg" style="--t-bg:var(--g-vermillion);--t-ink:var(--paper)">
+         data-mo="April 2026" data-key="Agentic Coding Workshop at CEC, Mangalore @ April 2026" data-tint="--g-vermillion" data-img="projects/workshop/canara.jpeg" style="--t-bg:var(--g-vermillion);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">Agentic Coding Workshop at CEC, Mangalore</span><span class="tk">EVENT</span></span>
       </a>
       <a class="tile" href="https://designdemonights.com/#2" target="_blank" rel="noopener noreferrer" data-cat="event" data-w="2"
-         data-mo="April 2026" data-tint="--g-vermillion" data-img="projects/design-demos/demos-2.jpg" style="--t-bg:var(--g-vermillion);--t-ink:var(--paper)">
+         data-mo="April 2026" data-key="Design Demo Nights #2 @ April 2026" data-tint="--g-vermillion" data-img="projects/design-demos/demos-2.jpg" style="--t-bg:var(--g-vermillion);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">Design Demo Nights #2</span><span class="tk">EVENT</span></span>
       </a>
       <a class="tile" href="https://github.com/inosaint/rocky" target="_blank" rel="noopener noreferrer" data-cat="exploration" data-w="3"
-         data-mo="April 2026" data-tint="--g-terra" data-img="projects/app/rocky.png" style="--t-bg:var(--g-terra);--t-ink:var(--ink)">
+         data-mo="April 2026" data-key="ASCII Rocky @ April 2026" data-tint="--g-terra" data-img="projects/app/rocky.png" style="--t-bg:var(--g-terra);--t-ink:var(--ink)">
         <span class="tmeta"><span class="tn">ASCII Rocky</span><span class="tk">EXPLORATION</span></span>
       </a>
       <a class="tile" href="https://woody-prism-2qw5.here.now" target="_blank" rel="noopener noreferrer" data-cat="game" data-w="1"
-         data-mo="April 2026" data-tint="--g-moss" data-img="projects/games/tower.PNG" style="--t-bg:var(--g-moss);--t-ink:var(--paper)">
+         data-mo="April 2026" data-key="Tower Dungeon @ April 2026" data-tint="--g-moss" data-img="projects/games/tower.PNG" style="--t-bg:var(--g-moss);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">Tower Dungeon</span><span class="tk">GAME</span></span>
       </a>
       <a class="tile" href="https://brisk-laurel-tj2e.here.now/" target="_blank" rel="noopener noreferrer" data-cat="exploration" data-w="2"
-         data-mo="April 2026" data-tint="--g-ochre" data-img="projects/app/designr.png" style="--t-bg:var(--g-ochre);--t-ink:var(--ink)">
+         data-mo="April 2026" data-key="designr. @ April 2026" data-tint="--g-ochre" data-img="projects/app/designr.png" style="--t-bg:var(--g-ochre);--t-ink:var(--ink)">
         <span class="tmeta"><span class="tn">designr.</span><span class="tk">EXPLORATION</span></span>
       </a>
       <p class="mlabel" role="presentation"><span>MARCH</span><b>2026</b></p>
       <a class="tile" href="https://amoebas-production.up.railway.app/" target="_blank" rel="noopener noreferrer" data-cat="game" data-w="2"
-         data-mo="March 2026" data-tint="--g-teal" data-img="projects/app/amoebas.mov" style="--t-bg:var(--g-teal);--t-ink:var(--paper)">
+         data-mo="March 2026" data-key="Amoebas - Live @ March 2026" data-tint="--g-teal" data-img="projects/app/amoebas.mov" style="--t-bg:var(--g-teal);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">Amoebas - Live</span><span class="tk">GAME</span></span>
       </a>
       <a class="tile" href="https://github.com/inosaint/amoebas" target="_blank" rel="noopener noreferrer" data-cat="game" data-w="1"
-         data-mo="March 2026" data-tint="--g-moss" data-img="projects/app/amoebas.mov" style="--t-bg:var(--g-moss);--t-ink:var(--paper)">
+         data-mo="March 2026" data-key="Amoebas @ March 2026" data-tint="--g-moss" data-img="projects/app/amoebas.mov" style="--t-bg:var(--g-moss);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">Amoebas</span><span class="tk">GAME</span></span>
       </a>
       <a class="tile" href="https://designdemonights.com/#1" target="_blank" rel="noopener noreferrer" data-cat="event" data-w="3"
-         data-mo="March 2026" data-tint="--g-vermillion" data-img="projects/design-demos/demos-1.jpeg" style="--t-bg:var(--g-vermillion);--t-ink:var(--paper)">
+         data-mo="March 2026" data-key="Design Demo Nights #1 @ March 2026" data-tint="--g-vermillion" data-img="projects/design-demos/demos-1.jpeg" style="--t-bg:var(--g-vermillion);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">Design Demo Nights #1</span><span class="tk">EVENT</span></span>
       </a>
       <a class="tile" href="https://github.com/inosaint/pinboarder" target="_blank" rel="noopener noreferrer" data-cat="app" data-w="4"
-         data-mo="March 2026" data-tint="--g-navy" data-img="projects/app/pinboarder.png" style="--t-bg:var(--g-navy);--t-ink:var(--paper)">
+         data-mo="March 2026" data-key="Pinboarder @ March 2026" data-tint="--g-navy" data-img="projects/app/pinboarder.png" style="--t-bg:var(--g-navy);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">Pinboarder</span><span class="tk">APP</span></span>
       </a>
       <a class="tile" href="https://spielwerk.app/games/A424F663-879D-4DD9-BD4C-663C136A830F" target="_blank" rel="noopener noreferrer" data-cat="game" data-w="2"
-         data-mo="March 2026" data-tint="--g-moss" data-img="projects/games/infinite-dungeons.mov" style="--t-bg:var(--g-moss);--t-ink:var(--paper)">
+         data-mo="March 2026" data-key="Infinite Pixel Dungeons @ March 2026" data-tint="--g-moss" data-img="projects/games/infinite-dungeons.mov" style="--t-bg:var(--g-moss);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">Infinite Pixel Dungeons</span><span class="tk">GAME</span></span>
       </a>
       <a class="tile" href="https://x.com/kenneth/status/2032401402073686218" target="_blank" rel="noopener noreferrer" data-cat="exploration" data-w="1"
-         data-mo="March 2026" data-tint="--g-ochre" style="--t-bg:var(--g-ochre);--t-ink:var(--ink)">
+         data-mo="March 2026" data-key="Design Tooling Releases — Exploration 2 @ March 2026" data-tint="--g-ochre" style="--t-bg:var(--g-ochre);--t-ink:var(--ink)">
         <span class="tmeta"><span class="tn">Design Tooling Releases — Exploration 2</span><span class="tk">EXPLORATION</span></span>
       </a>
       <a class="tile" href="https://x.com/kenneth/status/2032024715259523372" target="_blank" rel="noopener noreferrer" data-cat="exploration" data-w="2"
-         data-mo="March 2026" data-tint="--g-terra" style="--t-bg:var(--g-terra);--t-ink:var(--ink)">
+         data-mo="March 2026" data-key="Design Tooling Releases — Exploration 1 @ March 2026" data-tint="--g-terra" style="--t-bg:var(--g-terra);--t-ink:var(--ink)">
         <span class="tmeta"><span class="tn">Design Tooling Releases — Exploration 1</span><span class="tk">EXPLORATION</span></span>
       </a>
       <a class="tile" href="https://x.com/kenneth/status/2030282446743502850" target="_blank" rel="noopener noreferrer" data-cat="exploration" data-w="2"
-         data-mo="March 2026" data-tint="--g-ochre" style="--t-bg:var(--g-ochre);--t-ink:var(--ink)">
+         data-mo="March 2026" data-key="Same Prompt, 3 Design Models, 1 Tool @ March 2026" data-tint="--g-ochre" style="--t-bg:var(--g-ochre);--t-ink:var(--ink)">
         <span class="tmeta"><span class="tn">Same Prompt, 3 Design Models, 1 Tool</span><span class="tk">EXPLORATION</span></span>
       </a>
       <a class="tile" href="https://x.com/nid_india/status/2029866422168428610" target="_blank" rel="noopener noreferrer" data-cat="event" data-w="1"
-         data-mo="March 2026" data-tint="--g-vermillion" data-img="projects/workshop/nid.jpeg" style="--t-bg:var(--g-vermillion);--t-ink:var(--paper)">
+         data-mo="March 2026" data-key="AI Workshop at NID @ March 2026" data-tint="--g-vermillion" data-img="projects/workshop/nid.jpeg" style="--t-bg:var(--g-vermillion);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">AI Workshop at NID</span><span class="tk">EVENT</span></span>
       </a>
       <p class="mlabel" role="presentation"><span>FEBRUARY</span><b>2026</b></p>
       <a class="tile" href="#" data-cat="app" data-w="2"
-         data-mo="February 2026" data-tint="--g-navy" style="--t-bg:var(--g-navy);--t-ink:var(--paper)">
+         data-mo="February 2026" data-key="Sudhaarit @ February 2026" data-tint="--g-navy" style="--t-bg:var(--g-navy);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">Sudhaarit</span><span class="tk">APP</span></span>
       </a>
       <a class="tile" href="https://github.com/inosaint/unamed" target="_blank" rel="noopener noreferrer" data-cat="game" data-w="3"
-         data-mo="February 2026" data-tint="--g-moss" data-img="projects/unamed/unamed.png" style="--t-bg:var(--g-moss);--t-ink:var(--paper)">
+         data-mo="February 2026" data-key="Unnamed @ February 2026" data-tint="--g-moss" data-img="projects/unamed/unamed.png" style="--t-bg:var(--g-moss);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">Unnamed</span><span class="tk">GAME</span></span>
       </a>
       <a class="tile" href="https://github.com/inosaint/hermes" target="_blank" rel="noopener noreferrer" data-cat="app" data-w="4"
-         data-mo="February 2026" data-tint="--g-teal" data-img="projects/app/hermes-mac.png" style="--t-bg:var(--g-teal);--t-ink:var(--paper)">
+         data-mo="February 2026" data-key="Hermes @ February 2026" data-tint="--g-teal" data-img="projects/app/hermes-mac.png" style="--t-bg:var(--g-teal);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">Hermes</span><span class="tk">APP</span></span>
       </a>
       <a class="tile" href="projects/app/smithy/index.html" data-cat="app" data-w="1"
-         data-mo="February 2026" data-tint="--g-navy" data-img="projects/app/smithy/cover-smithy.png" style="--t-bg:var(--g-navy);--t-ink:var(--paper)">
+         data-mo="February 2026" data-key="Smithy @ February 2026" data-tint="--g-navy" data-img="projects/app/smithy/cover-smithy.png" style="--t-bg:var(--g-navy);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">Smithy</span><span class="tk">APP</span></span>
       </a>
       <a class="tile" href="https://kenneth.dsouza.im/vibeshift-blr/" target="_blank" rel="noopener noreferrer" data-cat="app" data-w="2"
-         data-mo="February 2026" data-tint="--g-teal" data-img="projects/event/vibeshift-blr.jpg" style="--t-bg:var(--g-teal);--t-ink:var(--paper)">
+         data-mo="February 2026" data-key="Vibeshift Projects @ February 2026" data-tint="--g-teal" data-img="projects/event/vibeshift-blr.jpg" style="--t-bg:var(--g-teal);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">Vibeshift Projects</span><span class="tk">APP</span></span>
       </a>
       <a class="tile" href="https://exhume.link" target="_blank" rel="noopener noreferrer" data-cat="visualization" data-w="2"
-         data-mo="February 2026" data-tint="--g-terra" data-img="projects/app/exhume.png" style="--t-bg:var(--g-terra);--t-ink:var(--ink)">
+         data-mo="February 2026" data-key="exhume.link @ February 2026" data-tint="--g-terra" data-img="projects/app/exhume.png" style="--t-bg:var(--g-terra);--t-ink:var(--ink)">
         <span class="tmeta"><span class="tn">exhume.link</span><span class="tk">VISUALIZATION</span></span>
       </a>
       <p class="mlabel" role="presentation"><span>JANUARY</span><b>2026</b></p>
       <a class="tile" href="https://mapyour.org" target="_blank" rel="noopener noreferrer" data-cat="app" data-w="4"
-         data-mo="January 2026" data-tint="--g-navy" data-img="projects/app/mapyourorg.JPG" style="--t-bg:var(--g-navy);--t-ink:var(--paper)">
+         data-mo="January 2026" data-key="Mapyour.org @ January 2026" data-tint="--g-navy" data-img="projects/app/mapyourorg.JPG" style="--t-bg:var(--g-navy);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">Mapyour.org</span><span class="tk">APP</span></span>
       </a>
       <a class="tile" href="https://kenneth.dsouza.im/ai-workshop" target="_blank" rel="noopener noreferrer" data-cat="app" data-w="1"
-         data-mo="January 2026" data-tint="--g-teal" data-img="projects/workshop/ai-workshop.png" style="--t-bg:var(--g-teal);--t-ink:var(--paper)">
+         data-mo="January 2026" data-key="AI workshop @ January 2026" data-tint="--g-teal" data-img="projects/workshop/ai-workshop.png" style="--t-bg:var(--g-teal);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">AI workshop</span><span class="tk">APP</span></span>
       </a>
       <a class="tile" href="https://kenneth.dsouza.im/books-2025/index.html" target="_blank" rel="noopener noreferrer" data-cat="visualization" data-w="3"
-         data-mo="January 2026" data-tint="--g-terra" data-img="projects/exploration/books-2025.png" style="--t-bg:var(--g-terra);--t-ink:var(--ink)">
+         data-mo="January 2026" data-key="Books Viz&#x27; 2025 @ January 2026" data-tint="--g-terra" data-img="projects/exploration/books-2025.png" style="--t-bg:var(--g-terra);--t-ink:var(--ink)">
         <span class="tmeta"><span class="tn">Books Viz&#x27; 2025</span><span class="tk">VISUALIZATION</span></span>
       </a>
       <p class="mlabel" role="presentation"><span>NOVEMBER</span><b>2025</b></p>
       <a class="tile" href="https://budgie.travel" target="_blank" rel="noopener noreferrer" data-cat="app" data-w="4"
-         data-mo="November 2025" data-tint="--g-navy" data-img="projects/app/budgie.PNG" style="--t-bg:var(--g-navy);--t-ink:var(--paper)">
+         data-mo="November 2025" data-key="budgie.travel @ November 2025" data-tint="--g-navy" data-img="projects/app/budgie.PNG" style="--t-bg:var(--g-navy);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">budgie.travel</span><span class="tk">APP</span></span>
       </a>
       <a class="tile" href="https://traviti.netlify.app" target="_blank" rel="noopener noreferrer" data-cat="app" data-w="2"
-         data-mo="November 2025" data-tint="--g-teal" data-img="projects/app/traviti.png" style="--t-bg:var(--g-teal);--t-ink:var(--paper)">
+         data-mo="November 2025" data-key="traviti @ November 2025" data-tint="--g-teal" data-img="projects/app/traviti.png" style="--t-bg:var(--g-teal);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">traviti</span><span class="tk">APP</span></span>
       </a>
       <p class="mlabel" role="presentation"><span>AUGUST</span><b>2025</b></p>
       <a class="tile" href="https://spielwerk.app/games/82184EF9-7578-4701-BCB5-646682BD7C3F" target="_blank" rel="noopener noreferrer" data-cat="game" data-w="1"
-         data-mo="August 2025" data-tint="--g-moss" data-img="projects/games/mouse.png" style="--t-bg:var(--g-moss);--t-ink:var(--paper)">
+         data-mo="August 2025" data-key="Whack-a-rat @ August 2025" data-tint="--g-moss" data-img="projects/games/mouse.png" style="--t-bg:var(--g-moss);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">Whack-a-rat</span><span class="tk">GAME</span></span>
       </a>
       <a class="tile" href="https://spielwerk.app/games/3F4D5B13-C17F-4000-80E7-A2473B1C1526" target="_blank" rel="noopener noreferrer" data-cat="game" data-w="3"
-         data-mo="August 2025" data-tint="--g-teal" data-img="projects/games/down.png" style="--t-bg:var(--g-teal);--t-ink:var(--paper)">
+         data-mo="August 2025" data-key="Freefallin&#x27; @ August 2025" data-tint="--g-teal" data-img="projects/games/down.png" style="--t-bg:var(--g-teal);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">Freefallin&#x27;</span><span class="tk">GAME</span></span>
       </a>
       <a class="tile" href="https://spielwerk.app/games/889C1041-DDDF-4295-A640-C41AA80358EA" target="_blank" rel="noopener noreferrer" data-cat="game" data-w="2"
-         data-mo="August 2025" data-tint="--g-moss" data-img="projects/games/taco.png" style="--t-bg:var(--g-moss);--t-ink:var(--paper)">
+         data-mo="August 2025" data-key="Not a Hotdog @ August 2025" data-tint="--g-moss" data-img="projects/games/taco.png" style="--t-bg:var(--g-moss);--t-ink:var(--paper)">
         <span class="tmeta"><span class="tn">Not a Hotdog</span><span class="tk">GAME</span></span>
       </a>
       </div>
@@ -249,7 +253,7 @@
       <i aria-hidden="true">·</i>
       <a href="https://x.com/kenneth" target="_blank" rel="noopener noreferrer">X</a>
       <i aria-hidden="true">·</i>
-      <a href="https://bsky.app/profile/ken.cv" target="_blank" rel="noopener noreferrer">BLUESKY</a>
+      <a href="index-new.html">← THE PLAYGROUND</a>
     </span>
   </div>
 </footer>

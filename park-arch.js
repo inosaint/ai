@@ -227,9 +227,18 @@ function initParkArch(svg, opts){
   }
 
   /* ---- animation ---- */
+  /* The footer is usually far below the fold. Animating it while it is off
+     screen, or while the tab is in the background, is pure cost. */
+  let onScreen=true;
+  if(typeof IntersectionObserver==='function'){
+    new IntersectionObserver(function(es){ onScreen=es[0].isIntersecting; },
+      {rootMargin:'150px'}).observe(svg);
+  }
+  const idle=()=>document.hidden||!onScreen;
+
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   function frame(t){
-  if(motion&&!reduce){
+  if(motion&&!reduce&&!idle()){
     tick=t/1000;
     const ang=tick*5;
     wheelG.setAttribute('transform','rotate('+ang+' 395 352)');
