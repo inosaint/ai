@@ -203,10 +203,12 @@
 }
 [data-theme="dark"] .tile .tico .dot{fill:var(--lamp)}
 
-/* every block is dark after nightfall, so all their labels go to paper — the
-   per-tile --t-ink is set inline for the light palette and cannot be reassigned
-   from here, so the colour itself is overridden instead */
-[data-theme="dark"] .tile{color:var(--paper)}
+/* Every block is dark after nightfall, so all labels need the light foreground.
+   That is --ink here, NOT --paper: the two swap roles between themes (dark
+   --paper is #0E1218, near-black, which is what made navy tiles unreadable).
+   The per-tile --t-ink is inline for the light palette and cannot be reassigned
+   from a stylesheet, so the resolved colour is overridden instead. */
+[data-theme="dark"] .tile{color:var(--ink)}
 [data-theme="dark"] .tile .tn{opacity:.96}
 [data-theme="dark"] .tile .tk{opacity:.62}
 @keyframes tileglow{
