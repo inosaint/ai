@@ -1,0 +1,40 @@
+/* Park illustration — architectural elevation, scoped variant.
+
+   These rules originally sat on :root, which meant they could not share a page
+   with park.css (same var names, different values). Everything here hangs off
+   .arch instead, so the elevation palette applies only inside that subtree and
+   playground.html can show both parks at once. */
+
+.arch{
+  --paper:#F6EFE7; --ink:#141414; --line:#141414;
+  --blush:#F3B59A; --ochre:#DB8B35; --teal:#578087; --rust:#A74E37;
+  --deep:#772913; --navy:#2E4A5C;
+  --plane-op:.52; --line-op:1; --lamp:#FFB33C; --lampglow:0; --figure:#C4402A;
+  --construct:.20; --rule:#14141426;
+  background:var(--paper); color:var(--ink);
+  transition:background .6s ease,color .6s ease;
+}
+[data-theme="dark"] .arch{
+  --paper:#0C1116; --ink:#CBD6DE; --line:#8FA6B4;
+  --blush:#8A5645; --ochre:#8A5A22; --teal:#33555E; --rust:#6E2E1F;
+  --deep:#4A1A0C; --navy:#1B3242;
+  --plane-op:.46; --line-op:.9; --lampglow:1; --figure:#E4674A;
+  --construct:.16; --rule:#CBD6DE26;
+}
+
+.arch .park{display:block;width:100%;height:auto}
+.arch .park .ln{stroke:var(--line);fill:none;stroke-linecap:butt;stroke-linejoin:miter;
+  opacity:var(--line-op);vector-effect:non-scaling-stroke}
+.arch .park .plane{opacity:var(--plane-op);mix-blend-mode:multiply}
+[data-theme="dark"] .arch .park .plane{mix-blend-mode:screen}
+.arch .park .cx{stroke:var(--line);fill:none;opacity:var(--construct);vector-effect:non-scaling-stroke}
+.arch .park .fig{fill:var(--figure)}
+.arch .park .slide-fill{stroke:var(--teal);fill:none;opacity:.34;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.arch .park .slide-edge{stroke:var(--teal);fill:none;opacity:.95;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.arch .park .coaster{stroke:var(--deep);fill:none;stroke-width:1.9;opacity:1;vector-effect:non-scaling-stroke}
+.arch .park .lamp{fill:var(--lamp);opacity:var(--lampglow);transition:opacity .6s ease}
+.arch .park .glow{fill:var(--lamp);opacity:calc(var(--lampglow)*.22);filter:blur(6px);transition:opacity .6s ease}
+.arch .park .tblock{fill:var(--line);opacity:.5;font-size:9px;letter-spacing:.1em;
+  font-family:'Martian Mono',ui-monospace,monospace}
+
+@media (prefers-reduced-motion: reduce){ .arch .park *{animation:none!important} }

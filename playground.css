@@ -70,6 +70,20 @@ h1{font-size:clamp(30px,5.4vw,62px);font-weight:600;letter-spacing:-.035em;line-
 .herolinks a:hover{color:var(--rust);border-bottom-color:currentColor}
 .herolinks .ext{font-size:10px;margin-left:5px;opacity:.55;vertical-align:1px}
 
+/* multi-line tooltips on the hero links. Unlike the filter tooltips these wrap:
+   max-width + white-space:normal is what gives them their line breaks, so the
+   copy can be a sentence rather than a label. */
+.herolinks a[data-tip]{position:relative}
+.herolinks a[data-tip]::after{content:attr(data-tip);position:absolute;left:0;top:calc(100% + 9px);
+  width:max-content;max-width:236px;white-space:normal;text-align:left;
+  font-family:var(--mono);font-size:9px;letter-spacing:.06em;line-height:1.55;
+  color:var(--paper);background:var(--ink);padding:8px 10px;border-radius:2px;
+  opacity:0;pointer-events:none;transition:opacity .14s;z-index:9}
+.herolinks a[data-tip]:hover::after,
+.herolinks a[data-tip]:focus-visible::after{opacity:1}
+/* the second link sits near the right edge on narrow screens — pin it to the right */
+@media(max-width:560px){ .herolinks a[data-tip]:last-child::after{left:auto;right:0;text-align:right} }
+
 h2.sec{font-size:10px;letter-spacing:.22em;font-weight:400;color:var(--dim);
   margin:clamp(30px,4vw,54px) 0 12px;padding-top:14px}
 
@@ -94,15 +108,21 @@ h2.sec{font-size:10px;letter-spacing:.22em;font-weight:400;color:var(--dim);
 /* filters */
 .idxhead{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
   margin:clamp(30px,4vw,54px) 0 16px;padding-top:14px}
-.idxhead .sec{margin:0;padding:0}
+/* symbols read on the left, the section title on the right — done with order so
+   the heading still comes first in the DOM for anything reading the page */
+.idxhead .sec{margin:0;padding:0;order:2}
+.idxhead .filters{order:1}
 .filters{display:flex;flex-wrap:wrap;gap:11px;margin:0;align-items:center}
 .filters button{font:inherit;padding:0;cursor:pointer;background:none;color:var(--dim);
   border:0;line-height:0;transition:color .15s;display:block}
 .filters button svg{display:block;overflow:visible;pointer-events:none}
 .filters button{position:relative}
+/* line-height must be reset here: the button sets line-height:0 to kill the
+   inline gap under its svg, and the tooltip inherits it, collapsing the text
+   box to zero height so the vertical padding has nothing to sit around */
 .filters button::after{content:attr(aria-label);position:absolute;left:50%;top:calc(100% + 10px);
-  transform:translateX(-50%);white-space:nowrap;font-size:9px;letter-spacing:.14em;
-  color:var(--paper);background:var(--ink);padding:7px 11px;border-radius:2px;
+  transform:translateX(-50%);white-space:nowrap;font-size:8.5px;letter-spacing:.12em;
+  line-height:1.35;color:var(--paper);background:var(--ink);padding:6px 10px;border-radius:2px;
   opacity:0;pointer-events:none;transition:opacity .14s;z-index:9}
 .filters button:hover::after,.filters button:focus-visible::after{opacity:1}
 .filters button .dot{fill:currentColor}
@@ -116,8 +136,13 @@ h2.sec{font-size:10px;letter-spacing:.22em;font-weight:400;color:var(--dim);
   letter-spacing:.18em;color:var(--dim);padding-bottom:8px;
   text-transform:uppercase}
 .mo h3 b{font-weight:400;font-size:10px;opacity:.7}
-.mo h3::after{content:"";flex:1;height:1px;background:var(--hair)}
+/* the trailing rule is drawn as a wobbly path into the sheet overlay (see
+   drawRules in playground.js); this is only the gap it gets measured from */
+.mo h3 .rulegap{flex:1;height:1px;align-self:center}
 .rows{list-style:none;position:relative}
+/* author display rules outrank the UA sheet's [hidden]{display:none}, so the
+   filter's r.hidden=true was being ignored on .row (display:grid) */
+[hidden]{display:none !important}
 .row{display:grid;grid-template-columns:12px 218px 1fr 200px;gap:0 14px;align-items:baseline;
   padding:11px 8px;margin:0 -8px;transition:background .15s}
 .row:hover{background:var(--sky)}

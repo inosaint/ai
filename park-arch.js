@@ -1,115 +1,44 @@
-<!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Footer study — elevation</title>
-<style>
-:root{
-  --paper:#F6EFE7; --ink:#141414; --line:#141414;
-  --blush:#F3B59A; --ochre:#DB8B35; --teal:#578087; --rust:#A74E37;
-  --deep:#772913; --navy:#2E4A5C;
-  --plane-op:.52; --line-op:1; --lamp:#FFB33C; --lampglow:0; --figure:#C4402A;
-  --construct:.20; --rule:#14141426;
-}
-[data-theme="dark"]{
-  --paper:#0C1116; --ink:#CBD6DE; --line:#8FA6B4;
-  --blush:#8A5645; --ochre:#8A5A22; --teal:#33555E; --rust:#6E2E1F;
-  --deep:#4A1A0C; --navy:#1B3242;
-  --plane-op:.46; --line-op:.9; --lampglow:1; --figure:#E4674A;
-  --construct:.16; --rule:#CBD6DE26;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--paper);color:var(--ink);
-  font-family:'Archivo',system-ui,sans-serif;font-size:13.5px;
-  transition:background .6s ease,color .6s ease;min-height:100vh;display:flex;flex-direction:column}
-main{flex:1;padding:40px 30px;max-width:1100px}
-h1{font-weight:600;letter-spacing:-.025em;font-size:clamp(22px,3vw,38px);letter-spacing:-.01em;line-height:1.1;max-width:24ch}
-p.lede{margin-top:14px;max-width:62ch;opacity:.75;line-height:1.6}
-.ctl{margin-top:22px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-button{font-family:'Martian Mono',ui-monospace,monospace;font-size:9.5px;letter-spacing:.14em;background:none;color:inherit;
-  border:1px solid var(--rule);padding:8px 13px;cursor:pointer}
-button:hover{border-color:currentColor}
-button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
-a{color:inherit}
+/* Park illustration — architectural elevation. Drawn by playground.html.
 
-footer{margin-top:auto;position:relative}
-.park{display:block;width:100%;height:auto}
-.park .ln{stroke:var(--line);fill:none;stroke-linecap:butt;stroke-linejoin:miter;opacity:var(--line-op);
-  vector-effect:non-scaling-stroke}
-.park .plane{opacity:var(--plane-op);mix-blend-mode:multiply}
-[data-theme="dark"] .park .plane{mix-blend-mode:screen}
-.park .cx{stroke:var(--line);fill:none;opacity:var(--construct);vector-effect:non-scaling-stroke}
-.park .fig{fill:var(--figure)}
-.park .slide-fill{stroke:var(--teal);fill:none;opacity:.34;stroke-linecap:round;vector-effect:non-scaling-stroke}
-.park .slide-edge{stroke:var(--teal);fill:none;opacity:.95;stroke-linecap:round;vector-effect:non-scaling-stroke}
-.park .coaster{stroke:var(--deep);fill:none;stroke-width:1.9;opacity:1;vector-effect:non-scaling-stroke}
-.park .lamp{fill:var(--lamp);opacity:var(--lampglow);transition:opacity .6s ease}
-.park .glow{fill:var(--lamp);opacity:calc(var(--lampglow)*.22);filter:blur(6px);transition:opacity .6s ease}
-.park .tblock{fill:var(--line);opacity:.5;font-size:9px;letter-spacing:.1em;
-  font-family:'Martian Mono',ui-monospace,monospace}
-
-.foot-meta{font-family:'Martian Mono',ui-monospace,monospace;font-size:9px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
-  padding:14px 30px 24px;font-size:11px;letter-spacing:.1em;opacity:.7;border-top:1px solid var(--rule)}
-.foot-meta a{text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px}
-.foot-meta a:hover{opacity:.6}
-@media (prefers-reduced-motion: reduce){ .park *{animation:none!important} }
-</style></head>
-<body>
-<main>
-  <h1>Footer study — elevation.</h1>
-  <p class="lede">The same park redrawn as a measured architectural elevation: orthographic, hairline draughting, flat colour planes sitting behind the linework like cut paper, construction lines running off the sheet. Everything still generated in JS. Dark mode reads it as a blueprint.</p>
-  <div class="ctl">
-    <button id="theme">DARK MODE</button>
-    <button id="reroll">REDRAW</button>
-    <button id="motion" aria-pressed="true">MOTION ON</button>
-    <span id="seedout" style="opacity:.55"></span>
-  </div>
-</main>
-
-<footer>
-  <svg class="park" id="park" viewBox="0 0 2400 800" preserveAspectRatio="xMidYMax meet"
-       aria-label="Architectural elevation of a theme park: ferris wheel, carousel and rollercoaster"></svg>
-  <div class="foot-meta">
-    <span><a href="https://kenneth.dsouza.im/">Kenneth Mark Dsouza</a> — Kenneth's AI playground</span>
-    <span>GITHUB · X · BLUESKY</span>
-  </div>
-</footer>
-
-<script>
-const NS='http://www.w3.org/2000/svg';
-const svg=document.getElementById('park');
-const _qs=new URLSearchParams(location.search);
-let SEED=_qs.has('seed')?(parseInt(_qs.get('seed'),10)||1):(Math.random()*9973|0);
-let motion=true;
-function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);
+   Usage:  const park = initParkArch(document.getElementById('park'), { seed, onSeed });
+   The svg must sit inside an element carrying the .arch class (see park-arch.css),
+   which scopes the elevation palette so it can coexist with park.css on one page. */
+function initParkArch(svg, opts){
+  const NS='http://www.w3.org/2000/svg';
+  opts=opts||{};
+  const onSeed=opts.onSeed||function(){};
+  let SEED=opts.seed!==undefined?opts.seed:(Math.random()*9973|0);
+  let motion=true;
+  function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);
   t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
-let rnd=mulberry(SEED); const R=(a,b)=>a+rnd()*(b-a);
-function el(n,at,p){const e=document.createElementNS(NS,n);for(const k in at)e.setAttribute(k,at[k]);
+  let rnd=mulberry(SEED); const R=(a,b)=>a+rnd()*(b-a);
+  function el(n,at,p){const e=document.createElementNS(NS,n);for(const k in at)e.setAttribute(k,at[k]);
   (p||svg).appendChild(e);return e}
 
-/* ---- draughting primitives: precise, no wobble ---- */
-const GROUND=648;
-function L(x1,y1,x2,y2,{w=1,op=1,g=svg,cls='ln'}={}){
+  /* ---- draughting primitives: precise, no wobble ---- */
+  const GROUND=648;
+  function L(x1,y1,x2,y2,{w=1,op=1,g=svg,cls='ln'}={}){
   return el('line',{x1,y1,x2,y2,'stroke-width':w,opacity:op,class:cls},g);
-}
-function P(pts,{w=1,op=1,g=svg,close=false,cls='ln'}={}){
+  }
+  function P(pts,{w=1,op=1,g=svg,close=false,cls='ln'}={}){
   let d='M'+pts.map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join('L');
   if(close)d+='Z';
   return el('path',{d,'stroke-width':w,opacity:op,class:cls},g);
-}
-function curve(pts,{w=1,op=1,g=svg,cls='ln'}={}){
+  }
+  function curve(pts,{w=1,op=1,g=svg,cls='ln'}={}){
   const m=(a,b)=>[(a[0]+b[0])/2,(a[1]+b[1])/2];
   let d='M'+pts[0][0]+' '+pts[0][1];
   for(let i=1;i<pts.length-1;i++){const q=m(pts[i],pts[i+1]);
     d+='Q'+pts[i][0]+' '+pts[i][1]+' '+q[0].toFixed(1)+' '+q[1].toFixed(1);}
   d+='L'+pts[pts.length-1][0]+' '+pts[pts.length-1][1];
   return el('path',{d,'stroke-width':w,opacity:op,class:cls},g);
-}
-// flat colour plane — deliberately offset from the linework, like cut paper
-function plane(x,y,w,h,fill,g,op){
+  }
+  // flat colour plane — deliberately offset from the linework, like cut paper
+  function plane(x,y,w,h,fill,g,op){
   return el('rect',{x,y,width:w,height:h,fill,class:'plane',opacity:op!==undefined?op:''},g||svg);
-}
-// lattice mast / truss
-function truss(x,yTop,yBot,w,bays,g,{cap=true}={}){
+  }
+  // lattice mast / truss
+  function truss(x,yTop,yBot,w,bays,g,{cap=true}={}){
   const step=(yBot-yTop)/bays;
   L(x-w,yBot,x-w*0.34,yTop,{w:.9,g}); L(x+w,yBot,x+w*0.34,yTop,{w:.9,g});
   for(let i=0;i<=bays;i++){
@@ -121,33 +50,33 @@ function truss(x,yTop,yBot,w,bays,g,{cap=true}={}){
     }
   }
   if(cap){ L(x-w*0.9,yTop,x+w*0.9,yTop,{w:1,g}); L(x,yTop,x,yTop-26,{w:.8,op:.8,g}); }
-}
-// architectural scale figure
-function figure(x,y,h,g){
+  }
+  // architectural scale figure
+  function figure(x,y,h,g){
   const u=h/8;
   el('circle',{cx:x,cy:y-h+u,r:u*0.92,class:'fig'},g);
   P([[x-u*0.9,y-h+u*2],[x+u*0.9,y-h+u*2],[x+u*0.8,y-u*2.6],[x-u*0.8,y-u*2.6]],
     {close:true,g,cls:'fig'}).setAttribute('stroke','none');
   P([[x-u*0.75,y-u*2.6],[x-u*0.2,y-u*2.6],[x-u*0.35,y],[x-u*0.85,y]],{close:true,g,cls:'fig'}).setAttribute('stroke','none');
   P([[x+u*0.2,y-u*2.6],[x+u*0.75,y-u*2.6],[x+u*0.85,y],[x+u*0.35,y]],{close:true,g,cls:'fig'}).setAttribute('stroke','none');
-}
-// glazing grid inside a plane
-function glazing(x,y,w,h,cx,cy,g){
+  }
+  // glazing grid inside a plane
+  function glazing(x,y,w,h,cx,cy,g){
   for(let i=1;i<cx;i++) L(x+i*w/cx,y,x+i*w/cx,y+h,{w:.45,op:.5,g});
   for(let i=1;i<cy;i++) L(x,y+i*h/cy,x+w,y+i*h/cy,{w:.45,op:.5,g});
-}
-function windows(x,y,w,h,cx,cy,g){
+  }
+  function windows(x,y,w,h,cx,cy,g){
   for(let i=0;i<cx;i++) for(let j=0;j<cy;j++){
     if(rnd()<0.45) continue;
     const wx=x+6+i*(w-12)/cx, wy=y+6+j*(h-12)/cy;
     el('rect',{x:wx.toFixed(1),y:wy.toFixed(1),width:8,height:10,class:'lamp'},g);
     el('rect',{x:(wx-3).toFixed(1),y:(wy-3).toFixed(1),width:14,height:16,class:'glow'},g);
   }
-}
+  }
 
-let wheelG, coasterPath, carDot, carUnits=[], carBackG, carFrontG, tick=0;
+  let wheelG, coasterPath, carDot, carUnits=[], carBackG, carFrontG, tick=0;
 
-function build(){
+  function build(){
   svg.innerHTML=''; rnd=mulberry(SEED); carUnits=[];
   const so=document.getElementById('seedout'); so.innerHTML='';
   const a=document.createElement('a');
@@ -229,9 +158,11 @@ function build(){
   for(let i=0;i<10;i++){
     const g=el('g',{class:'mu'},carFrontG);
     L(0,-112,0,-4,{w:.7,g});
-    P([[-11,-40],[10,-40],[12,-26],[-9,-26]],{close:true,w:.7,g});
-    P([[8,-41],[17,-49],[20,-42],[12,-34]],{close:true,w:.6,g});
-    L(-7,-26,-8,-6,{w:.6,g}); L(6,-26,7,-6,{w:.6,g});
+    const hg=el('g',{},g);                       // hg turns; the pole above stays put
+    P([[11,-40],[-10,-40],[-12,-26],[9,-26]],{close:true,w:.7,g:hg});
+    P([[-8,-41],[-17,-49],[-20,-42],[-12,-34]],{close:true,w:.6,g:hg});
+    L(7,-26,8,-6,{w:.6,g:hg}); L(-6,-26,-7,-6,{w:.6,g:hg});
+    g._h=hg;
     carUnits.push(g);
   }
 
@@ -293,11 +224,11 @@ function build(){
   const tb=el('text',{x:2350,y:730,class:'tblock','text-anchor':'end'},svg);
   tb.textContent="KENNETH'S AI PLAYGROUND — PARK ELEVATION — SCALE 1:200 — SHEET 01";
   L(1560,712,2350,712,{w:.6,op:.4,g:svg});
-}
+  }
 
-/* ---- animation ---- */
-const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-function frame(t){
+  /* ---- animation ---- */
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function frame(t){
   if(motion&&!reduce){
     tick=t/1000;
     const ang=tick*5;
@@ -310,6 +241,9 @@ function frame(t){
       const g=carUnits[i], a=tick*0.8+i/carUnits.length*Math.PI*2;
       const x=880+Math.cos(a)*96, y=648+Math.sin(tick*2.2+i)*3;
       g.setAttribute('transform','translate('+x.toFixed(1)+','+y.toFixed(1)+')');
+      const t=Math.max(-1,Math.min(1,Math.sin(a)/.3)), u=Math.abs(t);
+      const e=u*u*(3-2*u);                       // smoothstep the turn, don't snap it
+      g._h.setAttribute('transform','scale('+(t<0?-e:e).toFixed(3)+',1)');
       const want=Math.sin(a)>0?carFrontG:carBackG;
       if(g._p!==want){want.appendChild(g);g._p=want;}
     }
@@ -321,17 +255,13 @@ function frame(t){
     }
   }
   requestAnimationFrame(frame);
+  }
+  const reduceQ=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  onSeed(SEED);
+  build(); requestAnimationFrame(frame);
+  return {
+    get seed(){ return SEED; },
+    redraw(){ SEED=(SEED*31+17)%9973; build(); onSeed(SEED); return SEED; },
+    setMotion(on){ motion=!!on; }
+  };
 }
-if(_qs.get('theme')==='dark'){document.documentElement.setAttribute('data-theme','dark');}
-build(); requestAnimationFrame(frame);
-const tb=document.getElementById('theme');
-tb.textContent=document.documentElement.getAttribute('data-theme')==='dark'?'LIGHT MODE':'DARK MODE';
-tb.onclick=()=>{const d=document.documentElement.getAttribute('data-theme')==='dark';
-  document.documentElement.setAttribute('data-theme',d?'light':'dark');
-  tb.textContent=d?'DARK MODE':'LIGHT MODE';};
-document.getElementById('reroll').onclick=()=>{SEED=(SEED*31+17)%9973;build()};
-const mb=document.getElementById('motion');
-mb.onclick=()=>{motion=!motion;mb.setAttribute('aria-pressed',String(motion));
-  mb.textContent=motion?'MOTION ON':'MOTION OFF'};
-</script>
-</body></html>

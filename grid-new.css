@@ -1,0 +1,189 @@
+/* Asymmetrical project grid — flat colour blocks under loose ink ruling.
+   Sizes come from a manual weight (data-w 1..4); the palette is the park palette
+   pushed brighter, since these are meant to read as painted blocks, not washes. */
+:root{
+  --g-coral:#EE9179; --g-ochre:#E3A32E; --g-vermillion:#CE4527;
+  --g-teal:#47738F;  --g-navy:#26445C;  --g-moss:#3E6E5D;
+  --g-terra:#DE7F4E; --g-blush:#F2B9A4;
+}
+[data-theme="dark"]{
+  --g-coral:#A55C48; --g-ochre:#A2762A; --g-vermillion:#8F3220;
+  --g-teal:#365A72;  --g-navy:#1A2F40;  --g-moss:#2C5145;
+  --g-terra:#9C5A38; --g-blush:#A87A6B;
+}
+
+.idxhead{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  margin:clamp(30px,4vw,54px) 0 18px;padding-top:14px;
+  position:relative;z-index:20}   /* must outrank .pwrap, or tooltips hide behind the grid */
+.idxhead .sec{margin:0;padding:0;order:2}
+.idxhead .filters{order:1}
+
+/* ---- the grid ---- */
+.pwrap{position:relative}
+/* --row is set from JS to the measured column width, so span-n-cols by span-n-rows
+   comes out square whatever the container is */
+.pgrid{position:relative;display:grid;grid-template-columns:repeat(12,1fr);
+  grid-auto-rows:var(--row,90px);grid-auto-flow:row;gap:6px}
+.pcanvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:5}
+
+.tile{position:relative;z-index:1;display:flex;flex-direction:column;justify-content:flex-end;
+  padding:10px 11px;text-decoration:none;color:var(--t-ink,#15150F);overflow:hidden;
+  background:none;outline-offset:3px;transition:color .2s}
+.tile[data-w="1"]{grid-column:span 2;grid-row:span 2}
+.tile[data-w="2"]{grid-column:span 3;grid-row:span 3}
+.tile[data-w="3"]{grid-column:span 4;grid-row:span 4}
+.tile[data-w="4"]{grid-column:span 5;grid-row:span 5}
+@media(max-width:900px){
+  .pgrid{grid-template-columns:repeat(6,1fr)}
+  .tile[data-w="1"]{grid-column:span 2;grid-row:span 2}
+  .tile[data-w="2"]{grid-column:span 3;grid-row:span 3}
+  .tile[data-w="3"]{grid-column:span 3;grid-row:span 4}
+  .tile[data-w="4"]{grid-column:span 6;grid-row:span 5}
+}
+@media(max-width:560px){ .pgrid{grid-template-columns:repeat(4,1fr)}
+  .tile[data-w="1"],.tile[data-w="2"]{grid-column:span 2;grid-row:span 3}
+  .tile[data-w="3"],.tile[data-w="4"]{grid-column:span 4;grid-row:span 5} }
+
+/* the wobbly outline, drawn per tile */
+.tile .fr{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+/* the fill and the outline are the same wobbly path, so the block has a drawn
+   edge rather than a crisp CSS rectangle with a line sitting on top of it */
+.tile .fr .fill{fill:var(--t-bg);stroke:none}
+.tile .fr .edge{fill:none;stroke:currentColor;stroke-width:1.05;opacity:.5;
+  stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+
+.tile .tmeta{position:relative;z-index:3}
+.tile .tn{display:block;font-weight:600;letter-spacing:-.01em;line-height:1.15;
+  font-size:13px;text-wrap:balance}
+.tile[data-w="3"] .tn,.tile[data-w="4"] .tn{font-size:16px}
+.tile[data-w="1"] .tn{font-size:11.5px}
+.tile .tk{display:block;font-family:var(--mono,ui-monospace,monospace);font-size:8px;
+  letter-spacing:.18em;opacity:.62;margin-top:4px}
+.tile .tico{position:absolute;top:10px;left:11px;z-index:3;opacity:.55}
+.tile .tico .dot{fill:currentColor}
+.tile:hover,.tile:focus-visible{color:var(--t-ink,#15150F)}
+/* the hovered tile is painted entirely by the shader — edge included — so its own
+   drawing steps aside to avoid two slightly different wobbles fighting */
+.tile.hot{background:none;z-index:6}
+/* only the fill gives way — the outline stays put, so hovering cannot change the
+   shape of the box. The canvas is clipped to this same outline. */
+.tile.hot .fr .fill{opacity:0}
+/* filtering drains the non-matching blocks instead of pulling them out — the
+   weave has to stay continuous for the grid to keep reading as one fabric */
+.tile.dim{opacity:.30;filter:saturate(.25)}
+.tile.dim .tn,.tile.dim .tk,.tile.dim .tico{opacity:.5}
+.tile,.mlabel{transition:opacity .25s,filter .25s}
+.mlabel.dim{opacity:.22}
+.tile[hidden]{display:none}
+
+/* the ruling that overshoots the blocks, as in the reference sheets */
+.prules{position:absolute;inset:-30px -20px;width:calc(100% + 40px);height:calc(100% + 60px);
+  pointer-events:none;z-index:4;overflow:visible}
+.prules path{fill:none;stroke:var(--ink);stroke-width:.9;opacity:.42;
+  stroke-linecap:round;vector-effect:non-scaling-stroke}
+.prules path.faint{opacity:.22}
+
+/* filter symbols — same marks as the tiles and the map */
+.filters{display:flex;flex-wrap:wrap;gap:11px;align-items:center}
+.filters button{position:relative;font:inherit;padding:0;cursor:pointer;background:none;
+  border:0;line-height:0;display:block;opacity:1;transition:opacity .18s,transform .18s}
+.filters button[data-f="app"]{color:var(--g-teal)}
+.filters button[data-f="game"]{color:var(--g-moss)}
+.filters button[data-f="event"]{color:var(--g-vermillion)}
+.filters button[data-f="exploration"]{color:var(--g-ochre)}
+.filters button[data-f="visualization"]{color:var(--g-terra)}
+.filters button svg{display:block;overflow:visible;pointer-events:none}
+.filters button .dot{fill:currentColor}
+.filters button:hover{transform:scale(1.18)}
+/* only while filtering do the others step back */
+.filters button svg{transition:opacity .18s}
+.filters.filtering button[aria-checked="false"] svg{opacity:.28}
+.filters.filtering button[aria-checked="true"]{transform:scale(1.18)}
+.filters button::after{content:attr(aria-label);position:absolute;left:50%;top:calc(100% + 9px);
+  transform:translateX(-50%);white-space:nowrap;font-family:var(--mono,ui-monospace,monospace);
+  font-size:8.5px;letter-spacing:.12em;line-height:1.35;color:var(--paper);background:var(--ink);
+  padding:6px 10px;border-radius:2px;opacity:0;pointer-events:none;transition:opacity .14s;z-index:9}
+.filters button:hover::after,.filters button:focus-visible::after{opacity:1}
+
+/* the shared lattice: the grid of projects and the empty grid above it are the
+   same weave, drawn on the same pitch */
+.gridsvg path{fill:none;stroke:var(--ink);stroke-width:.9;opacity:.13;
+  stroke-linecap:round;vector-effect:non-scaling-stroke}
+.gridsvg path.ahead{opacity:.07}     /* cells above the first project: room to come */
+
+/* ---- month markers ----
+   Not headings: each month takes a cell in the weave, so its name is read in the
+   empty space beside its projects. Proximity does the grouping. */
+.mlabel{grid-column:span 2;grid-row:span 1;display:flex;flex-direction:column;
+  justify-content:center;gap:3px;padding:0 3px;line-height:1.1;pointer-events:none;
+  font-family:var(--mono,ui-monospace,monospace)}
+.mlabel span{opacity:.8;font-weight:600}
+.mlabel b{font-family:var(--mono,ui-monospace,monospace);font-size:8.5px;
+  font-weight:400;letter-spacing:.16em;opacity:.38;color:var(--ink)}
+@media(max-width:560px){ .mlabel{grid-column:span 2} }
+
+/* the heading doubles as the way back to everything — a real button, so it is
+   reachable by keyboard and announced as an action rather than just a heading */
+/* ---- one micro-type scale ----
+   The month markers, the ALL PROJECTS heading and the footer are the same voice:
+   same family, size and tracking, all coloured from --ink so light and dark are
+   handled by the theme rather than by separate rules. Only weight and opacity
+   separate them, and only ALL PROJECTS takes a hover state, because it is the
+   only one of the three you can act on. */
+.mlabel span,
+.idxhead .sec,
+.foot-meta{font-family:var(--mono,ui-monospace,monospace);font-size:9.5px;
+  letter-spacing:.2em;color:var(--ink)}
+
+.idxhead .sec{font-weight:600;margin:0;padding:0;order:2;opacity:.8}
+.sec .secbtn{font:inherit;letter-spacing:inherit;color:inherit;background:none;border:0;
+  padding:0;margin:0;cursor:pointer;-webkit-appearance:none;appearance:none;
+  transition:color .18s}
+.idxhead .sec:hover,.idxhead.filtering .sec{opacity:1}
+.sec .secbtn:hover{color:var(--g-vermillion)}
+.sec .secbtn:focus-visible{outline:1px solid currentColor;outline-offset:4px}
+
+/* the link out sits on a word in the subtitle, so it has to stay quiet enough
+   not to break the sentence */
+/* the same quiet link treatment wherever it appears — subtitle and footer */
+.lede .me,.foot-meta .me{color:inherit;text-decoration:none;
+  border-bottom:1px solid var(--g-vermillion);padding-bottom:1px;
+  transition:color .18s,opacity .18s}
+.foot-meta .me{border-bottom-color:var(--g-vermillion)}
+.lede .me:hover,.foot-meta .me:hover{color:var(--g-vermillion)}
+.lede .me:focus-visible,.foot-meta .me:focus-visible{outline:2px solid var(--g-vermillion);outline-offset:3px}
+
+/* dark-mode toggle, sitting with the footer meta */
+.foot-meta{opacity:1;padding-top:16px}
+.foot-meta,.foot-meta a{color:var(--ink)}
+.foot-meta > span{opacity:.8}
+.foot-meta a{text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px;
+  transition:color .18s,border-color .18s}
+.foot-meta a:hover{color:var(--g-vermillion)}
+.foot-left{display:inline-flex;align-items:center;gap:10px}
+.foot-left .themebtn{margin-right:2px}
+.foot-right{display:inline-flex;align-items:center;gap:8px}
+.foot-right i{font-style:normal;opacity:.4}
+.foot-right a{opacity:.85}
+.foot-right a:hover{opacity:1}
+
+.foot-meta .themebtn{width:13px;height:13px;flex:none;border:1px solid currentColor;
+  background:none;cursor:pointer;border-radius:50%;padding:0;position:relative;
+  overflow:hidden;color:inherit;opacity:.7;transition:opacity .16s}
+.foot-meta .themebtn::after{content:"";position:absolute;inset:0 50% 0 0;background:currentColor}
+.foot-meta .themebtn:hover{opacity:1}
+.foot-meta .themebtn:focus-visible{outline:2px solid var(--g-vermillion);outline-offset:3px}
+
+/* the map is drawn 30% larger on desktop (see buildViz); the cap has to move
+   with it or it would just be scaled back down again */
+@media(min-width:900px){
+  .viz svg{max-width:820px}
+}
+
+/* The title sat low because .hero is align-items:end and the (now larger) map
+   sets the row height. Opening space above the links lifts the title and
+   subtitle while the links themselves stay where they were — aligning the whole
+   block to the top would have moved them too. */
+@media(min-width:940px){
+  .herolinks{margin-top:42px}
+}

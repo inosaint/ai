@@ -64,6 +64,12 @@
       projectMap(host, readProjectRecords(), {legend:false, axis:false, cell:39, radius:9.6});
   }
 
+  /* the month headings end in a rule; it needs to be a real element so drawRules
+     can measure where to put the wobbly path (a ::after pseudo cannot be) */
+  document.querySelectorAll('.mo h3').forEach(h=>{
+    if(!h.querySelector('.rulegap')) h.appendChild(document.createElement('i')).className='rulegap';
+  });
+
   /* ---- hand-drawn rules: one overlay per container, measured from layout ---- */
   const NSS='http://www.w3.org/2000/svg';
   function mkRnd(s){return()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);
@@ -101,6 +107,12 @@
     const rel=el=>{const b=el.getBoundingClientRect();
       return {x:b.left-sb.left,y:b.top-sb.top,w:b.width,h:b.height};};
 
+
+    // the month headings' trailing rules, drawn wobbly rather than as a CSS hairline
+    document.querySelectorAll('.mo h3 .rulegap').forEach(gap=>{
+      const b=rel(gap);
+      if(b.w>8) hline(s,b.x,b.x+b.w,b.y+b.h/2,r,{j:1.1,faint:true});
+    });
 
     // the highlight grid's own dividers, in its own overlay
     const hl=document.querySelector('.hl');

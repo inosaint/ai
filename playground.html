@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Playground — specimen sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Martian+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- park.css owns :root; park-arch.css scopes its own palette under .arch -->
+<link rel="stylesheet" href="park.css">
+<link rel="stylesheet" href="park-arch.css">
+
+<style>
+/* ---- page chrome (loaded after park.css, so it wins on the shared selectors) ---- */
+body{font-family:'Archivo',system-ui,-apple-system,sans-serif;font-size:13.5px;
+  display:block;padding:0}
+main{max-width:none;padding:0}
+h1,h2,h3{font-weight:600;letter-spacing:-.015em}
+.mono{font-family:'Martian Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+
+.sheet{max-width:1180px;margin:0 auto;padding:clamp(28px,5vw,64px) clamp(20px,4vw,40px)}
+.masthead{border-bottom:1px solid var(--rule);padding-bottom:26px}
+.masthead h1{font-size:clamp(26px,4vw,44px);line-height:1.05;max-width:20ch}
+.masthead .lede{margin-top:14px;max-width:64ch;opacity:.72;line-height:1.65}
+.kicker{font-family:'Martian Mono',ui-monospace,monospace;font-size:9.5px;letter-spacing:.22em;
+  opacity:.55;margin-bottom:14px}
+
+.bar{margin-top:24px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+button{font-family:'Martian Mono',ui-monospace,monospace;font-size:9.5px;letter-spacing:.14em;
+  border:1px solid var(--rule);padding:8px 13px}
+.seed{font-family:'Martian Mono',ui-monospace,monospace;font-size:9.5px;letter-spacing:.1em;opacity:.5}
+
+/* ---- specimens ---- */
+.spec{margin-top:clamp(40px,6vw,76px)}
+.spec-head{display:flex;justify-content:space-between;align-items:baseline;gap:20px;
+  flex-wrap:wrap;border-top:1px solid var(--rule);padding-top:16px}
+.spec-head h2{font-size:clamp(17px,2vw,23px)}
+.spec-no{font-family:'Martian Mono',ui-monospace,monospace;font-size:9.5px;letter-spacing:.2em;opacity:.45}
+.spec .note{margin-top:10px;max-width:66ch;opacity:.7;line-height:1.6;font-size:12.5px}
+.spec-ctl{margin-top:18px;display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.frame{margin-top:20px;border:1px solid var(--rule);overflow:hidden;position:relative;
+  background:var(--paper);transition:background .6s ease}
+.frame.pad{padding:clamp(18px,3vw,36px)}
+.frame .park{display:block}
+
+/* the elevation specimen carries its own palette, so it paints its own ground */
+.frame.arch{background:var(--paper)}
+
+/* ---- project map specimen ---- */
+.viz svg{display:block;width:100%;height:auto;overflow:visible}
+.viz .dot{fill:var(--ink)}
+.viz .now{fill:none;stroke:var(--rust);stroke-width:1.5;stroke-dasharray:2.5 2.5}
+.viz .gap{fill:var(--ink);opacity:.3}
+.viz .base{stroke:var(--ink);opacity:.4;stroke-width:1}
+.viz .lab{fill:var(--ink);opacity:.55;font-size:9px;letter-spacing:.06em;
+  font-family:'Martian Mono',ui-monospace,monospace}
+.viz .yr{fill:var(--ink);font-size:9px;letter-spacing:.1em;
+  font-family:'Martian Mono',ui-monospace,monospace}
+.viz .hit{fill:transparent;cursor:crosshair}
+.viz-read{font-family:'Martian Mono',ui-monospace,monospace;font-size:10px;letter-spacing:.08em;
+  color:var(--rust);min-height:1.4em;margin-bottom:10px}
+.viz-legend{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:20px;padding-top:14px;
+  border-top:1px dashed var(--rule);font-family:'Martian Mono',ui-monospace,monospace;
+  font-size:9px;letter-spacing:.12em;opacity:.75}
+.viz-legend span{display:flex;align-items:center;gap:7px}
+.viz-legend .dot{fill:var(--ink)}
+
+.colophon{margin-top:clamp(48px,7vw,90px);border-top:1px solid var(--rule);padding-top:18px;
+  font-family:'Martian Mono',ui-monospace,monospace;font-size:10px;letter-spacing:.1em;
+  opacity:.6;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.colophon a{text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px}
+@media(max-width:620px){ .spec-head{display:block} .spec-no{display:block;margin-bottom:6px} }
+</style></head>
+
+<body>
+<div class="sheet">
+
+  <header class="masthead">
+    <p class="kicker">SPECIMEN SHEET · KENNETH'S AI PLAYGROUND</p>
+    <h1>Three drawings, one dataset, no images.</h1>
+    <p class="lede">Everything below is generated in the browser at run time — every line, colour
+    plane and figure built in JS from the same 43-project record set. Nothing here is an image
+    asset. The theme switch drives all three at once; the two parks redraw in a slightly
+    different hand on every seed.</p>
+    <div class="bar">
+      <button id="theme">DARK MODE</button>
+      <span class="seed" id="count"></span>
+    </div>
+  </header>
+
+  <!-- ---------------------------------------------------------------- -->
+  <section class="spec">
+    <div class="spec-head">
+      <h2>Project map</h2>
+      <span class="spec-no">SPECIMEN 01 · grid-viz.js</span>
+    </div>
+    <p class="note">One mark per project, one column per month, shape by kind. Gaps are months
+    where nothing shipped; the dashed ring marks the current month. The hero of the playground
+    page runs this same function at a smaller cell size with the legend suppressed.</p>
+    <div class="spec-ctl">
+      <button id="order" aria-pressed="true">NEWEST FIRST</button>
+    </div>
+    <div class="frame pad">
+      <div class="viz" id="viz"></div>
+    </div>
+    <div class="spec-ctl"><span class="seed">AS IT APPEARS IN THE HERO — SMALL, NO LEGEND</span></div>
+    <div class="frame pad">
+      <div class="viz" id="viz-small" style="max-width:430px"></div>
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------------------- -->
+  <section class="spec">
+    <div class="spec-head">
+      <h2>The park — painted</h2>
+      <span class="spec-no">SPECIMEN 02 · park.js</span>
+    </div>
+    <p class="note">Loose, hand-drawn, colour-block. The wheel turns, cars run the coaster, and
+    the carousel spins — its horses turning about their poles as they round each end so they
+    always lead with the head, and its far side passing behind the drum. Switch to dark and the
+    lamps come on.</p>
+    <div class="spec-ctl">
+      <button id="reroll">REDRAW</button>
+      <button id="motion" aria-pressed="true">MOTION ON</button>
+      <span class="seed" id="seedout"></span>
+    </div>
+    <div class="frame">
+      <svg class="park" id="park" viewBox="0 0 2000 620" preserveAspectRatio="xMidYMax meet"
+           aria-label="An illustrated theme park: a turning ferris wheel, a carousel and a rollercoaster"></svg>
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------------------- -->
+  <section class="spec">
+    <div class="spec-head">
+      <h2>The park — elevation</h2>
+      <span class="spec-no">SPECIMEN 03 · park-arch.js</span>
+    </div>
+    <p class="note">The same park redrawn as a measured architectural elevation: orthographic,
+    hairline draughting, flat colour planes sitting behind the linework like cut paper,
+    construction lines running off the sheet. Dark mode reads it as a blueprint.</p>
+    <div class="spec-ctl">
+      <button id="areroll">REDRAW</button>
+      <button id="amotion" aria-pressed="true">MOTION ON</button>
+      <span class="seed" id="aseedout"></span>
+    </div>
+    <div class="frame arch">
+      <svg class="park" id="apark" viewBox="0 0 2400 800" preserveAspectRatio="xMidYMax meet"
+           aria-label="Architectural elevation of a theme park: ferris wheel, carousel and rollercoaster"></svg>
+    </div>
+  </section>
+
+  <div class="colophon">
+    <span><a href="https://kenneth.dsouza.im/">Kenneth Mark Dsouza</a> — drawn in the browser</span>
+    <span><a href="index-new.html">← the playground itself</a></span>
+  </div>
+
+</div>
+
+<script src="projects-data.js"></script>
+<script src="grid-viz.js"></script>
+<script src="park.js"></script>
+<script src="park-arch.js"></script>
+<script>
+/* ---- 01: project map ---- */
+let newestFirst=true;
+function drawMap(){
+  projectMap(document.getElementById('viz'),RECORDS,{legend:true,cell:30,radius:7.2,newestFirst});
+  projectMap(document.getElementById('viz-small'),RECORDS,
+    {legend:false,cell:21,radius:5.1,newestFirst,showReadout:false});
+}
+drawMap();
+document.getElementById('count').textContent=RECORDS.length+' PROJECTS';
+const ob=document.getElementById('order');
+ob.onclick=()=>{newestFirst=!newestFirst;ob.setAttribute('aria-pressed',String(newestFirst));
+  ob.textContent=newestFirst?'NEWEST FIRST':'OLDEST FIRST';drawMap();};
+
+/* ---- 02 + 03: the two parks ---- */
+// onSeed fires during init, before the const would be bound — so the click
+// handler reaches the instance through a getter rather than capturing it
+function seedLink(el,getPark,s){
+  el.innerHTML='';
+  const a=document.createElement('a');
+  a.href='#'; a.textContent='SEED '+s;
+  a.style.cssText='color:inherit;text-decoration:underline;text-underline-offset:3px';
+  a.onclick=e=>{e.preventDefault();getPark().redraw();};
+  el.appendChild(a);
+}
+const so=document.getElementById('seedout'), aso=document.getElementById('aseedout');
+const park=initPark(document.getElementById('park'),{onSeed:s=>seedLink(so,()=>park,s)});
+const apark=initParkArch(document.getElementById('apark'),{onSeed:s=>seedLink(aso,()=>apark,s)});
+
+document.getElementById('reroll').onclick=()=>park.redraw();
+document.getElementById('areroll').onclick=()=>apark.redraw();
+function motionBtn(id,target){
+  const b=document.getElementById(id);
+  b.onclick=()=>{const on=b.getAttribute('aria-pressed')!=='true';
+    b.setAttribute('aria-pressed',String(on)); target.setMotion(on);
+    b.textContent=on?'MOTION ON':'MOTION OFF';};
+}
+motionBtn('motion',park); motionBtn('amotion',apark);
+
+/* ---- one theme switch for all three ---- */
+const tb=document.getElementById('theme');
+tb.onclick=()=>{const d=document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme',d?'light':'dark');
+  tb.textContent=d?'DARK MODE':'LIGHT MODE';};
+</script>
+</body></html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shader study — crumble on hover</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Martian+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="park.css">
+<style>
+body{font-family:'Archivo',system-ui,sans-serif;font-size:13.5px;display:block;padding:0}
+main{max-width:1120px;margin:0 auto;padding:clamp(28px,5vw,64px) clamp(20px,4vw,40px);flex:none}
+.kicker{font-family:'Martian Mono',ui-monospace,monospace;font-size:9.5px;letter-spacing:.22em;
+  opacity:.55;margin-bottom:14px}
+h1{font-weight:600;font-size:clamp(24px,3.4vw,38px);letter-spacing:-.015em;line-height:1.08;max-width:24ch}
+p.lede{margin-top:14px;max-width:66ch;opacity:.72;line-height:1.65}
+
+.ctl{margin:26px 0 22px;display:flex;gap:9px 16px;flex-wrap:wrap;align-items:center}
+button{font-family:'Martian Mono',ui-monospace,monospace;font-size:9.5px;letter-spacing:.14em;
+  border:1px solid var(--rule);padding:8px 13px}
+label{font-family:'Martian Mono',ui-monospace,monospace;font-size:9px;letter-spacing:.12em;
+  opacity:.6;display:flex;align-items:center;gap:8px}
+input[type=range]{width:92px;accent-color:var(--rust)}
+
+/* the canvas paints the cards; the .card elements are hit targets and hold the text */
+.stage{position:relative}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
+.grid{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{position:relative;aspect-ratio:4/3;border:1px solid var(--rule);border-radius:2px;
+  display:flex;flex-direction:column;justify-content:space-between;padding:16px;
+  text-decoration:none;color:var(--ink);overflow:hidden;outline-offset:3px}
+.card .ico{width:26px;height:26px;opacity:.75}
+.card .ico .dot{fill:var(--ink)}
+.card .tl{font-weight:600;font-size:15px;letter-spacing:-.01em;line-height:1.2}
+.card .ct{font-family:'Martian Mono',ui-monospace,monospace;font-size:8.5px;letter-spacing:.18em;
+  opacity:.55;margin-top:5px}
+.card .txt{position:relative}
+/* once a photograph can appear under the text, the label needs its own ground */
+.card .tl,.card .ct{display:inline-block;background:var(--paper);padding:1px 5px;
+  border-radius:2px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+/* shown when the images cannot be read into the texture (file:// taint) */
+.stage.tainted::before{content:attr(data-warn);position:absolute;left:0;top:-26px;
+  font-family:'Martian Mono',ui-monospace,monospace;font-size:9px;letter-spacing:.12em;
+  color:var(--rust);opacity:.9}
+.stage.no-webgl{background:var(--paper)}
+.stage.no-webgl::after{content:attr(data-error);position:absolute;inset:0;display:grid;
+  place-items:center;text-align:center;padding:20px;font-family:'Martian Mono',ui-monospace,monospace;
+  font-size:10px;letter-spacing:.12em;opacity:.6}
+
+.note{margin-top:24px;max-width:70ch;opacity:.7;line-height:1.65;font-size:12.5px}
+.note code{font-family:'Martian Mono',ui-monospace,monospace;font-size:11px;
+  background:var(--rule);padding:1px 5px;border-radius:2px}
+.colophon{margin-top:clamp(40px,6vw,72px);border-top:1px solid var(--rule);padding-top:16px;
+  font-family:'Martian Mono',ui-monospace,monospace;font-size:10px;letter-spacing:.1em;opacity:.55}
+.colophon a{text-decoration:none;border-bottom:1px solid currentColor}
+@media(max-width:760px){ .grid{grid-template-columns:1fr} }
+</style></head>
+<body>
+<main>
+  <p class="kicker">SHADER STUDY · 01</p>
+  <h1>Hover, and the paint crumbles off the picture.</h1>
+  <p class="lede">Move the cursor over a card and the patch of surface under it breaks into tiny
+  category marks — the project's own symbol — which drift outward, shrink and fade, letting the project's own
+  screenshot show through the hole. The dissolve front is ordered-dithered, so the edge breaks
+  up in a Bayer pattern instead of cutting a clean circle.</p>
+
+  <div class="ctl">
+    <button id="theme">DARK MODE</button>
+    <button id="dither" aria-pressed="true">DITHER ON</button>
+    <button id="motion" aria-pressed="true">MOTION ON</button>
+    <label>GRAIN <input type="range" id="cell" min="6" max="30" value="14"></label>
+    <label>REACH <input type="range" id="reach" min="10" max="140" value="100"></label>
+    <label>DRIFT <input type="range" id="drift" min="0" max="45" value="20"></label>
+    <label>IMAGE <input type="range" id="img" min="0" max="100" value="100"></label>
+  </div>
+
+  <div class="stage" id="stage">
+    <canvas id="gl"></canvas>
+    <div class="grid" id="grid">
+      <a class="card" href="#" data-cat="app" data-tint="--cobalt" data-img="projects/app/budgie.PNG">
+        <svg class="ico" viewBox="-12 -12 24 24" aria-hidden="true"></svg>
+        <span class="txt"><span class="tl">budgie.travel</span><br><span class="ct">APP</span></span>
+      </a>
+      <a class="card" href="#" data-cat="app" data-tint="--green" data-img="projects/app/mapyourorg.JPG">
+        <svg class="ico" viewBox="-12 -12 24 24" aria-hidden="true"></svg>
+        <span class="txt"><span class="tl">mapyour.org</span><br><span class="ct">APP</span></span>
+      </a>
+      <a class="card" href="#" data-cat="event" data-tint="--rust" data-img="projects/ddn-site/ddn-site.png">
+        <svg class="ico" viewBox="-12 -12 24 24" aria-hidden="true"></svg>
+        <span class="txt"><span class="tl">Design Demo Nights</span><br><span class="ct">EVENT</span></span>
+      </a>
+      <a class="card" href="#" data-cat="app" data-tint="--mustard" data-img="projects/app/pinboarder.png">
+        <svg class="ico" viewBox="-12 -12 24 24" aria-hidden="true"></svg>
+        <span class="txt"><span class="tl">Pinboarder</span><br><span class="ct">APP</span></span>
+      </a>
+      <a class="card" href="#" data-cat="app" data-tint="--terracotta" data-img="projects/app/hermes-mac.png">
+        <svg class="ico" viewBox="-12 -12 24 24" aria-hidden="true"></svg>
+        <span class="txt"><span class="tl">Hermes</span><br><span class="ct">APP</span></span>
+      </a>
+      <a class="card" href="#" data-cat="app" data-tint="--blush" data-img="projects/grinder-calibrator/grinder-v1.jpg">
+        <svg class="ico" viewBox="-12 -12 24 24" aria-hidden="true"></svg>
+        <span class="txt"><span class="tl">grindsize.in</span><br><span class="ct">APP</span></span>
+      </a>
+    </div>
+  </div>
+
+  <p class="note">The pieces are the same marks the project map draws, at the same proportions.
+  A cell only renders as a piece while it is mid-flight — intact cells are still sheet, and
+  finished ones are gone — so the cost stays in the crumbling ring rather than the whole card.
+  Each fragment checks a 5×5 neighbourhood, because a piece drifts over its neighbours.</p>
+
+  <p class="note"><b>GRAIN</b> sets the cell size: small is a fine sand, large reads as torn
+  paper. <b>REACH</b> is how far the hole opens, <b>DRIFT</b> how far pieces travel before
+  they fade. Turning <code>DITHER</code> off replaces the Bayer threshold with a flat one, which
+  is the quickest way to see what the dithering is doing to the edge.</p>
+
+  <p class="colophon"><a href="playground.html">← back to the specimen sheet</a></p>
+</main>
+
+<script src="grid-viz.js"></script>
+<script src="shader-study.js"></script>
+<script>
+/* the card icons are the same shape() the map and filters use */
+document.querySelectorAll('.card').forEach(c=>{
+  const svg=c.querySelector('.ico');
+  if(typeof shape==='function') svg.appendChild(shape(SHAPES[c.dataset.cat],0,0,9));
+  c.addEventListener('click',e=>e.preventDefault());
+});
+const cards=[...document.querySelectorAll('.card')];
+const study=initShaderStudy(document.getElementById('gl'),cards);
+
+if(study){
+  const bind=(id,fn)=>{const el=document.getElementById(id);el.oninput=()=>fn(+el.value);};
+  bind('cell', v=>study.state.cell=v);
+  bind('reach',v=>study.state.reach=v/100);
+  bind('drift',v=>study.state.drift=v/10);
+  bind('img',  v=>study.state.imgMix=v/100);
+  const toggle=(id,on,fn)=>{const b=document.getElementById(id);
+    b.onclick=()=>{const v=b.getAttribute('aria-pressed')!=='true';
+      b.setAttribute('aria-pressed',String(v)); fn(v);
+      b.textContent=b.textContent.replace(/(ON|OFF)$/, v?'ON':'OFF');};};
+  toggle('dither',true,v=>study.state.dither=v?1:0);
+  toggle('motion',true,v=>study.setMotion(v));
+}
+const tb=document.getElementById('theme');
+tb.onclick=()=>{const d=document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme',d?'light':'dark');
+  tb.textContent=d?'DARK MODE':'LIGHT MODE';
+  if(study) study.refresh();
+};
+</script>
+</body></html>

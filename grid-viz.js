@@ -1,5 +1,5 @@
 /* Project map — one mark per project, a column per month, shape by kind.
-   Shared by index-new.html (hero, no legend) and grid-viz.html (standalone).
+   Shared by index-new.html (hero, no legend) and playground.html (specimen 01).
      const recs = readProjectRecords();            // from .mo[data-month] sections
      projectMap(host, recs, { legend:true, cell:26 });
    Records may also be passed directly as {mo:'July 2026', cat:'app', nm:'…'}. */

@@ -273,11 +273,15 @@ function build(){
     const g=el('g',{class:'mu'},carFrontG);
     sketch([[0,-100],[0,6]],{w:1.05,amt:.5,g:g,passes:1});
     const hc=i%2?'var(--rust)':'var(--blush)';
-    el('path',{d:d_poly(edges([[-14,-32],[12,-32],[14,-17],[-12,-17]],2,1.3),true),fill:hc,class:'paint'},g);
-    el('path',{d:d_poly([[9,-33],[21,-42],[25,-34],[14,-25]],true),fill:hc,class:'paint'},g);
-    [[-9,-17],[7,-17]].forEach(([lx,ly])=>sketch([[lx,ly],[lx-2,-4]],{w:1.1,amt:.4,g:g,passes:1}));
-    el('circle',{cx:1,cy:-42,r:3.6,fill:'var(--navy)',class:'paint'},g);
+    // horse drawn facing left (-x), the way the near side of the ring travels;
+    // hg flips on the far side so every mount still leads with its head
+    const hg=el('g',{},g);
+    el('path',{d:d_poly(edges([[14,-32],[-12,-32],[-14,-17],[12,-17]],2,1.3),true),fill:hc,class:'paint'},hg);
+    el('path',{d:d_poly([[-9,-33],[-21,-42],[-25,-34],[-14,-25]],true),fill:hc,class:'paint'},hg);
+    [[9,-17],[-7,-17]].forEach(([lx,ly])=>sketch([[lx,ly],[lx+2,-4]],{w:1.1,amt:.4,g:hg,passes:1}));
+    el('circle',{cx:-1,cy:-42,r:3.6,fill:'var(--navy)',class:'paint'},hg);
     el('circle',{cx:0,cy:-96,r:2.2,class:'lamp'},g);
+    g._h=hg;
     carUnits.push(g);
   }
 
@@ -332,9 +336,15 @@ function frame(t){
       // flat elevation: no perspective scale, no vertical arc — just travel + bob
       const x=650+Math.cos(a)*112, y=482+Math.sin(tick*2.4+i)*4;
       g.setAttribute('transform','translate('+x.toFixed(1)+','+y.toFixed(1)+')');
+      // the horse turns about its pole rather than snapping: scaleX eases through 0
+      // over a short arc at each end, where the horse reads edge-on
+      const sn=Math.sin(a), TURN=.3;
+      const t=Math.max(-1,Math.min(1,sn/TURN)), u=Math.abs(t);
+      const e=u*u*(3-2*u);                                 // smoothstep, so it eases in and out
+      g._h.setAttribute('transform','scale('+(t<0?-e:e).toFixed(3)+',1)');
       const want=front?carFrontG:carBackG;
-      if(g._p!==want){ want.appendChild(g); g._p=want; }   // only on crossing, not every frame
-    }
+      if(g._p!==want){ want.appendChild(g); g._p=want; }   // swap depth only on crossing,
+    }                                                      // where the turn hides it
     // cars run the track
     if(coasterPath){
       const L=coasterPath.getTotalLength();

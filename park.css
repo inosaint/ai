@@ -1,4 +1,5 @@
-/* Park illustration — shared by footer.html, footer-arch.html and index-new.html */
+/* Park illustration — painted variant, shared by index-new.html and playground.html.
+   The elevation variant lives in park-arch.css. */
 :root{
   --paper:#F4F1EC; --field:#FFFDFD; --ink:#141414;
   --terracotta:#DC8558; --rust:#C44928; --mustard:#E4B574;

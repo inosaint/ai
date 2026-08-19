@@ -1,0 +1,6 @@
+# Annotation toolbar working state — local review notes, not site content
+annotations.json
+annotations-resolved.json
+
+# macOS
+.DS_Store
