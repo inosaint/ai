@@ -123,7 +123,11 @@
     tiles=[...grid.querySelectorAll('.tile')];              // DOM order changed
   })();
   // seeds taken after the shuffle, so the drawn hand differs between visits too
-  tiles.forEach((t,i)=>{ t.dataset.seed=(((i*137)+weaveSeed)%40).toFixed(2); });
+  tiles.forEach((t,i)=>{
+    const sd=((i*137)+weaveSeed)%40;
+    t.dataset.seed=sd.toFixed(2);
+    t.style.setProperty('--gd', (sd/10).toFixed(2)+'s');   // staggers the dark-mode glow
+  });
 
   /* ---------- the weave: one lattice, shared with the project grid ----------
      The underlay is drawn on the grid's own pitch and origin rather than an

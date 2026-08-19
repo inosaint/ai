@@ -215,10 +215,14 @@ function build(){
   for(let i=-3;i<=3;i++) sketch([[OX+i*14,OT],[OX+i*14,OT+13]],{w:.7,amt:.4,g:mid,op:.55,passes:1});
   sketch([[OX,OT],[OX,OT-32]],{w:1.1,amt:.7,g:mid});
   el('path',{d:d_poly([[OX,OT-32],[OX+23,OT-26],[OX,OT-19]],true),fill:'var(--rust)',class:'paint'},mid);
-  [-28,-9,10,29].forEach(dx=>{
-    el('rect',{x:OX+dx,y:OT+16,width:9,height:12,class:'lamp',rx:1},mid);
-    el('rect',{x:OX+dx-4,y:OT+12,width:17,height:20,class:'glow',rx:5},mid);
-  });
+  // four lamps, centred in the 92x38 facade both ways. The old offsets ran from
+  // -28 to +38, so the group sat 5px right of centre and 3px low.
+  const LW=9, LH=12, LN=4, LGAP=19, LX0=-((LN-1)*LGAP)/2, LY=OT+(38-LH)/2;
+  for(let i=0;i<LN;i++){
+    const cx=OX+LX0+i*LGAP;
+    el('rect',{x:(cx-LW/2).toFixed(1),y:LY,width:LW,height:LH,class:'lamp',rx:1},mid);
+    el('rect',{x:(cx-LW/2-4).toFixed(1),y:LY-4,width:LW+8,height:LH+8,class:'glow',rx:5},mid);
+  }
 
   /* ---------- rollercoaster ---------- */
   const track=[[1130,364],[1200,326],[1300,300],[1420,302],[1520,332],[1590,394],
@@ -359,9 +363,6 @@ function frame(t){
   }
   requestAnimationFrame(frame);
 }
-if(new URLSearchParams(location.search).get('theme')==='dark'){document.documentElement.setAttribute('data-theme','dark');document.getElementById('theme').textContent='LIGHT MODE';}
-
-
 
   build();
   requestAnimationFrame(frame);

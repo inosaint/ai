@@ -187,3 +187,34 @@
 @media(min-width:940px){
   .herolinks{margin-top:42px}
 }
+
+/* ---- dark mode: the category symbols come on like lamps ----
+   Same --lamp the park's bulbs use, so the page reads as one lit scene after
+   dark. Two drop-shadows give a tight core and a soft halo; the slow breath is
+   staggered per tile (--gd) so they do not pulse in lockstep. */
+[data-theme="dark"] .tile .tico{
+  opacity:1;
+  color:var(--lamp);
+  filter:drop-shadow(0 0 2px rgba(255,179,60,.95))
+         drop-shadow(0 0 7px rgba(255,179,60,.55))
+         drop-shadow(0 0 15px rgba(255,179,60,.25));
+  animation:tileglow 4.6s ease-in-out infinite;
+  animation-delay:var(--gd,0s);
+}
+[data-theme="dark"] .tile .tico .dot{fill:var(--lamp)}
+
+/* every block is dark after nightfall, so all their labels go to paper — the
+   per-tile --t-ink is set inline for the light palette and cannot be reassigned
+   from here, so the colour itself is overridden instead */
+[data-theme="dark"] .tile{color:var(--paper)}
+[data-theme="dark"] .tile .tn{opacity:.96}
+[data-theme="dark"] .tile .tk{opacity:.62}
+@keyframes tileglow{
+  0%,100%{opacity:.82}
+  50%    {opacity:1}
+}
+/* a dimmed tile is out of the current filter, so its lamp is off too */
+[data-theme="dark"] .tile.dim .tico{filter:none;animation:none;opacity:.35}
+@media (prefers-reduced-motion: reduce){
+  [data-theme="dark"] .tile .tico{animation:none}
+}
