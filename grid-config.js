@@ -24,6 +24,13 @@
 --------------------------------------------------------------------------- */
 const GRID_CONFIG = {
 
+  /* ---- August 2026 ---- */
+  "Design Demo Nights #6 @ August 2026":                       { size:2, colour:"--g-vermillion", media:"projects/design-demos/demos-6.png" },
+  "Agent-annotate @ August 2026":                              { size:3, colour:"--g-teal", media:"" },
+  "Website design agent workflow @ August 2026":               { size:2, colour:"--g-navy", media:"" },
+  "AI projects redesign @ August 2026":                        { size:3, colour:"--g-teal", media:"" },
+  "Salary data viz @ July 2026":                               { size:3, colour:"--g-terra", media:"" },
+
   /* ---- July 2026 ---- */
   "Design Demo Nights #5 @ July 2026":                         { size:3, colour:"--g-vermillion", media:"projects/design-demos/demos-5.png" },
   "Sudhaarit @ July 2026":                                     { size:2, colour:"--g-teal", media:"projects/app/sudhaarit-site.png" },

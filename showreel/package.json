@@ -1,0 +1,23 @@
+{
+  "name": "showreel",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "plan": "node plan.mjs",
+    "start": "remotion studio",
+    "landscape": "remotion render Landscape out/showreel-landscape.mp4",
+    "portrait": "remotion render Portrait out/showreel-portrait.mp4",
+    "still": "remotion still Landscape out/frame.png --frame=90"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.513",
+    "@remotion/google-fonts": "^4.0.513",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "remotion": "4.0.513"
+  },
+  "devDependencies": {
+    "@types/react": "19.0.0",
+    "typescript": "5.6.3"
+  }
+}
