@@ -48,15 +48,29 @@ function initParkMarks(svg, opts){
     const at={class:o.cls||'mk'};
     if(o.fill) at.fill=o.fill;
     if(o.op!==undefined) at.opacity=o.op;
+    /* Drawn with an imperfect edge, matching the project blocks and the map.
+       wobbleMark lives in grid-viz.js, which the footer pages already load; the
+       exact primitives stay as a fallback so the park still draws without it.
+       The seed comes from the mark's own position, so it keeps its hand across
+       redraws — and a lamp or a star stays crisp, since those read as light
+       rather than as drawn objects. */
+    const drawn = o.cls!=='lamp' && o.cls!=='star' && o.cls!=='glow';
     let e;
-    if(kind==='circle'){ at.cx=cx.toFixed(1); at.cy=cy.toFixed(1); at.r=(r*.9).toFixed(1);
-      e=el('circle',at,o.g); }
-    else { at.d=markPath(kind,cx,cy,r); e=el('path',at,o.g); }
+    if(drawn && typeof wobbleMark==='function'){
+      at.d=wobbleMark(kind,cx,cy,r, Math.round(cx*7+cy*13+r*3));
+      e=el('path',at,o.g);
+    } else if(kind==='circle'){
+      at.cx=cx.toFixed(1); at.cy=cy.toFixed(1); at.r=(r*.9).toFixed(1);
+      e=el('circle',at,o.g);
+    } else {
+      at.d=markPath(kind,cx,cy,r); e=el('path',at,o.g);
+    }
     if(o.rot) e.setAttribute('transform','rotate('+o.rot.toFixed(1)+' '+cx.toFixed(1)+' '+cy.toFixed(1)+')');
     return e;
   }
   /* A rectangle is a square mark stretched — the scene still uses nothing but
-     the five marks, which is the whole conceit. */
+     the five marks, which is the whole conceit. The wobble is applied before the
+     scale, so a tall slab does not end up with a stretched, uneven edge. */
   function rect(x,y,w,h,fill,g,op){
     const r=Math.max(w,h)/1.64, cx=x+w/2, cy=y+h/2;
     const e=mark('square',cx,cy,r,{fill:fill,cls:'plane',g:g,op:op});

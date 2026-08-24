@@ -8,6 +8,11 @@
    Usage: const c = initCrumble(canvas, hostEl); c.enter(tileEl); c.leave(tileEl); */
 function initCrumble(canvas, host){
   if(!canvas||!host) return null;
+  const CAN_CLIP = typeof CSS!=='undefined' && CSS.supports &&
+    (CSS.supports('clip-path','path("M0 0L1 1Z")') ||
+     CSS.supports('-webkit-clip-path','path("M0 0L1 1Z")'));
+  if(!CAN_CLIP) console.warn('[crumble] clip-path: path() unsupported — crumble disabled');
+  if(!CAN_CLIP) return null;
   const gl=canvas.getContext('webgl',{antialias:false,alpha:true,premultipliedAlpha:true});
   if(!gl){ console.warn('[crumble] no WebGL; tiles stay flat'); return null; }
 
@@ -285,7 +290,11 @@ function initCrumble(canvas, host){
         (q[0]+ox).toFixed(1)+' '+(q[1]+oy).toFixed(1)).join('L')+'Z');
     }
     const want=subs.length?'path("'+subs.join(' ')+'")':'none';
-    if(canvas._clip!==want){ canvas.style.clipPath=want; canvas._clip=want; }
+    if(canvas._clip!==want){
+      canvas.style.clipPath=want;
+      canvas.style.webkitClipPath=want;      // Safari still wants the prefix
+      canvas._clip=want;
+    }
   }
 
   function measure(){
@@ -350,6 +359,24 @@ function initCrumble(canvas, host){
   }
   function kick(){ if(!raf) raf=requestAnimationFrame(frame); }
 
+  /* Safari discards WebGL contexts aggressively — on tab switch, memory pressure,
+     or too many live contexts. The tile hides its own fill while hot and trusts
+     the canvas to paint it, so a lost context used to leave a blank square.
+     Losing the context now simply switches the crumble off. */
+  canvas.addEventListener('webglcontextlost', e=>{
+    e.preventDefault();
+    host.classList.remove('crumble-ok');
+    slotEl.forEach(el=>el && el.classList.remove('hot'));
+    want[0]=want[1]=hover[0]=hover[1]=0;
+    cancelAnimationFrame(raf); raf=0;
+    console.warn('[crumble] WebGL context lost — tiles fall back to flat colour');
+  });
+  canvas.addEventListener('webglcontextrestored', ()=>{
+    console.warn('[crumble] WebGL context restored');
+    location.reload();          // simplest correct recovery: rebuild everything
+  });
+
+  host.classList.add('crumble-ok');
   measure(); kick();
 
   return {
@@ -357,6 +384,17 @@ function initCrumble(canvas, host){
     enter(el, centre){
       kick();
       if(slotEl[0]===el){ want[0]=1; return; }
+      /* Whatever is in slot 1 is about to be evicted. The frame loop only ever
+         clears .hot for tiles still held in a slot, so an evicted tile kept the
+         class forever — its fill stayed hidden with nothing left to paint it,
+         leaving a blank square. Sweeping across tiles quickly evicted several at
+         once, which is exactly when the blanks appeared. */
+      if(slotEl[1] && slotEl[1]!==el && slotEl[1]!==slotEl[0])
+        slotEl[1].classList.remove('hot');
+      // belt and braces: nothing outside the two slots may stay hot
+      host.querySelectorAll('.tile.hot').forEach(t=>{
+        if(t!==el && t!==slotEl[0] && t!==slotEl[1]) t.classList.remove('hot');
+      });
       // push the current tile into the second slot so it can fade out behind
       slotEl[1]=slotEl[0]; hover[1]=hover[0]; want[1]=0; mouse[1]=mouse[0].slice();
       rects.copyWithin(4,0,4); kinds[1]=kinds[0]; hasImg[1]=hasImg[0]; seeds[1]=seeds[0];

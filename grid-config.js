@@ -11,8 +11,14 @@
              --g-coral --g-ochre --g-terra --g-blush
            Dark colours (teal, navy, moss, vermillion) automatically flip their
            label to paper, so you do not have to think about contrast.
-   media : the image or video revealed on hover. '' means the block reveals a
-           deepened version of its own colour instead. .mp4/.mov/.webm all work.
+   wip   : true adds a WORK IN PROGRESS tag. Links pointing at "#" get it
+           automatically and have their click cancelled.
+   pin   : "first" or "last" keeps a project at that end of its month, despite
+           the per-visit shuffle. Omit for the usual random placement.
+   media : the image or video revealed on hover. Leave "" to keep whatever the
+           markup already has; use "none" to show no image at all. When there is
+           nothing to show, the block reveals a deepened version of its own
+           colour instead. .mp4 / .mov / .webm all work.
 
    Keys are "Project Name @ Month Year". The month is part of the key because a
    project can appear twice — Sudhaarit shipped in both July and February, and
@@ -25,20 +31,19 @@
 const GRID_CONFIG = {
 
   /* ---- August 2026 ---- */
-  "Design Demo Nights #6 @ August 2026":                       { size:2, colour:"--g-vermillion", media:"projects/design-demos/demos-6.png" },
-  "Agent-annotate @ August 2026":                              { size:3, colour:"--g-teal", media:"" },
+  "Design Demo Nights #6 @ August 2026":                       { size:2, colour:"--g-vermillion", media:"", pin:"last" },
+  "agent-annotate @ August 2026":                              { size:3, colour:"--g-teal", media:"projects/agent-tools/agent-annotate.png" },
   "Website design agent workflow @ August 2026":               { size:2, colour:"--g-navy", media:"" },
-  "AI projects redesign @ August 2026":                        { size:3, colour:"--g-teal", media:"" },
-  "Salary data viz @ July 2026":                               { size:3, colour:"--g-terra", media:"" },
+  "Redesigning the AI projects page @ August 2026":                        { size:3, colour:"--g-teal", media:"projects/exploration/combo-layout.webp" },
 
   /* ---- July 2026 ---- */
   "Design Demo Nights #5 @ July 2026":                         { size:3, colour:"--g-vermillion", media:"projects/design-demos/demos-5.png" },
-  "Sudhaarit @ July 2026":                                     { size:2, colour:"--g-teal", media:"projects/app/sudhaarit-site.png" },
+  "Sudhaarit @ July 2026":                                     { size:2, colour:"--g-teal", media:"projects/app/sudhaarit-site.png" , wip:true },
   "Mapyour.org growth plan feature @ July 2026":               { size:1, colour:"--g-navy", media:"projects/app/mapyourgrowth.png" },
   "data-vizard.com @ July 2026":                               { size:1, colour:"--g-teal", media:"projects/data-vizard/data-vizard-site.png" },
   "Salary data viz @ July 2026":                               { size:3, colour:"--g-terra", media:"projects/data-vizard/salary-data.png" },
   "Interactive DataViz Using AI Coding at VizChitra 2026 @ July 2026": { size:2, colour:"--g-coral", media:"projects/workshop/vizchitra.jpeg" },
-  "FIFA 2026 football world cup visualized @ July 2026":       { size:2, colour:"--g-terra", media:"" },
+  "FIFA 2026 football world cup visualized @ July 2026":       { size:2, colour:"--g-terra", media:"projects/viz-demos/viz-demos-2.png" },
 
   /* ---- June 2026 ---- */
   "Data Vizard @ June 2026":                                   { size:4, colour:"--g-teal", media:"projects/data-vizard/data-vizard.png" },

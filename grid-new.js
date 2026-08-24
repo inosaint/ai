@@ -27,9 +27,12 @@
         t.style.setProperty('--t-bg','var('+cfg.colour+')');
         t.style.setProperty('--t-ink', DARK[cfg.colour]?'var(--paper)':'var(--ink)');
       }
-      if(cfg.media!==undefined){
-        if(cfg.media) t.dataset.img=cfg.media; else delete t.dataset.img;
-      }
+      // blank means "leave the markup alone", not "remove the image" — use
+      // media:"none" to deliberately strip one
+      if(cfg.media) t.dataset.img = (cfg.media==='none') ? '' : cfg.media;
+      if(cfg.media==='none') delete t.dataset.img;
+      if(cfg.pin) t.dataset.pin=cfg.pin;
+      if(cfg.wip) t.setAttribute('data-wip','');   // shows the work-in-progress tag
     });
   }
   const labels=[...grid.querySelectorAll('.mlabel')];
@@ -140,6 +143,9 @@
         const j=Math.floor(wr()*(i+1));
         [run[i],run[j]]=[run[j],run[i]];
       }
+      // pinned projects keep their place in the month whatever the shuffle did
+      const rank=el=>el.dataset.pin==='first'?-1:el.dataset.pin==='last'?1:0;
+      run.sort((a,b)=>rank(a)-rank(b));
       let after=anchorEl;
       run.forEach(el=>{ after.after(el); after=el; });
       run=[];
@@ -323,6 +329,13 @@
     if(stat) stat.textContent=n+(f==='all'?' projects':' '+f+' projects')+' shown';
     // nothing moves any more, so the outlines and the weave do not need redrawing
   }
+  /* tiles with no destination yet must not navigate; the CSS tags them */
+  tiles.forEach(t=>{
+    if(t.getAttribute('href')!=='#') return;
+    t.setAttribute('aria-disabled','true');
+    t.addEventListener('click',e=>e.preventDefault());
+  });
+
   const clearBtn=document.getElementById('clearf');
   if(clearBtn) clearBtn.addEventListener('click',()=>apply('all'));
 

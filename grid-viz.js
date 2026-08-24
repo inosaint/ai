@@ -6,16 +6,62 @@
 /* ---- project map: derived from the page, newest month on the left ---- */
 const MN=['January','February','March','April','May','June','July','August','September','October','November','December'];
 const SHAPES={app:'square',game:'circle',event:'triangle',exploration:'diamond',visualization:'cross'};
-function shape(kind,cx,cy,r){
-  const N='http://www.w3.org/2000/svg'; let e;
-  if(kind==='circle'){e=document.createElementNS(N,'circle');e.setAttribute('cx',cx);e.setAttribute('cy',cy);e.setAttribute('r',r*0.9);}
-  else if(kind==='square'){e=document.createElementNS(N,'rect');e.setAttribute('x',cx-r*0.82);e.setAttribute('y',cy-r*0.82);e.setAttribute('width',r*1.64);e.setAttribute('height',r*1.64);}
-  else if(kind==='triangle'){e=document.createElementNS(N,'path');const hh=r*1.02;
-    e.setAttribute('d','M'+cx+' '+(cy-hh)+'L'+(cx+r)+' '+(cy+hh*0.72)+'L'+(cx-r)+' '+(cy+hh*0.72)+'Z');}
-  else if(kind==='diamond'){e=document.createElementNS(N,'path');
-    e.setAttribute('d','M'+cx+' '+(cy-r*1.1)+'L'+(cx+r*1.1)+' '+cy+'L'+cx+' '+(cy+r*1.1)+'L'+(cx-r*1.1)+' '+cy+'Z');}
-  else{e=document.createElementNS(N,'path');const a=r*0.35,b=r*1.1;
-    e.setAttribute('d','M'+(cx-a)+' '+(cy-b)+'h'+(a*2)+'v'+(b-a)+'h'+(b-a)+'v'+(a*2)+'h'+(-(b-a))+'v'+(b-a)+'h'+(-a*2)+'v'+(-(b-a))+'h'+(-(b-a))+'v'+(-a*2)+'h'+(b-a)+'Z');}
+/* The marks are drawn with an imperfect edge, the same way the project blocks
+   are: the outline is walked point by point with a small nudge at each step.
+   Amplitude scales with the mark, so an 8px dot in the map gets a fraction of a
+   pixel while a 40px mount in the footer gets a couple.
+
+   markVerts() is the geometry, shared so the crisp proportions live in one
+   place; wobbleMark() is the drawn version. Both are exposed globally because
+   park-marks.js draws the same five marks in the footer. */
+function markVerts(kind,cx,cy,r){
+  if(kind==='circle'){
+    const v=[],n=26;
+    for(let i=0;i<n;i++){const a=i/n*Math.PI*2;
+      v.push([cx+Math.cos(a)*r*0.9, cy+Math.sin(a)*r*0.9]);}
+    return v;
+  }
+  if(kind==='square'){const k=r*0.82;
+    return [[cx-k,cy-k],[cx+k,cy-k],[cx+k,cy+k],[cx-k,cy+k]];}
+  if(kind==='triangle'){const hh=r*1.02;
+    return [[cx,cy-hh],[cx+r,cy+hh*0.72],[cx-r,cy+hh*0.72]];}
+  if(kind==='diamond'){const k=r*1.1;
+    return [[cx,cy-k],[cx+k,cy],[cx,cy+k],[cx-k,cy]];}
+  const a=r*0.35,b=r*1.1;
+  return [[cx-a,cy-b],[cx+a,cy-b],[cx+a,cy-a],[cx+b,cy-a],[cx+b,cy+a],[cx+a,cy+a],
+          [cx+a,cy+b],[cx-a,cy+b],[cx-a,cy+a],[cx-b,cy+a],[cx-b,cy-a],[cx-a,cy-a]];
+}
+
+/* a small deterministic generator, so a mark keeps the same hand across
+   redraws, filtering and theme changes */
+function markRnd(seed){
+  let a=(seed|0)||1;
+  return ()=>{ a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a);
+    t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; };
+}
+
+function wobbleMark(kind,cx,cy,r,seed){
+  const verts=markVerts(kind,cx,cy,r);
+  const rnd=markRnd(seed===undefined ? Math.round(cx*7+cy*13+r*3) : seed);
+  // a small mark cannot take much wobble before it stops reading as its shape
+  const amt=Math.max(0.28, Math.min(r*0.085, 2.0));
+  const step=Math.max(4, r*0.9);
+  const pts=[];
+  for(let e=0;e<verts.length;e++){
+    const [x0,y0]=verts[e], [x1,y1]=verts[(e+1)%verts.length];
+    const len=Math.hypot(x1-x0,y1-y0), n=Math.max(1,Math.round(len/step));
+    for(let i=0;i<n;i++){
+      const t=i/n;
+      pts.push([x0+(x1-x0)*t+(rnd()-0.5)*amt, y0+(y1-y0)*t+(rnd()-0.5)*amt]);
+    }
+  }
+  return 'M'+pts.map(q=>q[0].toFixed(2)+' '+q[1].toFixed(2)).join('L')+'Z';
+}
+
+function shape(kind,cx,cy,r,seed){
+  const N='http://www.w3.org/2000/svg';
+  const e=document.createElementNS(N,'path');
+  e.setAttribute('d',wobbleMark(kind,cx,cy,r,seed));
   e.setAttribute('class','dot'); return e;
 }
 /* Read {mo, cat, nm} records out of a page's month sections. */

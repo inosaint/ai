@@ -70,9 +70,13 @@
 /* the hovered tile is painted entirely by the shader — edge included — so its own
    drawing steps aside to avoid two slightly different wobbles fighting */
 .tile.hot{background:none;z-index:6}
-/* only the fill gives way — the outline stays put, so hovering cannot change the
-   shape of the box. The canvas is clipped to this same outline. */
-.tile.hot .fr .fill{opacity:0}
+/* Only the fill gives way — the outline stays put, so hovering cannot change the
+   shape of the box. The canvas is clipped to this same outline.
+
+   Gated on .crumble-ok, which crumble.js only sets once WebGL and clip-path are
+   both working, and removes if the context is lost. Without that gate any canvas
+   failure left a blank square, since the tile had stopped painting itself. */
+.pwrap.crumble-ok .tile.hot .fr .fill{opacity:0}
 /* filtering drains the non-matching blocks instead of pulling them out — the
    weave has to stay continuous for the grid to keep reading as one fabric */
 .tile.dim{opacity:.30;filter:saturate(.25)}
@@ -218,7 +222,7 @@
    --paper is #0E1218, near-black, which is what made navy tiles unreadable).
    The per-tile --t-ink is inline for the light palette and cannot be reassigned
    from a stylesheet, so the resolved colour is overridden instead. */
-[data-theme="dark"] .tile{color:var(--ink)}
+[data-theme="dark"] .tile{color:var(--tile-label)}
 /* full strength: .96 was enough to pull terra from 4.60 to 4.38:1 */
 [data-theme="dark"] .tile .tn{opacity:1}
 @keyframes tileglow{
@@ -259,3 +263,46 @@ p.lede{opacity:1}
 .herolinks .ext{opacity:.85}
 /* the year beside each month: 8.5px/400 at .38 alpha read 2.40:1 */
 .mlabel b{opacity:.72}
+
+/* ---- work in progress ----
+   A tile with no destination yet still looks and behaves like a link, which is a
+   promise it cannot keep. It gets a tag, loses the pointer, and its click is
+   cancelled in grid-new.js. currentColor is the tile's own label colour, which
+   already clears 4.5:1 against its tint, so the tag inherits that contrast. */
+.tile[href="#"]{cursor:default}
+.tile[href="#"]::after,
+.tile[data-wip]::after{
+  content:"WORK IN PROGRESS";
+  position:absolute;top:10px;right:11px;z-index:4;
+  /* inline-flex + place-items centres the text in the pill; the extra left pad
+     offsets the trailing letter-space, which otherwise pushes it off-centre */
+  display:inline-flex;align-items:center;justify-content:center;
+  font-family:var(--mono,ui-monospace,monospace);font-size:7.5px;letter-spacing:.16em;
+  line-height:1;padding:4px 5px 4px 6px;
+  /* --tile-label, not --paper: the paper token is near-black in dark mode,
+     which is what made this tag unreadable there */
+  color:var(--tile-label);border:1px solid currentColor;border-radius:2px;
+  background:rgba(18,22,27,.30);
+  opacity:.92;pointer-events:none}
+.tile[href="#"]:hover::after,.tile[data-wip]:hover::after{opacity:1}
+@media(max-width:560px){
+  .tile[data-w="1"][href="#"]::after,.tile[data-w="1"][data-wip]::after{content:"WIP"} }
+
+
+/* ---- labels ----
+   One fixed off-white in both themes. NOT var(--paper): that token swaps meaning
+   between light and dark, which is what turned the labels near-black in dark
+   mode. The label always sits on a coloured block, so it always wants the light
+   value regardless of theme. */
+:root{--tile-label:#F4F1EC}
+[data-theme="dark"]{--tile-label:#E9EEF3}
+.tile{color:var(--tile-label)}
+.tile .tico{color:var(--tile-label)}
+
+/* ---- tile outlines after dark ----
+   The label colour drives the outline, which after dark is a light off-white —
+   it read as a bright rim against the deep background. Dark mode uses the same
+   stroke and weight as the lattice behind the grid instead, so the outline sits
+   with the weave rather than in front of it. */
+[data-theme="dark"] .tile .fr .edge{stroke:var(--ink);opacity:.15}
+[data-theme="dark"] .tile.hot .fr .edge{opacity:.28}
