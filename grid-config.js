@@ -32,68 +32,68 @@ const GRID_CONFIG = {
 
   /* ---- August 2026 ---- */
   "Design Demo Nights #6 @ August 2026":                       { size:2, colour:"--g-vermillion", media:"", pin:"last" },
-  "agent-annotate @ August 2026":                              { size:3, colour:"--g-teal", media:"projects/agent-tools/agent-annotate.png" },
+  "agent-annotate @ August 2026":                              { size:3, colour:"--g-teal", media:"projects/agent-tools/agent-annotate.webp" },
   "Website design agent workflow @ August 2026":               { size:2, colour:"--g-navy", media:"" },
   "Redesigning the AI projects page @ August 2026":                        { size:3, colour:"--g-teal", media:"projects/exploration/combo-layout.webp" },
 
   /* ---- July 2026 ---- */
-  "Design Demo Nights #5 @ July 2026":                         { size:3, colour:"--g-vermillion", media:"projects/design-demos/demos-5.png" },
-  "Sudhaarit @ July 2026":                                     { size:2, colour:"--g-teal", media:"projects/app/sudhaarit-site.png" , wip:true },
-  "Mapyour.org growth plan feature @ July 2026":               { size:1, colour:"--g-navy", media:"projects/app/mapyourgrowth.png" },
-  "data-vizard.com @ July 2026":                               { size:1, colour:"--g-teal", media:"projects/data-vizard/data-vizard-site.png" },
-  "Salary data viz @ July 2026":                               { size:3, colour:"--g-terra", media:"projects/data-vizard/salary-data.png" },
-  "Interactive DataViz Using AI Coding at VizChitra 2026 @ July 2026": { size:2, colour:"--g-coral", media:"projects/workshop/vizchitra.jpeg" },
-  "FIFA 2026 football world cup visualized @ July 2026":       { size:2, colour:"--g-terra", media:"projects/viz-demos/viz-demos-2.png" },
+  "Design Demo Nights #5 @ July 2026":                         { size:3, colour:"--g-vermillion", media:"projects/design-demos/demos-5.webp" },
+  "Sudhaarit @ July 2026":                                     { size:2, colour:"--g-teal", media:"projects/app/sudhaarit-site.webp" , wip:true },
+  "Mapyour.org growth plan feature @ July 2026":               { size:1, colour:"--g-navy", media:"projects/app/mapyourgrowth.webp" },
+  "data-vizard.com @ July 2026":                               { size:1, colour:"--g-teal", media:"projects/data-vizard/data-vizard-site.webp" },
+  "Salary data viz @ July 2026":                               { size:3, colour:"--g-terra", media:"projects/data-vizard/salary-data.webp" },
+  "Interactive DataViz Using AI Coding at VizChitra 2026 @ July 2026": { size:2, colour:"--g-coral", media:"projects/workshop/vizchitra.webp" },
+  "FIFA 2026 football world cup visualized @ July 2026":       { size:2, colour:"--g-terra", media:"projects/viz-demos/viz-demos-2.webp" },
 
   /* ---- June 2026 ---- */
-  "Data Vizard @ June 2026":                                   { size:4, colour:"--g-teal", media:"projects/data-vizard/data-vizard.png" },
+  "Data Vizard @ June 2026":                                   { size:4, colour:"--g-teal", media:"projects/data-vizard/data-vizard.webp" },
   "feels @ June 2026":                                         { size:3, colour:"--g-navy", media:"" },
-  "Design Demo Nights #4 @ June 2026":                         { size:2, colour:"--g-vermillion", media:"projects/design-demos/demos-4.JPG" },
+  "Design Demo Nights #4 @ June 2026":                         { size:2, colour:"--g-vermillion", media:"projects/design-demos/demos-4.webp" },
 
   /* ---- May 2026 ---- */
-  "Solar System Narrative Viz @ May 2026":                     { size:2, colour:"--g-terra", media:"projects/viz-demos/viz-demos-1.png" },
+  "Solar System Narrative Viz @ May 2026":                     { size:2, colour:"--g-terra", media:"projects/viz-demos/viz-demos-1.webp" },
   "Grindsize Social Ad @ May 2026":                            { size:1, colour:"--g-terra", media:"" },
-  "Design Demo Nights #3 @ May 2026":                          { size:3, colour:"--g-vermillion", media:"projects/design-demos/demos-3.jpg" },
+  "Design Demo Nights #3 @ May 2026":                          { size:3, colour:"--g-vermillion", media:"projects/design-demos/demos-3.webp" },
   "Design Demo Nights Archive @ May 2026":                     { size:2, colour:"--g-vermillion", media:"" },
-  "Grindsize.in @ May 2026":                                   { size:4, colour:"--g-navy", media:"projects/grinder-calibrator/grinder-v1.jpg" },
+  "Grindsize.in @ May 2026":                                   { size:4, colour:"--g-navy", media:"projects/grinder-calibrator/grinder-v1.webp" },
 
   /* ---- April 2026 ---- */
-  "Agentic Coding Workshop at CEC, Mangalore @ April 2026":    { size:2, colour:"--g-vermillion", media:"projects/workshop/canara.jpeg" },
-  "Design Demo Nights #2 @ April 2026":                        { size:2, colour:"--g-vermillion", media:"projects/design-demos/demos-2.jpg" },
-  "ASCII Rocky @ April 2026":                                  { size:1, colour:"--g-terra", media:"projects/app/rocky.png" },
-  "Tower Dungeon @ April 2026":                                { size:1, colour:"--g-moss", media:"projects/games/tower.PNG" },
-  "designr. @ April 2026":                                     { size:2, colour:"--g-ochre", media:"projects/app/designr.png" },
+  "Agentic Coding Workshop at CEC, Mangalore @ April 2026":    { size:2, colour:"--g-vermillion", media:"projects/workshop/canara.webp" },
+  "Design Demo Nights #2 @ April 2026":                        { size:2, colour:"--g-vermillion", media:"projects/design-demos/demos-2.webp" },
+  "ASCII Rocky @ April 2026":                                  { size:1, colour:"--g-terra", media:"projects/app/rocky.webp" },
+  "Tower Dungeon @ April 2026":                                { size:1, colour:"--g-moss", media:"projects/games/tower.webp" },
+  "designr. @ April 2026":                                     { size:2, colour:"--g-ochre", media:"projects/app/designr.webp" },
 
   /* ---- March 2026 ---- */
   "Amoebas - Live @ March 2026":                               { size:2, colour:"--g-teal", media:"projects/app/amoebas.mov" },
   "Amoebas @ March 2026":                                      { size:1, colour:"--g-moss", media:"projects/app/amoebas.mov" },
-  "Design Demo Nights #1 @ March 2026":                        { size:3, colour:"--g-vermillion", media:"projects/design-demos/demos-1.jpeg" },
-  "Pinboarder @ March 2026":                                   { size:4, colour:"--g-navy", media:"projects/app/pinboarder.png" },
+  "Design Demo Nights #1 @ March 2026":                        { size:3, colour:"--g-vermillion", media:"projects/design-demos/demos-1.webp" },
+  "Pinboarder @ March 2026":                                   { size:4, colour:"--g-navy", media:"projects/app/pinboarder.webp" },
   "Infinite Pixel Dungeons @ March 2026":                      { size:2, colour:"--g-moss", media:"projects/games/infinite-dungeons.mov" },
   "Design Tooling Releases — Exploration 2 @ March 2026":      { size:1, colour:"--g-ochre", media:"" },
   "Design Tooling Releases — Exploration 1 @ March 2026":      { size:2, colour:"--g-terra", media:"" },
   "Same Prompt, 3 Design Models, 1 Tool @ March 2026":         { size:2, colour:"--g-ochre", media:"" },
-  "AI Workshop at NID @ March 2026":                           { size:1, colour:"--g-vermillion", media:"projects/workshop/nid.jpeg" },
+  "AI Workshop at NID @ March 2026":                           { size:1, colour:"--g-vermillion", media:"projects/workshop/nid.webp" },
 
   /* ---- February 2026 ---- */
   "Sudhaarit @ February 2026":                                 { size:2, colour:"--g-navy", media:"" },
-  "Unnamed @ February 2026":                                   { size:3, colour:"--g-moss", media:"projects/unamed/unamed.png" },
-  "Hermes @ February 2026":                                    { size:4, colour:"--g-teal", media:"projects/app/hermes-mac.png" },
-  "Smithy @ February 2026":                                    { size:1, colour:"--g-navy", media:"projects/app/smithy/cover-smithy.png" },
-  "Vibeshift Projects @ February 2026":                        { size:2, colour:"--g-teal", media:"projects/event/vibeshift-blr.jpg" },
-  "exhume.link @ February 2026":                               { size:2, colour:"--g-terra", media:"projects/app/exhume.png" },
+  "Unnamed @ February 2026":                                   { size:3, colour:"--g-moss", media:"projects/unamed/unamed.webp" },
+  "Hermes @ February 2026":                                    { size:4, colour:"--g-teal", media:"projects/app/hermes-mac.webp" },
+  "Smithy @ February 2026":                                    { size:1, colour:"--g-navy", media:"projects/app/smithy/cover-smithy.webp" },
+  "Vibeshift Projects @ February 2026":                        { size:2, colour:"--g-teal", media:"projects/event/vibeshift-blr.webp" },
+  "exhume.link @ February 2026":                               { size:2, colour:"--g-terra", media:"projects/app/exhume.webp" },
 
   /* ---- January 2026 ---- */
-  "Mapyour.org @ January 2026":                                { size:4, colour:"--g-navy", media:"projects/app/mapyourorg.JPG" },
-  "AI workshop @ January 2026":                                { size:3, colour:"--g-teal", media:"projects/workshop/ai-workshop.png" },
-  "Books Viz' 2025 @ January 2026":                       { size:2, colour:"--g-terra", media:"projects/exploration/books-2025.png" },
+  "Mapyour.org @ January 2026":                                { size:4, colour:"--g-navy", media:"projects/app/mapyourorg.webp" },
+  "AI workshop @ January 2026":                                { size:3, colour:"--g-teal", media:"projects/workshop/ai-workshop.webp" },
+  "Books Viz' 2025 @ January 2026":                       { size:2, colour:"--g-terra", media:"projects/exploration/books-2025.webp" },
 
   /* ---- November 2025 ---- */
-  "budgie.travel @ November 2025":                             { size:4, colour:"--g-navy", media:"projects/app/budgie.PNG" },
-  "traviti @ November 2025":                                   { size:2, colour:"--g-teal", media:"projects/app/traviti.png" },
+  "budgie.travel @ November 2025":                             { size:4, colour:"--g-navy", media:"projects/app/budgie.webp" },
+  "traviti @ November 2025":                                   { size:2, colour:"--g-teal", media:"projects/app/traviti.webp" },
 
   /* ---- August 2025 ---- */
-  "Whack-a-rat @ August 2025":                                 { size:1, colour:"--g-moss", media:"projects/games/mouse.png" },
-  "Freefallin' @ August 2025":                            { size:1, colour:"--g-teal", media:"projects/games/down.png" },
-  "Not a Hotdog @ August 2025":                                { size:2, colour:"--g-moss", media:"projects/games/taco.png" },
+  "Whack-a-rat @ August 2025":                                 { size:1, colour:"--g-moss", media:"projects/games/mouse.webp" },
+  "Freefallin' @ August 2025":                            { size:1, colour:"--g-teal", media:"projects/games/down.webp" },
+  "Not a Hotdog @ August 2025":                                { size:2, colour:"--g-moss", media:"projects/games/taco.webp" },
 };

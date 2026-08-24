@@ -187,7 +187,12 @@ function initCrumble(canvas, host){
       cache.delete(oldest);
     }
   }
-  const MAXTEX=1024;
+  /* 1024 was below what a retina screen actually asks for: the largest tile
+     (data-w 4, five of twelve columns) is ~660 CSS px on a 16" laptop, which is
+     1320 device px at dpr 2 and more on an external display. Capping at 1024
+     upscaled the texture and read as blur. The assets are now exported at their
+     display size, so this only guards against something oversized slipping in. */
+  const MAXTEX=Math.min(2048, gl.getParameter(gl.MAX_TEXTURE_SIZE)||2048);
   function fit(src){
     const w=src.naturalWidth||src.videoWidth||0, h=src.naturalHeight||src.videoHeight||0;
     if(!w||!h||Math.max(w,h)<=MAXTEX) return src;
@@ -377,6 +382,48 @@ function initCrumble(canvas, host){
   });
 
   host.classList.add('crumble-ok');
+
+  /* ---------- idle prefetch ----------
+     loadImage() used to be the first thing that ever asked for the file, so the
+     first hover of every tile paid the whole network round trip before any
+     image appeared. Warm the browser's HTTP cache while it is idle instead;
+     hover then only costs the decode and the texture upload.
+
+     Deliberately NOT written into `cache`: that LRU holds eight entries because
+     decoded bitmaps are heavy, and pushing 36 through it would just evict the
+     ones we wanted. These Images are dropped for the GC to collect once the
+     bytes have landed — the HTTP cache is what we are actually filling.
+
+     Nearest the viewport first, one at a time, so the grid's own paint keeps
+     the connection and the main thread. Videos are skipped: they are megabytes
+     each and stream on demand anyway. */
+  (function warmMedia(){
+    const idle = window.requestIdleCallback || (fn=>setTimeout(()=>fn({timeRemaining:()=>16}),200));
+    const seen=new Set(), queue=[];
+    host.querySelectorAll('.tile').forEach(t=>{
+      const src=t.dataset.img;
+      if(!src || isVideo(src) || seen.has(src)) return;
+      seen.add(src); queue.push({src, el:t});
+    });
+    if(!queue.length) return;
+    const mid=window.innerHeight/2;
+    queue.sort((a,b)=>{
+      const da=Math.abs(a.el.getBoundingClientRect().top-mid);
+      const db=Math.abs(b.el.getBoundingClientRect().top-mid);
+      return da-db;
+    });
+    let i=0;
+    const next=()=>{
+      if(i>=queue.length) return;
+      const {src}=queue[i++];
+      const im=new Image();
+      im.decoding='async';
+      // fetch only — the reference goes out of scope once it has loaded
+      im.onload=im.onerror=()=>idle(next);
+      im.src=src;
+    };
+    idle(next);
+  })();
   measure(); kick();
 
   return {
