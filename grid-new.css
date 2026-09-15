@@ -17,7 +17,13 @@
 .idxhead{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
   margin:clamp(30px,4vw,54px) 0 18px;padding-top:14px;
   position:relative;z-index:20}   /* must outrank .pwrap, or tooltips hide behind the grid */
-.idxhead .sec{margin:0;padding:0;order:2}
+.idxhead .secgrp{order:2;display:flex;align-items:center;gap:12px}
+.idxhead .sec{margin:0;padding:0}
+/* a short rule between the view toggle and the heading, so the icon reads as its
+   own control rather than a glyph belonging to ALL PROJECTS */
+.idxhead .secgrp .sec{position:relative;padding-left:13px}
+.idxhead .secgrp .sec::before{content:"";position:absolute;left:0;top:50%;
+  width:1px;height:13px;margin-top:-6.5px;background:var(--ink);opacity:.35}
 .idxhead .filters{order:1}
 
 /* ---- the grid ---- */
@@ -144,7 +150,7 @@
 .foot-meta{font-family:var(--mono,ui-monospace,monospace);font-size:9.5px;
   letter-spacing:.2em;color:var(--ink)}
 
-.idxhead .sec{font-weight:600;margin:0;padding:0;order:2;opacity:.8}
+.idxhead .sec{font-weight:600;margin:0;padding:0;opacity:.8}
 .sec .secbtn{font:inherit;letter-spacing:inherit;color:inherit;background:none;border:0;
   padding:0;margin:0;cursor:pointer;-webkit-appearance:none;appearance:none;
   transition:color .18s}
@@ -306,3 +312,89 @@ p.lede{opacity:1}
    with the weave rather than in front of it. */
 [data-theme="dark"] .tile .fr .edge{stroke:var(--ink);opacity:.15}
 [data-theme="dark"] .tile.hot .fr .edge{opacity:.28}
+
+/* ---- list view ----
+   The default. The same tiles as the grid, laid out as an index: the month in
+   the margin beside its first project, one row per project. Nothing is painted,
+   so the rows take the page ink rather than the fixed label colour. */
+/* the same colours the filter marks and the hero map use (playground.css) */
+.tile[data-cat="app"]{--cat:var(--c-app)}
+.tile[data-cat="game"]{--cat:var(--c-game)}
+.tile[data-cat="event"]{--cat:var(--c-event)}
+.tile[data-cat="exploration"]{--cat:var(--c-exploration)}
+.tile[data-cat="visualization"]{--cat:var(--c-visualization)}
+
+.as-list .pcanvas,.as-list .tile .fr{display:none}
+/* a month sits in the left column and the auto-placement drops its first project
+   into the same row; every later project wraps to the next row, leaving the
+   margin empty until the next month */
+/* the list lies on plain paper: the lattice's wobbly horizontals doubled up
+   against the row rules. The weave still shows around it and in the hero. */
+.as-list .pgrid{grid-template-columns:minmax(96px,160px) 1fr;grid-auto-rows:auto;gap:0;
+  background:var(--paper);transition:background-color .5s ease}
+.as-list .mlabel{grid-column:1;grid-row:auto;justify-content:flex-start;
+  padding:16px 0 0}
+.as-list .tile{grid-column:2;grid-row:auto;flex-direction:row;align-items:center;gap:12px;
+  padding:13px 8px 13px 2px;border-top:1px solid var(--hair);overflow:visible;
+  color:var(--ink);transition:background-color .18s,opacity .25s}
+/* the row that opens a month sits under the drawn month rule (drawMonthRules),
+   so it drops its own straight one. .mfirst is set in JS because under a filter
+   the first visible row is not always the label's next sibling. */
+.as-list .tile.mfirst{border-top-color:transparent}
+.mrules{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;
+  overflow:visible;z-index:2}
+.mrules path{fill:none;stroke:var(--ink);stroke-width:1;opacity:.28;
+  stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.as-list .tile:hover,.as-list .tile:focus-visible{color:var(--ink);
+  background:color-mix(in srgb,var(--cat) 9%,transparent)}
+.as-list .tile[href="#"]:hover{background:none}
+
+.as-list .tile .tmeta{flex:1;min-width:0;display:flex;align-items:baseline;
+  justify-content:space-between;gap:16px}
+.as-list .tile .tn,
+.as-list .tile[data-w] .tn{font-size:15px;font-weight:500;line-height:1.3;opacity:1}
+/* in a row the word earns its place again: there is room for it, and the
+   symbol alone is a lot to decode at a scan */
+.as-list .tile .tk{position:static;width:auto;height:auto;overflow:visible;clip:auto;
+  flex:none;font-family:var(--mono,ui-monospace,monospace);font-size:9px;
+  letter-spacing:.16em;opacity:.6}
+
+.as-list .tile .tico,
+[data-theme="dark"] .as-list .tile .tico{position:static;order:-1;flex:none;opacity:1;
+  color:var(--cat);filter:none;animation:none;transition:transform .18s}
+[data-theme="dark"] .as-list .tile .tico .dot{fill:currentColor}
+.as-list .tile:hover .tico{transform:scale(1.2)}
+
+/* the way out: ↗ for another site, → for a page on this one */
+.as-list .tile::before{order:2;flex:none;width:14px;text-align:right;font-size:13px;
+  line-height:1;opacity:.35;transition:opacity .18s,transform .18s}
+.as-list .tile[target]::before{content:"\2197"}
+.as-list .tile:not([target]):not([href="#"])::before{content:"\2192"}
+.as-list .tile:hover::before{opacity:1;transform:translate(2px,-1px)}
+
+.as-list .tile[href="#"]::after,
+.as-list .tile[data-wip]::after{position:static;order:1;flex:none;color:inherit;
+  background:none;opacity:.55}
+
+/* a list has no weave to keep continuous, so the filter removes rows outright */
+.as-list .tile.dim,.as-list .mlabel.dim{display:none}
+
+@media(max-width:560px){
+  .as-list .pgrid{grid-template-columns:1fr}
+  .as-list .mlabel{flex-direction:row;align-items:baseline;gap:8px;padding:24px 0 8px}
+  .as-list .tile{grid-column:1}
+  .as-list .tile .tk{display:none}
+}
+
+/* the grid/list toggle, beside the heading */
+.idxhead .viewbtn{position:relative;padding:4px;margin:-4px;border:0;background:none;
+  color:var(--ink);line-height:0;cursor:pointer;opacity:.7;transition:opacity .18s,color .18s}
+.idxhead .viewbtn:hover{opacity:1;color:var(--g-vermillion);border:0}
+.idxhead .viewbtn:focus-visible{outline:1px solid currentColor;outline-offset:2px;opacity:1}
+.viewbtn svg{display:block;overflow:visible}
+.viewbtn rect,.viewbtn path{fill:none;stroke:currentColor;stroke-width:1.1}
+.viewbtn::after{content:attr(data-tip);position:absolute;left:50%;top:calc(100% + 9px);
+  transform:translateX(-50%);white-space:nowrap;font-family:var(--mono,ui-monospace,monospace);
+  font-size:8.5px;letter-spacing:.12em;line-height:1.35;color:var(--paper);background:var(--ink);
+  padding:6px 10px;border-radius:2px;opacity:0;pointer-events:none;transition:opacity .14s;z-index:9}
+.viewbtn:hover::after,.viewbtn:focus-visible::after{opacity:1}

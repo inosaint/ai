@@ -36,6 +36,15 @@
     });
   }
   const labels=[...grid.querySelectorAll('.mlabel')];
+
+  /* ---------- list or grid ----------
+     The same tiles render either way — a list by default, the painted weave on
+     request — so the filters never need to know which one is showing.
+     ?view=grid opens on the grid. */
+  const wrapEl=document.querySelector('.pwrap');
+  function isList(){ return !!wrapEl && wrapEl.classList.contains('as-list'); }
+  if(wrapEl && new URLSearchParams(location.search).get('view')==='grid')
+    wrapEl.classList.remove('as-list');
   // set data-shapes on the grid to cut every tile to its category mark
   const SHAPE_TILES = grid.dataset.shapes!==undefined && typeof SHAPES==='object';
   // one seed per tile, shared by the SVG outline and the shader's edge
@@ -108,6 +117,7 @@
   }
 
   function drawFrames(){
+    if(isList()) return;                    // list rows have no painted block
     tiles.forEach((el,i)=>{
       const b=el.getBoundingClientRect();
       if(!b.width) return;
@@ -135,6 +145,8 @@
      ?weave=<n> pins a layout, the way ?seed= pins the park. */
   const weaveSeed = qsp.has('weave') ? (parseInt(qsp.get('weave'),10)||1)
                                      : (Math.random()*99991|0);
+  // the list reads as a history, so it keeps the order the markup was written in
+  const listOrder=[...grid.children];
   (function shuffleWithinMonths(){
     const wr=rnd(weaveSeed);
     let run=[], anchorEl=null;
@@ -157,6 +169,7 @@
     if(anchorEl) flush();
     tiles=[...grid.querySelectorAll('.tile')];              // DOM order changed
   })();
+  const weaveOrder=[...grid.children];
   // seeds taken after the shuffle, so the drawn hand differs between visits too
   tiles.forEach((t,i)=>{
     const sd=((i*137)+weaveSeed)%40;
@@ -171,10 +184,16 @@
      colour below is the part of the weave already made. */
   const zone=document.getElementById('zone');
   function gridPitch(){
-    const cs=getComputedStyle(grid);
-    const gap=parseFloat(cs.columnGap)||6;
-    const cols=cs.gridTemplateColumns.split(' ').filter(Boolean).length||12;
     const gb=grid.getBoundingClientRect();
+    let gap=6, cols;
+    if(isList()){
+      // the list is not laid out on the lattice, so draw the one the grid would use
+      cols=matchMedia('(max-width:560px)').matches?4:matchMedia('(max-width:900px)').matches?6:12;
+    }else{
+      const cs=getComputedStyle(grid);
+      gap=parseFloat(cs.columnGap)||6;
+      cols=cs.gridTemplateColumns.split(' ').filter(Boolean).length||12;
+    }
     if(!gb.width) return null;
     const col=(gb.width-(cols-1)*gap)/cols;
     return {gap, cols, col, pitch:col+gap, box:gb};
@@ -327,7 +346,9 @@
         dt.classList.toggle('on', dt.getAttribute('data-cat')===f));
     }
     if(stat) stat.textContent=n+(f==='all'?' projects':' '+f+' projects')+' shown';
-    // nothing moves any more, so the outlines and the weave do not need redrawing
+    // the grid only dims, so nothing moves there; the list drops rows, which
+    // changes the page height the weave is drawn to
+    if(isList()) layoutTiles();
   }
   /* tiles with no destination yet must not navigate; the CSS tags them */
   tiles.forEach(t=>{
@@ -379,30 +400,95 @@
   if(crumble){
     tiles.forEach(t=>{
       // .hot is applied by crumble itself, in step with what it is drawing
-      t.addEventListener('pointerenter',()=>{ if(!t.classList.contains('dim')) crumble.enter(t); });
+      const live=()=>!isList() && !t.classList.contains('dim');
+      t.addEventListener('pointerenter',()=>{ if(live()) crumble.enter(t); });
       t.addEventListener('pointerleave',()=>crumble.leave(t));
-      t.addEventListener('focus',      ()=>{ if(!t.classList.contains('dim')) crumble.enter(t,true); });
+      t.addEventListener('focus',      ()=>{ if(live()) crumble.enter(t,true); });
       t.addEventListener('blur',       ()=>crumble.leave(t));
     });
   }
 
   // make the row unit match the column width, so the spans come out square
   function sizeRows(){
-    const cs=getComputedStyle(grid);
-    const gap=parseFloat(cs.columnGap)||6;
-    const cols=cs.gridTemplateColumns.split(' ').filter(Boolean).length||12;
-    const w=grid.getBoundingClientRect().width;
-    if(!w) return;
-    const col=(w-(cols-1)*gap)/cols;
-    grid.style.setProperty('--row', col.toFixed(2)+'px');
+    const G=gridPitch();
+    if(!G) return;
+    grid.style.setProperty('--row', G.col.toFixed(2)+'px');
     // one clear row of lattice below the last project, so the weave runs on past
     // the end the same way it does above the first
-    const wrap=document.querySelector('.pwrap');
-    if(wrap) wrap.style.paddingBottom=(col+gap).toFixed(2)+'px';
+    if(wrapEl) wrapEl.style.paddingBottom=G.pitch.toFixed(2)+'px';
   }
 
-  function relayout(){ sizeRows(); buildViz(); requestAnimationFrame(()=>{
-    drawFrames(); drawRules(); drawGrid(); if(crumble) crumble.measure(); }); }
+  /* ---------- month rules in the list ----------
+     Drawn rather than bordered, with the lattice's hand, so the line that opens
+     each month wobbles like the rest of the drafting. */
+  function drawMonthRules(){
+    const old=grid.querySelector('.mrules'); if(old) old.remove();
+    if(!isList()) return;
+    const gb=grid.getBoundingClientRect();
+    const w=gb.width, h=gb.height;
+    if(!w||!h) return;
+    const svg=document.createElementNS(NS,'svg');
+    svg.setAttribute('class','mrules');
+    svg.setAttribute('viewBox','0 0 '+w.toFixed(0)+' '+h.toFixed(0));
+    svg.setAttribute('aria-hidden','true');
+    tiles.forEach(t=>t.classList.remove('mfirst'));
+    let seenFirst=false;
+    labels.forEach((l,i)=>{
+      const lb=l.getBoundingClientRect();
+      if(!lb.height) return;                    // filtered out
+      let first=l.nextElementSibling;
+      while(first && first.classList.contains('tile') && first.classList.contains('dim'))
+        first=first.nextElementSibling;
+      if(first && first.classList.contains('tile')) first.classList.add('mfirst');
+      // the lattice already rules a line under the heading, so the first month
+      // shown needs none of its own
+      if(!seenFirst){ seenFirst=true; return; }
+      const y=lb.top-gb.top, r=rnd(311+i*53), J=1.6, pts=[];
+      const x0=-2+r()*3, x1=w-r()*3;
+      const n=Math.max(3,Math.round((x1-x0)/44));
+      for(let k=0;k<=n;k++) pts.push([x0+(x1-x0)*k/n, y+(r()-0.5)*2*J]);
+      const p=document.createElementNS(NS,'path');
+      p.setAttribute('d','M'+pts.map(q=>q[0].toFixed(1)+' '+q[1].toFixed(1)).join('L'));
+      svg.appendChild(p);
+    });
+    grid.appendChild(svg);
+  }
+
+  // everything that depends on where the tiles sit, but not on the hero map
+  function layoutTiles(){ sizeRows(); requestAnimationFrame(()=>{
+    drawFrames(); drawRules(); drawMonthRules(); drawGrid(); if(crumble) crumble.measure(); }); }
+  function relayout(){ buildViz(); layoutTiles(); }
+
+  /* ---------- the view toggle ----------
+     One button, showing the view it will switch to. */
+  const viewBtn=document.getElementById('viewbtn');
+  const ICONS={
+    grid:'<svg width="13" height="13" viewBox="0 0 13 13" aria-hidden="true">'+
+      '<rect x=".5" y=".5" width="5" height="5"/><rect x="7.5" y=".5" width="5" height="5"/>'+
+      '<rect x=".5" y="7.5" width="5" height="5"/><rect x="7.5" y="7.5" width="5" height="5"/></svg>',
+    list:'<svg width="13" height="13" viewBox="0 0 13 13" aria-hidden="true">'+
+      '<path d="M0 2h13M0 6.5h13M0 11h13"/></svg>'
+  };
+  function syncViewBtn(){
+    if(!viewBtn) return;
+    const next=isList()?'grid':'list';
+    viewBtn.innerHTML=ICONS[next];
+    viewBtn.setAttribute('aria-label','Show projects as a '+next);
+    viewBtn.dataset.tip=next.toUpperCase()+' VIEW';
+  }
+  function setView(v){
+    if(!wrapEl) return;
+    wrapEl.classList.toggle('as-list', v==='list');
+    (v==='list'?listOrder:weaveOrder).forEach(el=>grid.appendChild(el));
+    if(v==='list' && crumble){
+      tiles.forEach(t=>{ crumble.leave(t); t.classList.remove('hot'); });
+    }
+    syncViewBtn();
+    layoutTiles();
+  }
+  if(viewBtn) viewBtn.addEventListener('click',()=>setView(isList()?'grid':'list'));
+  if(isList()) listOrder.forEach(el=>grid.appendChild(el));
+  syncViewBtn();
   let rt; addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(relayout,160);});
   // scroll fired measure() — rects plus clip-path strings — on every single event
   let sTick=false;
