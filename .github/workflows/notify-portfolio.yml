@@ -1,0 +1,52 @@
+name: Notify portfolio
+
+# The portfolio homepage (inosaint/inosaint.github.io) scrapes this site's
+# project tiles at BUILD time — it has no feed and no live fetch, so a project
+# added here stays invisible there until that repo rebuilds. This tells it to.
+#
+# Only index.html carries the tiles, so only index.html is worth a rebuild.
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'index.html'
+  workflow_dispatch:
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      # This repo is served by legacy GitHub Pages, which builds a little after
+      # the push lands. Dispatching immediately would have the portfolio scrape
+      # the OLD index.html and bake in a stale list, so wait for the new one to
+      # actually be served before asking for the rebuild.
+      - name: Wait for Pages to serve the new index.html
+        run: |
+          for i in $(seq 1 30); do
+            if curl -fsS --max-time 20 -H 'Cache-Control: no-cache' \
+                 "https://kenneth.dsouza.im/ai/?cb=${GITHUB_SHA}${i}" -o /tmp/live.html; then
+              # The published page is what the portfolio will parse, so compare
+              # against the committed file rather than trusting a fixed sleep.
+              if diff -q <(tr -d '[:space:]' < /tmp/live.html) \
+                         <(tr -d '[:space:]' < index.html) >/dev/null 2>&1; then
+                echo "Pages is serving this commit's index.html (attempt $i)."
+                exit 0
+              fi
+            fi
+            echo "Not published yet (attempt $i/30); waiting 20s."
+            sleep 20
+          done
+          echo "::warning::Timed out waiting for Pages; dispatching anyway."
+
+      - name: Ask the portfolio to rebuild
+        env:
+          GH_TOKEN: ${{ secrets.PORTFOLIO_DISPATCH_TOKEN }}
+        run: |
+          gh api repos/inosaint/inosaint.github.io/dispatches \
+            -f event_type=projects-updated \
+            -f "client_payload[sha]=${GITHUB_SHA}"
