@@ -13,6 +13,10 @@
            label to paper, so you do not have to think about contrast.
    wip   : true adds a WORK IN PROGRESS tag. Links pointing at "#" get it
            automatically and have their click cancelled.
+   upcoming : true adds an UPCOMING tag, for something that has a real link but
+           has not happened yet. Unlike wip, the link stays clickable.
+   abandoned : true adds an ABANDONED tag, for something that was stopped rather
+           than finished. The link stays clickable.
    pin   : "first" or "last" keeps a project at that end of its month, despite
            the per-visit shuffle. Omit for the usual random placement.
    media : the image or video revealed on hover. Leave "" to keep whatever the
@@ -29,6 +33,14 @@
    stay in order; only the arrangement inside a month is shuffled per visit.
 --------------------------------------------------------------------------- */
 const GRID_CONFIG = {
+
+  /* ---- October 2026 ---- */
+  "The Designer in the age of AI at DesignUp 2026 @ October 2026": { size:2, colour:"--g-coral", media:"projects/workshop/designup.webp", upcoming:true },
+
+  /* ---- September 2026 ---- */
+  "codetocanvas @ September 2026":                             { size:3, colour:"--g-teal", media:"projects/app/codetocanvas.webp" },
+  "Design Demo Nights #7 @ September 2026":                    { size:2, colour:"--g-vermillion", media:"projects/design-demos/demos-7.webp", pin:"first", upcoming:true },
+  "Personal website redesign @ September 2026":                 { size:2, colour:"--g-navy", media:"projects/app/personal-site.webp", pin:"last" },
 
   /* ---- August 2026 ---- */
   "Design Demo Nights #6 @ August 2026":                       { size:2, colour:"--g-vermillion", media:"", pin:"last" },
@@ -61,7 +73,7 @@ const GRID_CONFIG = {
   "Agentic Coding Workshop at CEC, Mangalore @ April 2026":    { size:2, colour:"--g-vermillion", media:"projects/workshop/canara.webp" },
   "Design Demo Nights #2 @ April 2026":                        { size:2, colour:"--g-vermillion", media:"projects/design-demos/demos-2.webp" },
   "ASCII Rocky @ April 2026":                                  { size:1, colour:"--g-terra", media:"projects/app/rocky.webp" },
-  "Tower Dungeon @ April 2026":                                { size:1, colour:"--g-moss", media:"projects/games/tower.webp" },
+  "Tower Dungeon @ April 2026":                                { size:1, colour:"--g-moss", media:"projects/games/tower.webp", wip:true },
   "designr. @ April 2026":                                     { size:2, colour:"--g-ochre", media:"projects/app/designr.webp" },
 
   /* ---- March 2026 ---- */
@@ -77,7 +89,7 @@ const GRID_CONFIG = {
 
   /* ---- February 2026 ---- */
   "Sudhaarit @ February 2026":                                 { size:2, colour:"--g-navy", media:"" },
-  "Unnamed @ February 2026":                                   { size:3, colour:"--g-moss", media:"projects/unamed/unamed.webp" },
+  "Unnamed @ February 2026":                                   { size:3, colour:"--g-moss", media:"projects/unamed/unamed.webp", abandoned:true },
   "Hermes @ February 2026":                                    { size:4, colour:"--g-teal", media:"projects/app/hermes-mac.webp" },
   "Smithy @ February 2026":                                    { size:1, colour:"--g-navy", media:"projects/app/smithy/cover-smithy.webp" },
   "Vibeshift Projects @ February 2026":                        { size:2, colour:"--g-teal", media:"projects/event/vibeshift-blr.webp" },

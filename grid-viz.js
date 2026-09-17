@@ -89,8 +89,12 @@ function projectMap(host, recs, opts){
     return {...r, i:(+yr)*12+MN.indexOf(nm)};
   });
   if(!recs.length) return;
-  const now=new Date(), end=now.getFullYear()*12+now.getMonth();
+  const now=new Date(), nowI=now.getFullYear()*12+now.getMonth();
   const start=Math.min(...recs.map(r=>r.i));
+  /* the axis runs to the latest record, not to today: something already booked
+     for a future month owns a column of its own instead of being dropped off
+     the leading edge. */
+  const end=Math.max(nowI, ...recs.map(r=>r.i));
   let cols=[];
   for(let i=end;i>=start;i--) cols.push({i,y:Math.floor(i/12),m:i%12,items:recs.filter(r=>r.i===i)});
   // drop empty months at the leading edge (e.g. a current month with nothing in it yet)
@@ -131,7 +135,7 @@ function projectMap(host, recs, opts){
       g.appendChild(hit);
     });
     if(!c.items.length){
-      if(c.i===end){const p=document.createElementNS(N,'circle');p.setAttribute('class','now');
+      if(c.i===nowI){const p=document.createElementNS(N,'circle');p.setAttribute('class','now');
         p.setAttribute('cx',cx);p.setAttribute('cy',base-CELL/2);p.setAttribute('r',R*0.9);
         const t=document.createElementNS(N,'title');t.textContent='This month — nothing logged yet';
         p.appendChild(t);g.appendChild(p);}

@@ -61,8 +61,17 @@
   stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
 
 .tile .tmeta{position:relative;z-index:3}
-.tile .tn{display:block;font-weight:600;letter-spacing:-.01em;line-height:1.15;
+.tile .tn{display:block;font-weight:600;letter-spacing:-.01em;line-height:1.21;
   font-size:13px;text-wrap:balance}
+/* on hover the name takes the note's chrome, so the two read as one card set
+   down on the tile rather than a label with a tooltip floating over it. Top and
+   right keep the negative margin, so nothing above moves and a long title can
+   still run the width of the tile; bottom and left let the padding stand, which
+   is what holds the pill off the corner it sits in. */
+.tile .tn{width:max-content;max-width:100%;padding:8px 10px;margin:-8px -10px 0 0;
+  border-radius:2px;background:transparent;
+  transition:background-color .14s,color .14s}
+.tile:hover .tn,.tile:focus-visible .tn{background:var(--ink);color:var(--paper)}
 .tile[data-w="3"] .tn,.tile[data-w="4"] .tn{font-size:16px}
 .tile[data-w="1"] .tn{font-size:11.5px}
 /* The symbol in the corner already says which category this is, so the word is
@@ -277,7 +286,9 @@ p.lede{opacity:1}
    already clears 4.5:1 against its tint, so the tag inherits that contrast. */
 .tile[href="#"]{cursor:default}
 .tile[href="#"]::after,
-.tile[data-wip]::after{
+.tile[data-wip]::after,
+.tile[data-upcoming]::after,
+.tile[data-abandoned]::after{
   content:"WORK IN PROGRESS";
   position:absolute;top:10px;right:11px;z-index:4;
   /* inline-flex + place-items centres the text in the pill; the extra left pad
@@ -290,9 +301,20 @@ p.lede{opacity:1}
   color:var(--tile-label);border:1px solid currentColor;border-radius:2px;
   background:rgba(18,22,27,.30);
   opacity:.92;pointer-events:none}
-.tile[href="#"]:hover::after,.tile[data-wip]:hover::after{opacity:1}
+/* ---- upcoming ----
+   Same pill as the tag above, different word: the tile has a real destination,
+   it just has not happened yet. It keeps its pointer and its click. */
+.tile[data-upcoming]::after{content:"UPCOMING"}
+.tile[data-abandoned]::after{content:"ABANDONED"}
+.tile[href="#"]:hover::after,.tile[data-wip]:hover::after,
+.tile[data-upcoming]:hover::after,.tile[data-abandoned]:hover::after{opacity:1}
+/* Below this width every tile is narrow — four columns hold the whole grid — so
+   the short form is what fits, not just on the smallest blocks. A tag set in
+   full ran the width of a tile and left no room for its own corner. */
 @media(max-width:560px){
-  .tile[data-w="1"][href="#"]::after,.tile[data-w="1"][data-wip]::after{content:"WIP"} }
+  .tile[href="#"]::after,.tile[data-wip]::after{content:"WIP"}
+  .tile[data-upcoming]::after{content:"SOON"}
+  .tile[data-abandoned]::after{content:"STOPPED"} }
 
 
 /* ---- labels ----
@@ -349,10 +371,41 @@ p.lede{opacity:1}
   background:color-mix(in srgb,var(--cat) 9%,transparent)}
 .as-list .tile[href="#"]:hover{background:none}
 
-.as-list .tile .tmeta{flex:1;min-width:0;display:flex;align-items:baseline;
-  justify-content:space-between;gap:16px}
+/* centred, not baseline-aligned: sitting the 9px category label on the 15px
+   title's baseline dropped its small box well below the title's optical centre,
+   which read as a tag that had slipped down the row. */
+.as-list .tile .tmeta{flex:1;min-width:0;display:flex;align-items:center;
+  justify-content:flex-start;gap:0;flex-wrap:wrap}
+/* the name and its note are one phrase, so no gap between them; the category
+   label is what holds the right edge, and it brings its own breathing room. */
+.as-list .tile .tk{margin-left:auto;padding-left:16px}
+/* a row has no card to build, so the name is handed back its plain self */
 .as-list .tile .tn,
-.as-list .tile[data-w] .tn{font-size:15px;font-weight:500;line-height:1.3;opacity:1}
+.as-list .tile[data-w] .tn{font-size:15px;font-weight:500;line-height:1.3;opacity:1;
+  width:auto;max-width:none;padding:0;margin:0;background:none;color:inherit}
+/* "project: what it is" — the note carries the name's size at the row's lighter
+   weight, so it reads as the same sentence rather than a second label. It shows
+   only in the list; a grid tile has no line to hold it. */
+/* on a grid tile the note is the tooltip: the same span, parked just above the
+   name and faded in on hover, in the dark pill the hero links already use. It
+   sits inside the tile because a tile clips its overflow for the crumble. */
+.tile .tnote{position:absolute;left:0;bottom:calc(100% + 8px);z-index:5;
+  width:max-content;max-width:100%;white-space:normal;text-align:left;
+  font-family:var(--mono,ui-monospace,monospace);font-size:9px;letter-spacing:.06em;
+  line-height:1.55;color:var(--paper);background:var(--ink);padding:8px 10px;
+  border-radius:2px;opacity:0;pointer-events:none;transition:opacity .14s}
+.tile:hover .tnote,.tile:focus-visible .tnote{opacity:1}
+/* in a row it is not a tooltip at all but part of the sentence, so every bit of
+   the pill above is handed back */
+/* width:auto matters: the tooltip above is sized to max-content so it never
+   breaks mid-phrase, and left that way in a row it refuses to wrap and runs off
+   the side of the page instead. */
+.as-list .tile .tnote{position:static;display:inline;flex:0 1 auto;
+  width:auto;min-width:0;
+  max-width:none;background:none;color:inherit;padding:0;border-radius:0;
+  font-family:inherit;letter-spacing:normal;
+  font-size:15px;font-weight:400;line-height:1.3;opacity:.55;transition:none}
+.as-list .tile .tnote::before{content:":\00a0"}
 /* in a row the word earns its place again: there is room for it, and the
    symbol alone is a lot to decode at a scan */
 .as-list .tile .tk{position:static;width:auto;height:auto;overflow:visible;clip:auto;
@@ -372,18 +425,86 @@ p.lede{opacity:1}
 .as-list .tile:not([target]):not([href="#"])::before{content:"\2192"}
 .as-list .tile:hover::before{opacity:1;transform:translate(2px,-1px)}
 
+/* in a row the tag keeps its pill but changes seat: out at the rule's end it read
+   as a second category label next to EVENT, so the tile-level one is dropped and
+   the same pill is drawn after the project name instead — the eye picks it up
+   with the thing it qualifies rather than with the arrow. */
 .as-list .tile[href="#"]::after,
-.as-list .tile[data-wip]::after{position:static;order:1;flex:none;color:inherit;
-  background:none;opacity:.55}
+.as-list .tile[data-wip]::after,
+.as-list .tile[data-upcoming]::after,
+.as-list .tile[data-abandoned]::after{content:none}
+
+/* It is drawn on .tmeta instead, which makes it a flex item of the row rather
+   than a pseudo-element hanging off a line of text: the row already centres its
+   items, so the pill is centred by the layout instead of by a vertical-align
+   guess against two different type sizes. order keeps it after the name and its
+   note and before the category label, whatever the markup order is. */
+.as-list .tile .tk{order:2}
+.as-list .tile[href="#"] .tmeta::after,
+.as-list .tile[data-wip] .tmeta::after,
+.as-list .tile[data-upcoming] .tmeta::after,
+.as-list .tile[data-abandoned] .tmeta::after{
+  content:"WORK IN PROGRESS";order:1;flex:none;align-self:center;
+  display:inline-flex;align-items:center;justify-content:center;
+  margin-left:8px;
+  font-family:var(--mono,ui-monospace,monospace);font-size:7.5px;letter-spacing:.16em;
+  line-height:1;padding:4px 5px 4px 6px;
+  color:inherit;border:1px solid currentColor;border-radius:2px;
+  background:none;opacity:.3}
+.as-list .tile[data-upcoming] .tmeta::after{content:"UPCOMING"}
+.as-list .tile[data-abandoned] .tmeta::after{content:"ABANDONED"}
 
 /* a list has no weave to keep continuous, so the filter removes rows outright */
 .as-list .tile.dim,.as-list .mlabel.dim{display:none}
 
 @media(max-width:560px){
+  .as-list .tile[href="#"] .tmeta::after,
+  .as-list .tile[data-wip] .tmeta::after{content:"WIP"}
+  .as-list .tile[data-upcoming] .tmeta::after{content:"SOON"}
+  .as-list .tile[data-abandoned] .tmeta::after{content:"STOPPED"}
   .as-list .pgrid{grid-template-columns:1fr}
   .as-list .mlabel{flex-direction:row;align-items:baseline;gap:8px;padding:24px 0 8px}
   .as-list .tile{grid-column:1}
   .as-list .tile .tk{display:none}
+  /* Narrow enough that the note drops under the name anyway, so it takes a line
+     of its own. The colon moves with the break: it closes the title line rather
+     than hanging at the start of the second one, where it reads as a typo. Both
+     lines open up a little now that they stack. */
+  .as-list .tile .tmeta{gap:2px 0}
+  .as-list .tile .tn{line-height:1.37}
+  .as-list .tile[data-note] .tn::after{content:":"}
+  .as-list .tile .tnote{flex:0 0 100%;line-height:1.37}
+  .as-list .tile .tnote::before{content:none}
+  /* As its own flex item the tag has to take a whole line the moment the title
+     wraps, and a lone chip under two lines of title reads as a mistake. Here it
+     goes back inside the text and closes the last line of it — the note's, or
+     the title's where there is no note — so it can never be stranded. */
+  .as-list .tile[href="#"][href] .tmeta::after,
+  .as-list .tile[data-wip][data-wip] .tmeta::after,
+  .as-list .tile[data-upcoming][data-upcoming] .tmeta::after,
+  .as-list .tile[data-abandoned][data-abandoned] .tmeta::after{content:none}
+  .as-list .tile[href="#"] .tnote::after,
+  .as-list .tile[data-wip] .tnote::after,
+  .as-list .tile[data-upcoming] .tnote::after,
+  .as-list .tile[data-abandoned] .tnote::after,
+  .as-list .tile[href="#"]:not([data-note]) .tn::after,
+  .as-list .tile[data-wip]:not([data-note]) .tn::after,
+  .as-list .tile[data-upcoming]:not([data-note]) .tn::after,
+  .as-list .tile[data-abandoned]:not([data-note]) .tn::after{
+    content:"WIP";
+    display:inline-flex;align-items:center;justify-content:center;
+    margin-left:8px;vertical-align:middle;
+    font-family:var(--mono,ui-monospace,monospace);font-size:7.5px;letter-spacing:.16em;
+    line-height:1;padding:4px 5px 4px 6px;
+    color:inherit;border:1px solid currentColor;border-radius:2px;
+    background:none;opacity:.55}
+  .as-list .tile[data-upcoming] .tnote::after,
+  .as-list .tile[data-upcoming]:not([data-note]) .tn::after{content:"SOON"}
+  .as-list .tile[data-abandoned] .tnote::after,
+  .as-list .tile[data-abandoned]:not([data-note]) .tn::after{content:"STOPPED"}
+  /* the note already sits at .55, so only the title-side pill needs taking down
+     to the same weight */
+  .as-list .tile:not([data-note]) .tn::after{opacity:.3}
 }
 
 /* the grid/list toggle, beside the heading */

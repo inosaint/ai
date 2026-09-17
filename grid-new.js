@@ -9,6 +9,19 @@
   if(!grid) return;
   let tiles=[...grid.querySelectorAll('.tile')];   // reassigned after the shuffle
 
+  /* ---------- the one-line note ----------
+     data-note on a tile is the sentence that follows its name in the list, as
+     "project: what it is". It is built here rather than written into every
+     tile's markup so the attribute stays the single place a note is edited. */
+  tiles.forEach(t=>{
+    const note=t.dataset.note, nameEl=t.querySelector('.tn');
+    if(!note || !nameEl || t.querySelector('.tnote')) return;
+    const s=document.createElement('span');
+    s.className='tnote';
+    s.textContent=note;
+    nameEl.after(s);
+  });
+
   /* ---------- apply grid-config.js ----------
      Sizes, colours and hover media are edited by hand in that file so the
      markup does not have to be regenerated to retune the layout. */
@@ -33,6 +46,8 @@
       if(cfg.media==='none') delete t.dataset.img;
       if(cfg.pin) t.dataset.pin=cfg.pin;
       if(cfg.wip) t.setAttribute('data-wip','');   // shows the work-in-progress tag
+      if(cfg.upcoming) t.setAttribute('data-upcoming','');  // shows the upcoming tag
+      if(cfg.abandoned) t.setAttribute('data-abandoned','');  // shows the abandoned tag
     });
   }
   const labels=[...grid.querySelectorAll('.mlabel')];
@@ -247,9 +262,14 @@
   function buildViz(){
     const hostEl=document.getElementById('viz');
     if(!hostEl||typeof projectMap!=='function') return;
-    // records come from projects-data.js; the page no longer has month sections
-    // for readProjectRecords() to walk
-    const recs=(typeof RECORDS!=='undefined') ? RECORDS : [];
+    /* the map is read off the grid itself — one record per tile — so a project
+       added to the page shows up in the hero without a second list being kept
+       in step. projects-data.js is the fallback, and still feeds playground.html. */
+    const recs=tiles.map(t=>({
+      mo:t.dataset.mo, cat:t.dataset.cat,
+      nm:(t.querySelector('.tn')||{}).textContent.trim()
+    })).filter(r=>r.mo);
+    if(!recs.length && typeof RECORDS!=='undefined') recs.push(...RECORDS);
     if(!recs.length) return;
     const big=matchMedia('(min-width:900px)').matches;
     projectMap(hostEl, recs, {legend:false, axis:false,
@@ -405,6 +425,14 @@
       t.addEventListener('pointerleave',()=>crumble.leave(t));
       t.addEventListener('focus',      ()=>{ if(live()) crumble.enter(t,true); });
       t.addEventListener('blur',       ()=>crumble.leave(t));
+      /* A touch screen has no hover to sit in, so the reveal rides the press:
+         the image is there while the finger is down and fades as it lifts. The
+         link still opens on the tap — nothing here calls preventDefault. */
+      if(matchMedia('(hover: none)').matches){
+        t.addEventListener('pointerdown',  ()=>{ if(live()) crumble.enter(t); });
+        t.addEventListener('pointerup',    ()=>crumble.leave(t));
+        t.addEventListener('pointercancel',()=>crumble.leave(t));
+      }
     });
   }
 

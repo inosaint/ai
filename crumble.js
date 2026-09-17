@@ -302,9 +302,23 @@ function initCrumble(canvas, host){
     }
   }
 
+  /* The canvas covers the whole grid, so its pixel height is the grid's height
+     times the device ratio — and a narrow layout stacks the same 50 projects
+     into four columns instead of twelve, which makes the grid several times
+     taller. Past the GL viewport limit the drawing is silently clamped: the
+     bottom of the grid still paints and everything above it comes out empty,
+     which looks like a hovered tile turning transparent with no image. Stepping
+     the ratio down keeps the whole surface inside the limit. */
+  const MAXDIM=(function(){
+    const v=gl.getParameter(gl.MAX_VIEWPORT_DIMS);
+    const rb=gl.getParameter(gl.MAX_RENDERBUFFER_SIZE)||4096;
+    return Math.max(1024, Math.min(v?Math.min(v[0],v[1]):4096, rb));
+  })();
   function measure(){
     hostRect=host.getBoundingClientRect();
     dpr=Math.min(devicePixelRatio||1,2);
+    const big=Math.max(hostRect.width,hostRect.height)*dpr;
+    if(big>MAXDIM) dpr=Math.max(0.25, dpr*MAXDIM/big);
     const w=Math.max(1,Math.round(hostRect.width*dpr)), h=Math.max(1,Math.round(hostRect.height*dpr));
     if(canvas.width!==w||canvas.height!==h){ canvas.width=w; canvas.height=h; }
     gl.viewport(0,0,w,h);
