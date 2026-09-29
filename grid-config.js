@@ -39,7 +39,9 @@ const GRID_CONFIG = {
 
   /* ---- September 2026 ---- */
   "codetocanvas @ September 2026":                             { size:3, colour:"--g-teal", media:"projects/app/codetocanvas.webp" },
-  "Design Demo Nights #7 @ September 2026":                    { size:2, colour:"--g-vermillion", media:"projects/design-demos/demos-7.webp", pin:"first", upcoming:true },
+  "Coffeee @ September 2026":                                  { size:2, colour:"--g-terra", media:"projects/viz-demos/coffeee.webp" },
+  "Pinboarder v0.3.0 @ September 2026":                        { size:2, colour:"--g-teal", media:"projects/app/pinboarder.webp" },
+  "Design Demo Nights #7 @ September 2026":                    { size:2, colour:"--g-vermillion", media:"projects/design-demos/demos-7.webp", pin:"first" },
   "Personal website redesign @ September 2026":                 { size:2, colour:"--g-navy", media:"projects/app/personal-site.webp", pin:"last" },
 
   /* ---- August 2026 ---- */
